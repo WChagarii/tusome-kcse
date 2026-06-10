@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Tusome KCSE</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p900:#1A0938; --p800:#2A1050; --p700:#3B1870;
+  --p600:#5B2D99; --p500:#7B45BF; --p400:#9E6DD4;
+  --p300:#C4A3E8; --p100:#EDE5F8; --p50:#F7F2FD;
+  --t800:#084F57; --t700:#0D6B75; --t600:#118899;
+  --t500:#17A8BA; --t400:#2EC4D6; --t300:#6DDDE8;
+  --t100:#CCF3F7; --t50:#EDFAFB;
+  --b900:#0C1E4A; --b700:#1A3D8F;
+  --b600:#2554C7; --b500:#3B6FE8; --b400:#6B93F0;
+  --b300:#A3BCFA; --b100:#DBEAFE; --b50:#EFF6FF;
+  --white:#FFFFFF; --bg:#F2EFFE;
+  --text:#0E0826; --text2:#3D3360; --text3:#8878B0;
+  --border:rgba(59,24,112,.12); --border2:rgba(59,24,112,.06);
+  --ff-h:'Syne',sans-serif; --ff-b:'DM Sans',sans-serif;
+  --r-xl:24px; --r-lg:16px; --r-md:12px; --r-sm:8px;
+  --shadow-md:0 8px 28px rgba(14,8,38,.1);
+  --shadow-sm:0 2px 12px rgba(14,8,38,.07);
+  --nav-h:66px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* =============================================
+   NAV
+   ============================================= */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:var(--nav-h);
+  background:rgba(26,9,56,.97);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;padding:0 2rem;gap:1.25rem;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.nav-mark{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--t500),var(--b600));
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  box-shadow:0 3px 12px rgba(23,168,186,.38);
+}
+.nav-name{font-family:var(--ff-h);font-size:17px;font-weight:800;color:#fff;letter-spacing:-.2px}
+.nav-name em{font-style:normal;color:var(--t300)}
+.nav-sep{width:1px;height:24px;background:rgba(255,255,255,.1);flex-shrink:0}
+.nav-page{font-size:13px;font-weight:600;color:rgba(255,255,255,.45)}
+.nav-space{flex:1}
+.nav-bell{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:15px;position:relative;transition:background .2s;
+}
+.nav-bell:hover{background:rgba(255,255,255,.13)}
+.bell-dot{
+  position:absolute;top:6px;right:6px;width:8px;height:8px;
+  border-radius:50%;background:var(--t400);border:2px solid var(--p900);
+}
+.nav-user{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:50px;padding:4px 12px 4px 4px;cursor:pointer;
+  transition:background .2s;
+}
+.nav-user:hover{background:rgba(255,255,255,.12)}
+.nav-av{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p500),var(--t500));
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;font-family:var(--ff-h);
+}
+.nav-uname{font-size:13px;font-weight:600;color:rgba(255,255,255,.82)}
+.nav-logout{
+  background:none;border:1px solid rgba(255,255,255,.12);border-radius:8px;
+  padding:6px 13px;font-size:13px;color:rgba(255,255,255,.5);
+  cursor:pointer;font-family:var(--ff-b);transition:all .2s;
+}
+.nav-logout:hover{background:rgba(255,255,255,.08);color:#fff}
+
+/* =============================================
+   LAYOUT
+   ============================================= */
+.wrap{max-width:1180px;margin:0 auto;padding:calc(var(--nav-h) + 2rem) 2rem 3rem}
+
+/* =============================================
+   WELCOME BANNER
+   ============================================= */
+.banner{
+  position:relative;overflow:hidden;
+  background:var(--p900);border-radius:var(--r-xl);
+  padding:2.25rem 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  margin-bottom:1.75rem;
+}
+.banner::before{
+  content:'';position:absolute;top:-100px;right:160px;
+  width:360px;height:360px;border-radius:50%;
+  background:radial-gradient(circle,rgba(23,168,186,.25) 0%,transparent 65%);
+}
+.banner::after{
+  content:'';position:absolute;bottom:-80px;left:-50px;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,84,199,.2) 0%,transparent 65%);
+}
+.bdots{
+  position:absolute;inset:0;border-radius:var(--r-xl);
+  background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:24px 24px;pointer-events:none;
+}
+.bleft{position:relative;z-index:1}
+.btag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);
+  border-radius:50px;padding:4px 12px;
+  font-size:11px;font-weight:600;color:rgba(255,255,255,.7);
+  margin-bottom:.85rem;font-family:var(--ff-h);letter-spacing:.3px;
+}
+.btag .dot{
+  width:7px;height:7px;border-radius:50%;background:var(--t400);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.bgreeting{
+  font-family:var(--ff-h);font-size:26px;font-weight:800;
+  color:#fff;line-height:1.2;margin-bottom:.5rem;letter-spacing:-.4px;
+}
+.bgreeting span{
+  background:linear-gradient(90deg,var(--t300),var(--b300));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.bsub{font-size:14px;color:rgba(255,255,255,.52);line-height:1.7;max-width:440px}
+.bright{
+  position:relative;z-index:1;
+  display:flex;align-items:center;gap:1rem;flex-shrink:0;
+}
+
+/* Streak card */
+.streak-card{
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);
+  border-radius:var(--r-lg);padding:1rem 1.25rem;text-align:center;min-width:88px;
+}
+.streak-num{
+  font-family:var(--ff-h);font-size:34px;font-weight:800;color:#fff;line-height:1;
+}
+.streak-lbl{font-size:10px;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.7px;margin-top:4px}
+
+/* Ring card */
+.ring-card{
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.13);
+  border-radius:var(--r-lg);padding:1rem 1.25rem;
+  display:flex;flex-direction:column;align-items:center;gap:5px;min-width:88px;
+}
+.ring-wrap{position:relative;width:56px;height:56px}
+.ring-wrap svg{transform:rotate(-90deg)}
+.ring-pct{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:var(--ff-h);font-size:13px;font-weight:800;color:#fff;
+}
+.ring-lbl{font-size:10px;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.7px}
+
+/* Hunter warning */
+.hunter-bar{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,rgba(37,84,199,.15),rgba(23,168,186,.1));
+  border:1px solid rgba(46,196,214,.2);
+  border-radius:var(--r-md);padding:12px 16px;
+  margin-bottom:1.75rem;
+  animation:up .5s cubic-bezier(.4,0,.2,1) both;animation-delay:.1s;
+}
+.hunter-icon{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(37,84,199,.2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.hunter-text{flex:1}
+.hunter-title{font-size:13.5px;font-weight:700;color:var(--b700);margin-bottom:2px}
+.hunter-sub{font-size:12.5px;color:var(--text3);line-height:1.5}
+.hunter-action{
+  font-size:12.5px;font-weight:700;color:var(--t600);
+  cursor:pointer;white-space:nowrap;background:none;border:none;
+  font-family:var(--ff-b);transition:color .2s;
+}
+.hunter-action:hover{color:var(--p600)}
+
+/* =============================================
+   SECTION LABEL
+   ============================================= */
+.sec-label{
+  font-family:var(--ff-h);font-size:11.5px;font-weight:700;
+  color:var(--text3);text-transform:uppercase;letter-spacing:.9px;
+  margin-bottom:.85rem;
+}
+
+/* =============================================
+   THREE AGENT CARDS
+   ============================================= */
+.agents-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.25rem;margin-bottom:1.75rem;
+}
+.agent-card{
+  background:var(--white);border-radius:var(--r-lg);
+  border:1.5px solid var(--border);
+  padding:1.6rem 1.5rem;cursor:pointer;
+  transition:all .25s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;text-decoration:none;display:block;
+}
+/* top colour bar on hover */
+.agent-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;opacity:0;transition:opacity .25s;
+}
+.agent-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:transparent}
+.agent-card:hover::after{opacity:1}
+.ac-scout::after {background:linear-gradient(90deg,var(--t500),var(--t300))}
+.ac-guard::after  {background:linear-gradient(90deg,var(--b500),var(--b300))}
+.ac-hunter::after {background:linear-gradient(90deg,var(--p500),var(--p300))}
+
+/* disabled state for Hunter rotation rule */
+.agent-card.blocked{
+  opacity:.55;cursor:not-allowed;
+  background:var(--bg);
+}
+.agent-card.blocked:hover{transform:none;box-shadow:none;border-color:var(--border)}
+
+.ac-icon-wrap{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:1rem;
+}
+.ac-scout .ac-icon-wrap{background:var(--t50)}
+.ac-guard  .ac-icon-wrap{background:var(--b50)}
+.ac-hunter .ac-icon-wrap{background:var(--p100)}
+
+.ac-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  border-radius:50px;padding:3px 10px;
+  font-size:11px;font-weight:700;font-family:var(--ff-h);
+  margin-bottom:.6rem;letter-spacing:.2px;
+}
+.ac-scout .ac-badge{background:var(--t50);color:var(--t700)}
+.ac-guard  .ac-badge{background:var(--b50);color:var(--b700)}
+.ac-hunter .ac-badge{background:var(--p100);color:var(--p700)}
+
+.ac-title{font-family:var(--ff-h);font-size:16px;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.ac-desc{font-size:13px;color:var(--text3);line-height:1.65}
+.ac-cta{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:1.1rem;font-size:12.5px;font-weight:700;
+  transition:gap .2s;
+}
+.ac-scout .ac-cta{color:var(--t600)}
+.ac-guard  .ac-cta{color:var(--b600)}
+.ac-hunter .ac-cta{color:var(--p600)}
+.agent-card:hover .ac-cta{gap:9px}
+
+/* locked badge */
+.locked-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(139,120,176,.12);border-radius:50px;
+  padding:4px 10px;font-size:11px;font-weight:600;
+  color:var(--text3);margin-top:.85rem;
+}
+
+/* =============================================
+   BOTTOM GRID
+   ============================================= */
+.bottom-grid{
+  display:grid;grid-template-columns:1fr 1fr 320px;
+  gap:1.25rem;align-items:start;
+}
+.card{
+  background:var(--white);border-radius:var(--r-lg);
+  border:1.5px solid var(--border);padding:1.4rem;
+}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+.card-title{font-family:var(--ff-h);font-size:15px;font-weight:700;color:var(--text)}
+.card-link{font-size:12.5px;font-weight:600;color:var(--t600);cursor:pointer;background:none;border:none;font-family:var(--ff-b)}
+.card-link:hover{color:var(--p600)}
+
+/* Subject progress */
+.subj-list{display:flex;flex-direction:column;gap:.8rem}
+.subj-row{display:flex;flex-direction:column;gap:5px}
+.subj-meta{display:flex;align-items:center;justify-content:space-between}
+.subj-name{font-size:13.5px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:7px}
+.subj-count{font-size:12px;color:var(--text3)}
+.bar-track{height:6px;border-radius:99px;background:var(--border2);overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.bf-t{background:linear-gradient(90deg,var(--t500),var(--t300))}
+.bf-b{background:linear-gradient(90deg,var(--b500),var(--b300))}
+.bf-p{background:linear-gradient(90deg,var(--p500),var(--p300))}
+
+/* Activity */
+.act-list{display:flex;flex-direction:column;gap:.65rem}
+.act-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:.75rem;background:var(--bg);
+  border-radius:var(--r-md);border:1px solid var(--border2);
+  transition:border-color .2s;
+}
+.act-item:hover{border-color:var(--border)}
+.act-ico{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.ai-t{background:var(--t50)}
+.ai-b{background:var(--b50)}
+.ai-p{background:var(--p100)}
+.act-info{flex:1;min-width:0}
+.act-title{
+  font-size:13px;font-weight:600;color:var(--text);
+  margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.act-meta{font-size:11.5px;color:var(--text3)}
+.act-score{
+  font-family:var(--ff-h);font-size:12.5px;font-weight:700;
+  padding:3px 9px;border-radius:50px;flex-shrink:0;
+}
+.score-hi{background:var(--t50);color:var(--t700)}
+.score-md{background:var(--b50);color:var(--b700)}
+.score-lo{background:var(--p100);color:var(--p700)}
+
+/* Mini stats */
+.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1rem}
+.mini-stat{
+  background:var(--bg);border-radius:var(--r-md);
+  padding:.85rem;border:1px solid var(--border2);text-align:center;
+}
+.ms-val{font-family:var(--ff-h);font-size:22px;font-weight:800;color:var(--text);margin-bottom:2px}
+.ms-lbl{font-size:10.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+
+/* Memory pills */
+.mem-wrap{display:flex;flex-wrap:wrap;gap:6px;max-height:200px;overflow-y:auto}
+.mem-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:50px;
+  font-size:11.5px;font-weight:500;border:1px solid;
+}
+.mp-t{background:var(--t50);border-color:var(--t100);color:var(--t700)}
+.mp-b{background:var(--b50);border-color:var(--b100);color:var(--b700)}
+.mp-p{background:var(--p50);border-color:var(--p100);color:var(--p700)}
+.mem-empty{
+  text-align:center;padding:1.5rem 1rem;
+  color:var(--text3);font-size:13px;line-height:1.7;width:100%;
+}
+
+/* Quote card */
+.quote-card{
+  background:linear-gradient(135deg,var(--p900),var(--b900));
+  border-radius:var(--r-lg);padding:1.25rem;
+  position:relative;overflow:hidden;margin-top:1rem;
+}
+.quote-card::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle,rgba(23,168,186,.22) 0%,transparent 70%);
+}
+.qmark{font-size:28px;color:var(--t300);line-height:1;margin-bottom:.4rem;font-family:serif}
+.qtext{font-size:13px;color:rgba(255,255,255,.78);line-height:1.75;font-style:italic;margin-bottom:.6rem}
+.qattr{font-size:11px;color:rgba(255,255,255,.38);font-weight:600;font-family:var(--ff-h)}
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+.banner,.hunter-bar,.agents-grid,.bottom-grid{animation:up .55s cubic-bezier(.4,0,.2,1) both}
+.banner      {animation-delay:.05s}
+.hunter-bar  {animation-delay:.1s}
+.agents-grid {animation-delay:.15s}
+.bottom-grid {animation-delay:.22s}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:2rem;left:50%;
+  transform:translateX(-50%) translateY(90px);
+  background:var(--p900);color:#fff;padding:12px 22px;border-radius:50px;
+  font-size:14px;font-weight:500;border-left:4px solid var(--t400);
+  z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 32px rgba(14,8,38,.28);white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .bottom-grid{grid-template-columns:1fr 1fr}
+  .bottom-grid>div:last-child{grid-column:1/-1}
+}
+@media(max-width:720px){
+  .agents-grid{grid-template-columns:1fr}
+  .bottom-grid{grid-template-columns:1fr}
+  .banner{flex-direction:column;align-items:flex-start}
+  .bright{width:100%;justify-content:flex-start}
+  .wrap{padding:calc(var(--nav-h) + 1.25rem) 1rem 2rem}
+  .nav-bell{display:none}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <a class="nav-brand" href="01-login.html">
+    <div class="nav-mark">📚</div>
+    <div class="nav-name">Tusome <em>KCSE</em></div>
+  </a>
+  <div class="nav-sep"></div>
+  <div class="nav-page">Dashboard</div>
+  <div class="nav-space"></div>
+  <div class="nav-bell">
+    🔔<span class="bell-dot"></span>
+  </div>
+  <div class="nav-user" id="navUser">
+    <div class="nav-av" id="navAv">--</div>
+    <span class="nav-uname" id="navName">Student</span>
+  </div>
+  <button class="nav-logout" onclick="logout()">Sign Out</button>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<div class="wrap">
+
+  <!-- WELCOME BANNER -->
+  <div class="banner">
+    <div class="bdots"></div>
+    <div class="bleft">
+      <div class="btag">
+        <span class="dot"></span>
+        <span id="bannerTag">Session Active</span>
+      </div>
+      <div class="bgreeting" id="greeting">
+        Good morning, <span id="greetName">Student</span>! 👋
+      </div>
+      <div class="bsub" id="bannerSub">
+        Ready to make today count? Every topic you revise brings you one step closer to your KCSE goals.
+      </div>
+    </div>
+    <div class="bright">
+      <div class="streak-card">
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-lbl">🔥 Day Streak</div>
+      </div>
+      <div class="ring-card">
+        <div class="ring-wrap">
+          <svg width="56" height="56" viewBox="0 0 56 56">
+            <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/>
+            <circle cx="28" cy="28" r="22" fill="none"
+              stroke="url(#rg)" stroke-width="5" stroke-linecap="round"
+              stroke-dasharray="138.2" stroke-dashoffset="138.2" id="ringArc"/>
+            <defs>
+              <linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#17A8BA"/>
+                <stop offset="100%" stop-color="#6B93F0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-pct" id="ringPct">0%</div>
+        </div>
+        <div class="ring-lbl">Topics Done</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUNTER AGENT NUDGE (shown when same subject studied yesterday) -->
+  <div class="hunter-bar" id="hunterBar" style="display:none">
+    <div class="hunter-icon">🏹</div>
+    <div class="hunter-text">
+      <div class="hunter-title" id="hunterTitle">Hunter Agent — Subject Rotation Reminder</div>
+      <div class="hunter-sub" id="hunterSub">You studied Chemistry yesterday. For best results, try Biology, Physics or Mathematics today.</div>
+    </div>
+    <button class="hunter-action" onclick="dismissHunter()">Got it →</button>
+  </div>
+
+  <!-- THREE AGENTS -->
+  <div class="sec-label">Your Study Agents</div>
+  <div class="agents-grid">
+
+    <!-- Scout -->
+    <a class="agent-card ac-scout" id="cardScout" href="03-scout.html">
+      <div class="ac-icon-wrap">🔍</div>
+      <div class="ac-badge">Scout Agent</div>
+      <div class="ac-title">What did you learn today?</div>
+      <div class="ac-desc">Tell the Scout what you covered in class. It generates a personalised KCSE quiz using the spacing effect — right at your level.</div>
+      <div class="ac-cta">Start today's session <span>→</span></div>
+    </a>
+
+    <!-- Guardian -->
+    <a class="agent-card ac-guard" id="cardGuard" href="04-guardian.html">
+      <div class="ac-icon-wrap">🛡️</div>
+      <div class="ac-badge">Guardian Agent</div>
+      <div class="ac-title">What felt hardest?</div>
+      <div class="ac-desc">Tell the Guardian which concept confused you. It explains step-by-step — like a helpful older sibling, not a strict teacher.</div>
+      <div class="ac-cta">Get an explanation <span>→</span></div>
+    </a>
+
+    <!-- Hunter -->
+    <a class="agent-card ac-hunter" id="cardHunter" href="05-hunter.html">
+      <div class="ac-icon-wrap">🏹</div>
+      <div class="ac-badge">Hunter Agent</div>
+      <div class="ac-title">Your subject rotation plan</div>
+      <div class="ac-desc">The Hunter tracks what you studied yesterday and keeps you rotating subjects — because spacing out study boosts memory by 40%.</div>
+      <div class="ac-cta">View rotation plan <span>→</span></div>
+    </a>
+
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="bottom-grid">
+
+    <!-- Subject progress -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">📊 Subject Progress</div>
+        <button class="card-link" onclick="showToast('Full progress view coming soon!')">View all</button>
+      </div>
+      <div class="subj-list" id="subjList"></div>
+    </div>
+
+    <!-- Recent activity -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-title">🕐 Recent Activity</div>
+        <button class="card-link" onclick="showToast('Full history coming soon!')">See all</button>
+      </div>
+      <div class="act-list" id="actList"></div>
+    </div>
+
+    <!-- Right column: stats + memory + quote -->
+    <div style="display:flex;flex-direction:column;gap:1rem">
+
+      <!-- Stats -->
+      <div class="card" style="padding:1.25rem">
+        <div class="card-head" style="margin-bottom:.9rem">
+          <div class="card-title">📈 Your Stats</div>
+        </div>
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <div class="ms-val" id="statLessons">0</div>
+            <div class="ms-lbl">Sessions</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-val" id="statQuizzes">0</div>
+            <div class="ms-lbl">Quizzes</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-val" id="statBest">—</div>
+            <div class="ms-lbl">Best Score</div>
+          </div>
+          <div class="mini-stat">
+            <div class="ms-val" id="statTopics">0</div>
+            <div class="ms-lbl">Topics</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Topics studied memory -->
+      <div class="card" style="padding:1.25rem">
+        <div class="card-head" style="margin-bottom:.9rem">
+          <div class="card-title">🧠 Topics Studied</div>
+          <button class="card-link" style="color:var(--text3)" onclick="clearMemory()">Clear</button>
+        </div>
+        <div class="mem-wrap" id="memWrap"></div>
+      </div>
+
+      <!-- Quote -->
+      <div class="quote-card">
+        <div class="qmark">"</div>
+        <div class="qtext" id="quoteText">Education is the most powerful weapon you can use to change the world.</div>
+        <div class="qattr" id="quoteAttr">— Nelson Mandela</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* =============================================
+   DATA
+   ============================================= */
+const S_KEY  = 'tk_students';
+const SESS   = 'tk_session';
+const getStudents = () => { try{return JSON.parse(localStorage.getItem(S_KEY)||'{}')}catch{return{}} };
+const saveStudents = d => localStorage.setItem(S_KEY, JSON.stringify(d));
+
+const SUBJECTS = ['Biology','Chemistry','Physics','Mathematics'];
+const TOTAL    = 10; // topics per subject
+const ICONS    = {Biology:'🧬',Chemistry:'🧪',Physics:'⚛️',Mathematics:'📐'};
+const BARS     = ['bf-t','bf-b','bf-p','bf-t'];
+const PILLS    = ['mp-t','mp-b','mp-p','mp-t'];
+
+const QUOTES = [
+  {t:'Education is the most powerful weapon you can use to change the world.',a:'Nelson Mandela'},
+  {t:'The beautiful thing about learning is that no one can take it away from you.',a:'B.B. King'},
+  {t:'Success is not final, failure is not fatal — it is the courage to continue that counts.',a:'Winston Churchill'},
+  {t:'The secret of getting ahead is getting started. One step at a time.',a:'Mark Twain'},
+  {t:'Strive for progress, not perfection. Every revision session counts.',a:'Tusome KCSE'},
+  {t:'You are not struggling because you are not smart. You are struggling because the system was not designed for you — yet.',a:'Naomi Chagarii, Tusome KCSE'},
+];
+
+/* =============================================
+   INIT
+   ============================================= */
+let student = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const raw  = sessionStorage.getItem(SESS);
+  const sess = raw ? JSON.parse(raw) : null;
+  const students = getStudents();
+
+  if (sess && students[sess.admKey]) {
+    student = students[sess.admKey];
+  } else {
+    // Demo student for testing without login
+    const demoKey = 'demo_grace_muthoni';
+    if (!students[demoKey]) {
+      students[demoKey] = {
+        admKey: demoKey, name: 'Grace Muthoni',
+        firstName: 'Grace', lastName: 'Muthoni',
+        school: 'Njonjo Girls', form: 'Form 4',
+        streak: 7, lastStudyDate: new Date(Date.now()-86400000).toISOString(),
+        lastSubject: 'Chemistry',
+        totalQuizzes: 12, totalLessons: 18, bestScore: 88,
+        memory: [
+          {subject:'Chemistry',topic:'The Haber Process',date:new Date(Date.now()-86400000).toISOString()},
+          {subject:'Biology',topic:'Cell Structure & Function',date:new Date(Date.now()-172800000).toISOString()},
+          {subject:'Physics',topic:'Newton\'s Laws of Motion',date:new Date(Date.now()-259200000).toISOString()},
+          {subject:'Mathematics',topic:'Quadratic Equations',date:new Date(Date.now()-345600000).toISOString()},
+          {subject:'Chemistry',topic:'Atomic Structure',date:new Date(Date.now()-432000000).toISOString()},
+          {subject:'Biology',topic:'Photosynthesis',date:new Date(Date.now()-518400000).toISOString()},
+        ],
+        quizHistory: [
+          {subject:'Chemistry',topic:'The Haber Process',score:8,total:10,date:new Date(Date.now()-86400000).toISOString()},
+          {subject:'Biology',topic:'Cell Structure',score:7,total:10,date:new Date(Date.now()-172800000).toISOString()},
+          {subject:'Physics',topic:'Newton\'s Laws',score:9,total:10,date:new Date(Date.now()-259200000).toISOString()},
+        ],
+        struggles: [],
+      };
+      saveStudents(students);
+    }
+    student = students[demoKey];
+    sessionStorage.setItem(SESS, JSON.stringify({admKey: demoKey}));
+  }
+
+  renderAll();
+});
+
+/* =============================================
+   RENDER
+   ============================================= */
+function renderAll(){
+  renderNav();
+  renderBanner();
+  renderRing();
+  renderHunter();
+  renderSubjects();
+  renderActivity();
+  renderMemory();
+  renderStats();
+  renderQuote();
+}
+
+function renderNav(){
+  const init = student.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('navAv').textContent   = init;
+  document.getElementById('navName').textContent = student.firstName;
+}
+
+function renderBanner(){
+  const h = new Date().getHours();
+  const greet = h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  const emoji = h<12?'☀️':h<17?'🌤️':'🌙';
+  document.getElementById('greeting').innerHTML =
+    `${greet}, <span id="greetName">${student.firstName}</span>! ${emoji}`;
+
+  const topics = (student.memory||[]).length;
+  const subs   = [...new Set((student.memory||[]).map(m=>m.subject))].length;
+  document.getElementById('bannerSub').textContent = topics === 0
+    ? 'Welcome! Start your first session today. Your three agents are ready to help you succeed.'
+    : `You have covered ${topics} topic${topics!==1?'s':''} across ${subs} subject${subs!==1?'s':''}. Keep that momentum going!`;
+
+  document.getElementById('streakNum').textContent = student.streak||0;
+  document.getElementById('bannerTag').textContent =
+    (student.streak||0) > 0 ? `🔥 ${student.streak}-day streak!` : 'Start your streak today!';
+}
+
+function renderRing(){
+  const total   = SUBJECTS.length * TOTAL;
+  const studied = (student.memory||[]).length;
+  const pct     = Math.min(Math.round((studied/total)*100),100);
+  const circum  = 138.2;
+  document.getElementById('ringPct').textContent = pct+'%';
+  setTimeout(()=>{
+    const arc = document.getElementById('ringArc');
+    arc.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)';
+    arc.style.strokeDashoffset = circum - (circum * pct / 100);
+  }, 400);
+}
+
+function renderHunter(){
+  // Hunter rule: block same subject studied yesterday
+  if (!student.lastSubject || !student.lastStudyDate) return;
+  const yesterday = new Date(Date.now()-86400000).toDateString();
+  const lastDate  = new Date(student.lastStudyDate).toDateString();
+  if (lastDate !== yesterday && lastDate !== new Date().toDateString()) return;
+
+  const blocked = student.lastSubject;
+  const others  = SUBJECTS.filter(s=>s!==blocked).join(', ');
+
+  document.getElementById('hunterBar').style.display = 'flex';
+  document.getElementById('hunterSub').textContent =
+    `You studied ${blocked} yesterday. For the best results, try ${others} today — spacing out subjects helps you remember 40% more.`;
+
+  // Visually block the matching agent card
+  const map = {Biology:'cardScout', Chemistry:'cardScout', Physics:'cardGuard', Mathematics:'cardHunter'};
+  // Block Scout card if yesterday's subject overlaps — simplified: just show the nudge
+}
+
+function dismissHunter(){
+  document.getElementById('hunterBar').style.display = 'none';
+}
+
+function renderSubjects(){
+  const memory = student.memory||[];
+  const html = SUBJECTS.map((s,i)=>{
+    const done = memory.filter(m=>m.subject===s).length;
+    const pct  = Math.round((done/TOTAL)*100);
+    return `
+      <div class="subj-row">
+        <div class="subj-meta">
+          <div class="subj-name">${ICONS[s]} ${s}</div>
+          <div class="subj-count">${done}/${TOTAL} topics</div>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill ${BARS[i]}" style="width:0%" data-w="${pct}%"></div>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('subjList').innerHTML = html;
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill').forEach(b=>{
+      b.style.transition='width 1s cubic-bezier(.4,0,.2,1)';
+      b.style.width=b.dataset.w;
+    });
+  },350);
+}
+
+function renderActivity(){
+  const history = (student.quizHistory||[]).slice().reverse().slice(0,5);
+  const memory  = (student.memory||[]).slice().reverse().slice(0,3);
+  const icons   = ['ai-t','ai-b','ai-p'];
+
+  if(!history.length && !memory.length){
+    document.getElementById('actList').innerHTML=`
+      <div style="text-align:center;padding:2rem;color:var(--text3);font-size:13px;line-height:1.8">
+        <div style="font-size:30px;margin-bottom:.5rem">📋</div>
+        No activity yet.<br>Complete a session to see your history here.
+      </div>`;
+    return;
+  }
+
+  const items = [
+    ...history.map(h=>({type:'quiz',...h})),
+    ...memory.map(m=>({type:'lesson',...m}))
+  ].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+
+  document.getElementById('actList').innerHTML = items.map((item,i)=>{
+    const ic  = icons[i%icons.length];
+    const ago = timeAgo(item.date);
+    if(item.type==='quiz'){
+      const pct = Math.round((item.score/item.total)*100);
+      const cls = pct>=70?'score-hi':pct>=50?'score-md':'score-lo';
+      return `
+        <div class="act-item">
+          <div class="act-ico ${ic}">🧠</div>
+          <div class="act-info">
+            <div class="act-title">${item.subject}: ${item.topic}</div>
+            <div class="act-meta">Quiz · ${ago}</div>
+          </div>
+          <div class="act-score ${cls}">${pct}%</div>
+        </div>`;
+    }
+    return `
+      <div class="act-item">
+        <div class="act-ico ${ic}">${ICONS[item.subject]||'📖'}</div>
+        <div class="act-info">
+          <div class="act-title">${item.subject}: ${item.topic}</div>
+          <div class="act-meta">Session · ${ago}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderMemory(){
+  const memory = student.memory||[];
+  if(!memory.length){
+    document.getElementById('memWrap').innerHTML=`
+      <div class="mem-empty">
+        <div style="font-size:26px;margin-bottom:.4rem">🧩</div>
+        No topics yet. Complete your first session!
+      </div>`;
+    return;
+  }
+  document.getElementById('memWrap').innerHTML = memory.slice().reverse().map((m,i)=>`
+    <span class="mem-pill ${PILLS[i%PILLS.length]}">${ICONS[m.subject]} ${m.topic}</span>
+  `).join('');
+}
+
+function renderStats(){
+  document.getElementById('statLessons').textContent = student.totalLessons||0;
+  document.getElementById('statQuizzes').textContent = student.totalQuizzes||0;
+  document.getElementById('statBest').textContent    = student.bestScore ? student.bestScore+'%':'—';
+  document.getElementById('statTopics').textContent  = (student.memory||[]).length;
+}
+
+function renderQuote(){
+  const q = QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  document.getElementById('quoteText').textContent = q.t;
+  document.getElementById('quoteAttr').textContent = '— '+q.a;
+}
+
+/* =============================================
+   HELPERS
+   ============================================= */
+function timeAgo(d){
+  const diff = Date.now()-new Date(d).getTime();
+  const m = Math.floor(diff/60000);
+  if(m<1) return 'just now';
+  if(m<60) return m+'m ago';
+  const h=Math.floor(m/60);
+  if(h<24) return h+'h ago';
+  return Math.floor(h/24)+'d ago';
+}
+
+function clearMemory(){
+  if(!confirm('Clear all studied topics? This cannot be undone.')) return;
+  const students = getStudents();
+  student.memory = [];
+  students[student.admKey] = student;
+  saveStudents(students);
+  renderMemory(); renderRing(); renderSubjects(); renderStats();
+  showToast('Topics cleared');
+}
+
+function logout(){
+  sessionStorage.removeItem(SESS);
+  window.location.href='01-login.html';
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Intercept unbuilt pages
+document.querySelectorAll('.agent-card').forEach(card=>{
+  card.addEventListener('click', e=>{
+    const href = card.getAttribute('href');
+    const built = ['01-login.html','02-dashboard.html'];
+    if(!built.includes(href)){
+      e.preventDefault();
+      showToast('📦 This screen is coming next in our build!');
+    }
+  });
+});
+</script>
+</body>
+</html>

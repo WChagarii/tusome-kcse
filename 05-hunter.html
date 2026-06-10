@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hunter Agent — Tusome KCSE</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p900:#1A0938;--p800:#2A1050;--p700:#3B1870;
+  --p600:#5B2D99;--p500:#7B45BF;--p400:#9E6DD4;
+  --p300:#C4A3E8;--p100:#EDE5F8;--p50:#F7F2FD;
+  --t800:#084F57;--t700:#0D6B75;--t600:#118899;
+  --t500:#17A8BA;--t400:#2EC4D6;--t300:#6DDDE8;
+  --t100:#CCF3F7;--t50:#EDFAFB;
+  --b900:#0C1E4A;--b700:#1A3D8F;
+  --b600:#2554C7;--b500:#3B6FE8;--b400:#6B93F0;
+  --b300:#A3BCFA;--b100:#DBEAFE;--b50:#EFF6FF;
+  --white:#FFFFFF;--bg:#F2EFFE;
+  --text:#0E0826;--text2:#3D3360;--text3:#8878B0;
+  --border:rgba(59,24,112,.12);--border2:rgba(59,24,112,.06);
+  --ff-h:'Syne',sans-serif;--ff-b:'DM Sans',sans-serif;
+  --r-xl:24px;--r-lg:16px;--r-md:12px;
+  --shadow-md:0 8px 28px rgba(14,8,38,.1);
+  --shadow-sm:0 2px 12px rgba(14,8,38,.07);
+  --nav-h:66px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(26,9,56,.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 2rem;gap:1.25rem}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.nav-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--t500),var(--b600));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 3px 12px rgba(23,168,186,.38)}
+.nav-name{font-family:var(--ff-h);font-size:17px;font-weight:800;color:#fff;letter-spacing:-.2px}
+.nav-name em{font-style:normal;color:var(--t300)}
+.nav-sep{width:1px;height:24px;background:rgba(255,255,255,.1);flex-shrink:0}
+.nav-page{font-size:13px;font-weight:600;color:rgba(255,255,255,.45)}
+.nav-space{flex:1}
+.nav-back{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:none;transition:all .2s}
+.nav-back:hover{background:rgba(255,255,255,.13);color:#fff}
+.nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--p500),var(--t500));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;font-family:var(--ff-h)}
+
+/* LAYOUT */
+.wrap{max-width:1100px;margin:0 auto;padding:calc(var(--nav-h) + 2rem) 2rem 3rem;display:grid;grid-template-columns:300px 1fr;gap:1.75rem;align-items:start}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:1.25rem}
+.agent-card-side{background:var(--p900);border-radius:var(--r-xl);padding:1.75rem;position:relative;overflow:hidden}
+.agent-card-side::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(91,45,153,.35) 0%,transparent 65%)}
+.agent-card-side::after{content:'';position:absolute;bottom:-40px;left:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(23,168,186,.18) 0%,transparent 65%)}
+.aic-icon{width:52px;height:52px;border-radius:15px;background:rgba(91,45,153,.25);border:1px solid rgba(158,109,212,.3);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:1rem;position:relative;z-index:1}
+.aic-title{font-family:var(--ff-h);font-size:18px;font-weight:800;color:#fff;margin-bottom:.4rem;position:relative;z-index:1}
+.aic-sub{font-size:13px;color:rgba(255,255,255,.52);line-height:1.7;margin-bottom:1.25rem;position:relative;z-index:1}
+.aic-rule{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-md);padding:10px 12px;position:relative;z-index:1}
+.aic-rule-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.aic-rule-text{font-size:12.5px;color:rgba(255,255,255,.68);line-height:1.6}
+
+.info-card{background:var(--white);border-radius:var(--r-lg);border:1.5px solid var(--border);padding:1.25rem}
+.info-title{font-family:var(--ff-h);font-size:14px;font-weight:700;color:var(--text);margin-bottom:.85rem}
+.info-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:.7rem}
+.info-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.info-text{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* SMS preview card */
+.sms-card{background:linear-gradient(135deg,var(--p50),var(--b50));border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem}
+.sms-title{font-family:var(--ff-h);font-size:13px;font-weight:700;color:var(--p700);margin-bottom:.75rem;display:flex;align-items:center;gap:7px}
+.sms-bubble{background:var(--white);border-radius:12px;padding:12px 14px;border:1px solid var(--border);font-size:12.5px;color:var(--text2);line-height:1.7;font-style:italic;position:relative}
+.sms-bubble::before{content:'📱';position:absolute;top:-10px;left:12px;font-size:16px}
+.sms-note{font-size:11px;color:var(--text3);margin-top:.6rem;line-height:1.5}
+
+/* MAIN */
+.main{display:flex;flex-direction:column;gap:1.25rem}
+
+/* Today's recommendation */
+.rec-card{background:var(--p900);border-radius:var(--r-xl);padding:2rem;position:relative;overflow:hidden}
+.rec-card::before{content:'';position:absolute;top:-80px;right:-60px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(23,168,186,.22) 0%,transparent 65%)}
+.rec-card::after{content:'';position:absolute;bottom:-60px;left:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(37,84,199,.18) 0%,transparent 65%)}
+.rec-dots{position:absolute;inset:0;border-radius:var(--r-xl);background-image:radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.rec-inner{position:relative;z-index:1}
+.rec-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);border-radius:50px;padding:4px 12px;font-size:11px;font-weight:700;color:rgba(255,255,255,.75);font-family:var(--ff-h);margin-bottom:1rem}
+.rec-title{font-family:var(--ff-h);font-size:22px;font-weight:800;color:#fff;letter-spacing:-.4px;margin-bottom:.5rem}
+.rec-sub{font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;max-width:500px;margin-bottom:1.75rem}
+
+/* Subject recommendation pills */
+.rec-subjects{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.rec-subj{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;border-radius:var(--r-md);
+  border:1.5px solid;cursor:pointer;transition:all .2s;
+  flex:1;min-width:120px;
+}
+.rs-recommended{background:rgba(23,168,186,.15);border-color:rgba(46,196,214,.35)}
+.rs-recommended:hover{background:rgba(23,168,186,.25);transform:translateY(-2px)}
+.rs-ok{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.rs-ok:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.rs-blocked{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.06);cursor:not-allowed;opacity:.45}
+.rs-icon{font-size:20px}
+.rs-info{}
+.rs-name{font-family:var(--ff-h);font-size:13px;font-weight:700;color:#fff}
+.rs-status{font-size:11px;margin-top:2px}
+.rs-recommended .rs-status{color:var(--t300)}
+.rs-ok .rs-status{color:rgba(255,255,255,.45)}
+.rs-blocked .rs-status{color:rgba(255,255,255,.3)}
+.rs-check{margin-left:auto;font-size:16px}
+
+/* Science box */
+.science-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.sb-icon{font-size:22px;flex-shrink:0}
+.sb-text{font-size:13px;color:rgba(255,255,255,.65);line-height:1.65}
+.sb-text strong{color:var(--t300)}
+
+/* Weekly calendar */
+.calendar-card{background:var(--white);border-radius:var(--r-lg);border:1.5px solid var(--border);padding:1.4rem}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
+.cal-title{font-family:var(--ff-h);font-size:15px;font-weight:700;color:var(--text)}
+.cal-badge{font-size:11px;font-weight:600;color:var(--t700);background:var(--t50);border:1px solid var(--t100);border-radius:50px;padding:3px 10px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.5rem}
+.cal-day{border-radius:var(--r-sm);padding:.6rem .3rem;text-align:center;border:1px solid var(--border2)}
+.cd-name{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:.35rem}
+.cd-subj{font-size:10px;font-weight:700;padding:3px 5px;border-radius:6px;min-height:22px;display:flex;align-items:center;justify-content:center}
+.cd-today{border-color:var(--p400);background:var(--p50)}
+.subj-bio{background:var(--t50);color:var(--t700)}
+.subj-chem{background:var(--b50);color:var(--b700)}
+.subj-phys{background:var(--p100);color:var(--p700)}
+.subj-math{background:#FEF9C3;color:#92400E}
+.subj-empty{background:var(--bg);color:var(--text3);font-size:9px}
+
+/* Progress section */
+.progress-card{background:var(--white);border-radius:var(--r-lg);border:1.5px solid var(--border);padding:1.4rem}
+.prog-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.prog-item{display:flex;flex-direction:column;gap:.5rem}
+.pi-head{display:flex;align-items:center;justify-content:space-between}
+.pi-name{font-size:13.5px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:6px}
+.pi-pct{font-size:12px;font-weight:700;color:var(--text3)}
+.bar-track{height:8px;border-radius:99px;background:var(--border2);overflow:hidden}
+.bar-fill{height:100%;border-radius:99px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.bf-t{background:linear-gradient(90deg,var(--t500),var(--t300))}
+.bf-b{background:linear-gradient(90deg,var(--b500),var(--b300))}
+.bf-p{background:linear-gradient(90deg,var(--p500),var(--p300))}
+.bf-gold{background:linear-gradient(90deg,#D4A017,#FBBF24)}
+.pi-topics{font-size:11px;color:var(--text3)}
+
+/* Escalation alert */
+.escalation-card{
+  background:linear-gradient(135deg,var(--b50),var(--p50));
+  border:1.5px solid var(--b100);border-radius:var(--r-lg);padding:1.4rem;
+  display:none;
+}
+.escalation-card.show{display:block}
+.esc-head{display:flex;align-items:center;gap:10px;margin-bottom:.85rem}
+.esc-icon{width:38px;height:38px;border-radius:10px;background:var(--b100);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.esc-title{font-family:var(--ff-h);font-size:15px;font-weight:700;color:var(--b700)}
+.esc-sub{font-size:13px;color:var(--b700);line-height:1.7;margin-bottom:1rem}
+.esc-sms{background:var(--white);border-radius:var(--r-md);padding:12px 14px;border:1px solid var(--b100);font-size:13px;color:var(--text2);line-height:1.7;font-style:italic}
+
+/* CTA button */
+.bgo{width:100%;padding:14px;border:none;border-radius:var(--r-md);font-size:15px;font-weight:700;font-family:var(--ff-h);cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--p600) 0%,var(--t600) 50%,var(--b600) 100%);background-size:200% 100%;box-shadow:0 5px 22px rgba(91,45,153,.28);transition:all .3s;letter-spacing:.1px}
+.bgo:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 10px 30px rgba(23,168,186,.35)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(90px);background:var(--p900);color:#fff;padding:12px 22px;border-radius:50px;font-size:14px;font-weight:500;border-left:4px solid var(--p400);z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 32px rgba(14,8,38,.28);white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ANIM */
+.rec-card,.calendar-card,.progress-card,.escalation-card{animation:up .5s cubic-bezier(.4,0,.2,1) both}
+.rec-card{animation-delay:.05s}.calendar-card{animation-delay:.12s}
+.progress-card{animation-delay:.18s}.escalation-card{animation-delay:.22s}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* RESPONSIVE */
+@media(max-width:860px){.wrap{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:520px){.rec-subjects{flex-direction:column}.prog-grid{grid-template-columns:1fr}.wrap{padding:calc(var(--nav-h) + 1rem) 1rem 2rem}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="02-dashboard.html">
+    <div class="nav-mark">📚</div>
+    <div class="nav-name">Tusome <em>KCSE</em></div>
+  </a>
+  <div class="nav-sep"></div>
+  <div class="nav-page">🏹 Hunter Agent</div>
+  <div class="nav-space"></div>
+  <a class="nav-back" href="02-dashboard.html">← Dashboard</a>
+  <div class="nav-av" id="navAv">--</div>
+</nav>
+
+<div class="wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="agent-card-side">
+      <div class="aic-icon">🏹</div>
+      <div class="aic-title">Hunter Agent</div>
+      <div class="aic-sub">The Hunter tracks what you studied yesterday and enforces one simple rule — you cannot study the same subject two days in a row.</div>
+      <div class="aic-rule">
+        <div class="aic-rule-title">The Spacing Effect</div>
+        <div class="aic-rule-text">Research shows students remember 40% more when they rotate subjects rather than repeating the same one. The Hunter keeps your rotation on track.</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-title">What the Hunter does</div>
+      <div class="info-row">
+        <div class="info-icon">🔄</div>
+        <div class="info-text">Tracks your last studied subject and blocks repeats the next day</div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📅</div>
+        <div class="info-text">Builds your weekly study rotation plan across all 4 KCSE subjects</div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📊</div>
+        <div class="info-text">Flags subjects you are falling behind on so you can catch up</div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">📱</div>
+        <div class="info-text">Sends a weekly SMS summary to parents in Swahili — progress and next steps</div>
+      </div>
+      <div class="info-row">
+        <div class="info-icon">🧑‍🏫</div>
+        <div class="info-text">If you are persistently struggling, it alerts a real teacher for support</div>
+      </div>
+    </div>
+
+    <!-- SMS Preview -->
+    <div class="sms-card">
+      <div class="sms-title">📱 Weekly Parent SMS Preview</div>
+      <div class="sms-bubble" id="smsBubble">
+        Habari! Ripoti ya wiki ya <strong id="smsName">Grace</strong>: Amesoma masomo <span id="smsCount">4</span> wiki hii. Alama bora: <span id="smsBest">88%</span>. Tusome KCSE inampongeza kwa juhudi zake nzuri!
+      </div>
+      <div class="sms-note">This SMS is sent to the parent's verified phone number every Sunday via Africa's Talking.</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- Today's Recommendation -->
+    <div class="rec-card">
+      <div class="rec-dots"></div>
+      <div class="rec-inner">
+        <div class="rec-badge">🏹 Hunter Agent — Today's Rotation</div>
+        <div class="rec-title" id="recTitle">Today's recommended subject</div>
+        <div class="rec-sub" id="recSub">Based on your study history, here is what the Hunter recommends you study today.</div>
+
+        <div class="rec-subjects" id="recSubjects">
+          <!-- Injected by JS -->
+        </div>
+
+        <div class="science-box">
+          <div class="sb-icon">🧬</div>
+          <div class="sb-text" id="scienceText">
+            <strong>Why rotation works:</strong> When you switch between subjects, your brain forms stronger memory connections. Students who rotate subjects score an average of 40% higher in KCSE than those who cram one subject at a time.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Calendar -->
+    <div class="calendar-card">
+      <div class="cal-head">
+        <div class="cal-title">📅 This Week's Study Plan</div>
+        <div class="cal-badge" id="calBadge">Week of <span id="weekOf"></span></div>
+      </div>
+      <div class="cal-grid" id="calGrid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Subject Progress -->
+    <div class="progress-card">
+      <div class="cal-head">
+        <div class="cal-title">📊 KCSE Subject Progress</div>
+        <button style="font-size:12.5px;font-weight:600;color:var(--t600);background:none;border:none;cursor:pointer;font-family:var(--ff-b)" onclick="window.location.href='06-quiz.html'">Take a quiz →</button>
+      </div>
+      <div class="prog-grid" id="progGrid">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Escalation (shown when student struggles consistently) -->
+    <div class="escalation-card" id="escalationCard">
+      <div class="esc-head">
+        <div class="esc-icon">🧑‍🏫</div>
+        <div class="esc-title">Teacher Support Recommended</div>
+      </div>
+      <div class="esc-sub" id="escSub">
+        The Hunter has noticed you have asked the Guardian many questions on the same topic. This is completely normal — some concepts need more time. A teacher has been flagged to follow up with you this week.
+      </div>
+      <div class="esc-sms" id="escSms"></div>
+    </div>
+
+    <!-- Start Today's Session -->
+    <button class="bgo" id="startBtn" onclick="startTodaySession()">
+      Start Today's Session →
+    </button>
+
+  </div>
+</div>
+
+<script>
+/* =============================================
+   DATA
+   ============================================= */
+const S_KEY = 'tk_students';
+const SESS  = 'tk_session';
+const getStudents  = () => { try{return JSON.parse(localStorage.getItem(S_KEY)||'{}')}catch{return{}} };
+const saveStudents = d => localStorage.setItem(S_KEY,JSON.stringify(d));
+
+const SUBJECTS = ['Biology','Chemistry','Physics','Mathematics'];
+const ICONS    = {Biology:'🧬',Chemistry:'🧪',Physics:'⚛️',Mathematics:'📐'};
+const BARS     = {Biology:'bf-t',Chemistry:'bf-b',Physics:'bf-p',Mathematics:'bf-gold'};
+const SUBJ_CLS = {Biology:'subj-bio',Chemistry:'subj-chem',Physics:'subj-phys',Mathematics:'subj-math'};
+const DAYS     = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const TOTAL    = 10;
+
+let student     = null;
+let recommended = [];
+let blockedSubj = null;
+
+/* =============================================
+   INIT
+   ============================================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const raw  = sessionStorage.getItem(SESS);
+  const sess = raw ? JSON.parse(raw) : null;
+  const students = getStudents();
+  student = sess && students[sess.admKey] ? students[sess.admKey] : Object.values(students)[0];
+
+  if(!student) { window.location.href='01-login.html'; return; }
+
+  document.getElementById('navAv').textContent =
+    student.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+
+  renderAll();
+});
+
+/* =============================================
+   RENDER ALL
+   ============================================= */
+function renderAll(){
+  renderRecommendation();
+  renderCalendar();
+  renderProgress();
+  renderSMS();
+  checkEscalation();
+}
+
+/* =============================================
+   HUNTER LOGIC — ROTATION RECOMMENDATION
+   ============================================= */
+function renderRecommendation(){
+  const memory  = student.memory || [];
+  const lastSubj= student.lastSubject;
+  const todayStr= new Date().toDateString();
+  const lastDate= student.lastStudyDate ? new Date(student.lastStudyDate).toDateString() : null;
+
+  // Determine blocked subject
+  const studiedToday = lastDate === todayStr;
+  const studiedYest  = lastDate === new Date(Date.now()-86400000).toDateString();
+  blockedSubj = (studiedToday || studiedYest) ? lastSubj : null;
+
+  // Find least studied subject (excluding blocked)
+  const counts = {};
+  SUBJECTS.forEach(s => { counts[s] = memory.filter(m=>m.subject===s).length; });
+
+  // Recommended = not blocked + least studied first
+  recommended = SUBJECTS
+    .filter(s => s !== blockedSubj)
+    .sort((a,b) => counts[a] - counts[b]);
+
+  // Top recommendation
+  const top = recommended[0] || SUBJECTS[0];
+
+  document.getElementById('recTitle').textContent =
+    blockedSubj
+      ? `Study ${top} today — not ${blockedSubj}`
+      : `Study ${top} today`;
+
+  document.getElementById('recSub').textContent = blockedSubj
+    ? `You studied ${blockedSubj} yesterday. The Hunter recommends rotating to ${top} today to strengthen your memory through spacing.`
+    : `Based on your progress, ${top} needs the most attention right now. The Hunter has planned a great session for you.`;
+
+  // Render subject buttons
+  document.getElementById('recSubjects').innerHTML = SUBJECTS.map(s => {
+    const isBlocked    = s === blockedSubj;
+    const isTop        = s === top;
+    const cls = isBlocked ? 'rs-blocked' : isTop ? 'rs-recommended' : 'rs-ok';
+    const status = isBlocked
+      ? '🚫 Studied yesterday — rest it'
+      : isTop
+      ? '⭐ Recommended today'
+      : '✅ Good to study';
+    const check = isTop ? '→' : '';
+    return `
+      <div class="rec-subj ${cls}" onclick="${isBlocked ? "showToast('The Hunter recommends resting this subject today — try it tomorrow!')" : `chooseSubject('${s}')`}">
+        <div class="rs-icon">${ICONS[s]}</div>
+        <div class="rs-info">
+          <div class="rs-name">${s}</div>
+          <div class="rs-status">${status}</div>
+        </div>
+        <div class="rs-check">${check}</div>
+      </div>`;
+  }).join('');
+}
+
+/* =============================================
+   WEEKLY CALENDAR
+   ============================================= */
+function renderCalendar(){
+  const today    = new Date();
+  const dayOfWk  = today.getDay(); // 0=Sun
+  const monday   = new Date(today);
+  monday.setDate(today.getDate() - (dayOfWk===0?6:dayOfWk-1));
+
+  document.getElementById('weekOf').textContent =
+    monday.toLocaleDateString('en-KE',{day:'numeric',month:'short'});
+
+  // Build rotation plan for the week
+  const memory  = student.memory||[];
+  const rotation = buildRotation(monday);
+
+  document.getElementById('calGrid').innerHTML = DAYS.map((d,i)=>{
+    const date    = new Date(monday);
+    date.setDate(monday.getDate()+i);
+    const isToday = date.toDateString() === today.toDateString();
+    const isPast  = date < today && !isToday;
+
+    // Check if we have memory for this day
+    const dateStr  = date.toDateString();
+    const studied  = memory.find(m => new Date(m.date).toDateString()===dateStr);
+    const planned  = rotation[i];
+
+    let subjHtml = '';
+    if(studied){
+      subjHtml=`<span class="cd-subj ${SUBJ_CLS[studied.subject]}" title="${studied.subject}">${ICONS[studied.subject]}</span>`;
+    } else if(!isPast){
+      subjHtml=`<span class="cd-subj ${SUBJ_CLS[planned]||'subj-empty'}">${planned?ICONS[planned]:'—'}</span>`;
+    } else {
+      subjHtml=`<span class="cd-subj subj-empty">—</span>`;
+    }
+
+    return `
+      <div class="cal-day ${isToday?'cd-today':''}">
+        <div class="cd-name">${d}</div>
+        ${subjHtml}
+      </div>`;
+  }).join('');
+}
+
+function buildRotation(startMonday){
+  // Simple round-robin rotation avoiding repeats
+  const order = [...SUBJECTS];
+  // Start from the subject after last studied
+  const lastIdx = student.lastSubject ? SUBJECTS.indexOf(student.lastSubject) : -1;
+  const startIdx= (lastIdx+1) % SUBJECTS.length;
+  const plan = [];
+  for(let i=0;i<7;i++){
+    plan.push(SUBJECTS[(startIdx+i) % SUBJECTS.length]);
+  }
+  return plan;
+}
+
+/* =============================================
+   PROGRESS
+   ============================================= */
+function renderProgress(){
+  const memory  = student.memory||[];
+  const bars    = ['bf-t','bf-b','bf-p','bf-gold'];
+  document.getElementById('progGrid').innerHTML = SUBJECTS.map((s,i)=>{
+    const done = memory.filter(m=>m.subject===s).length;
+    const pct  = Math.round((done/TOTAL)*100);
+    const behind = done < 3;
+    return `
+      <div class="prog-item">
+        <div class="pi-head">
+          <div class="pi-name">${ICONS[s]} ${s}${behind?' <span style="font-size:10px;color:var(--p500)">⚠️ Behind</span>':''}</div>
+          <div class="pi-pct">${pct}%</div>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill ${bars[i]}" style="width:0%" data-w="${pct}%"></div>
+        </div>
+        <div class="pi-topics">${done} of ${TOTAL} topics covered</div>
+      </div>`;
+  }).join('');
+
+  setTimeout(()=>{
+    document.querySelectorAll('.bar-fill').forEach(b=>{
+      b.style.transition='width 1s cubic-bezier(.4,0,.2,1)';
+      b.style.width=b.dataset.w;
+    });
+  },300);
+}
+
+/* =============================================
+   SMS PREVIEW (Swahili — parent facing)
+   ============================================= */
+function renderSMS(){
+  document.getElementById('smsName').textContent  = student.firstName||'Mwanafunzi';
+  document.getElementById('smsCount').textContent = (student.memory||[]).length;
+  document.getElementById('smsBest').textContent  = student.bestScore ? student.bestScore+'%' : 'Bado';
+}
+
+/* =============================================
+   ESCALATION CHECK
+   ============================================= */
+function checkEscalation(){
+  const struggles = student.struggles||[];
+  // Escalate if student has asked 5+ questions without improvement
+  if(struggles.length < 5) return;
+
+  // Check if struggles are on same topic repeatedly
+  const recent = struggles.slice(-5);
+  const subjects = [...new Set(recent.map(s=>s.subject))];
+  if(subjects.length > 2) return; // varied — ok
+
+  const card = document.getElementById('escalationCard');
+  card.classList.add('show');
+
+  const struggling = subjects[0];
+  document.getElementById('escSub').textContent =
+    `The Hunter has noticed you have asked the Guardian several questions about ${struggling}. This shows great effort and curiosity! Some topics just need more time and a human touch. A teacher has been flagged to check in with you this week.`;
+
+  // SMS to parent — Swahili
+  document.getElementById('escSms').innerHTML =
+    `📱 <em>SMS kwa mzazi: "Habari! Mwanafunzi wako ${student.firstName} anahitaji msaada zaidi katika ${struggling}. Mwalimu atamfikia wiki hii. Tusome KCSE."</em>`;
+}
+
+/* =============================================
+   ACTIONS
+   ============================================= */
+function chooseSubject(subj){
+  // Save recommendation choice and go to Scout
+  const students = getStudents();
+  student.hunterRecommended = subj;
+  students[student.admKey] = student;
+  saveStudents(students);
+  showToast(`Great choice! Starting ${subj} session with the Scout...`);
+  setTimeout(()=>{ window.location.href='03-scout.html'; }, 1000);
+}
+
+function startTodaySession(){
+  // Go to Scout with top recommended subject pre-selected
+  const top = recommended[0] || SUBJECTS[0];
+  chooseSubject(top);
+}
+
+/* =============================================
+   HELPERS
+   ============================================= */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
