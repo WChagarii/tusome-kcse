@@ -5,7 +5,865 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scout Agent — Tusome KCSE</title>
 <link href="https://fonts.googleapis.com/css2?family=Syn<!DOCTYPE html>
-<html lang="en"><!DOCTYPE html>
+<html lang="en"><!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scout Agent — Tusome KCSE</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p900:#1A0938;--p800:#2A1050;--p700:#3B1870;
+  --p600:#5B2D99;--p500:#7B45BF;--p400:#9E6DD4;
+  --p300:#C4A3E8;--p100:#EDE5F8;--p50:#F7F2FD;
+  --t800:#084F57;--t700:#0D6B75;--t600:#118899;
+  --t500:#17A8BA;--t400:#2EC4D6;--t300:#6DDDE8;
+  --t100:#CCF3F7;--t50:#EDFAFB;
+  --b900:#0C1E4A;--b700:#1A3D8F;
+  --b600:#2554C7;--b500:#3B6FE8;--b400:#6B93F0;
+  --b300:#A3BCFA;--b100:#DBEAFE;--b50:#EFF6FF;
+  --white:#FFFFFF;--bg:#F2EFFE;
+  --text:#0E0826;--text2:#3D3360;--text3:#8878B0;
+  --border:rgba(59,24,112,.12);--border2:rgba(59,24,112,.06);
+  --ff-h:'Syne',sans-serif;--ff-b:'DM Sans',sans-serif;
+  --r-xl:24px;--r-lg:16px;--r-md:12px;--r-sm:8px;
+  --shadow-md:0 8px 28px rgba(14,8,38,.1);
+  --shadow-sm:0 2px 12px rgba(14,8,38,.07);
+  --nav-h:66px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);
+  background:rgba(26,9,56,.97);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;padding:0 2rem;gap:1.25rem;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.nav-mark{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--t500),var(--b600));
+  display:flex;align-items:center;justify-content:center;font-size:17px;
+  box-shadow:0 3px 12px rgba(23,168,186,.38);
+}
+.nav-name{font-family:var(--ff-h);font-size:17px;font-weight:800;color:#fff;letter-spacing:-.2px}
+.nav-name em{font-style:normal;color:var(--t300)}
+.nav-sep{width:1px;height:24px;background:rgba(255,255,255,.1);flex-shrink:0}
+.nav-page{font-size:13px;font-weight:600;color:rgba(255,255,255,.45)}
+.nav-space{flex:1}
+.nav-back{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;padding:7px 14px;
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.7);
+  text-decoration:none;transition:all .2s;
+}
+.nav-back:hover{background:rgba(255,255,255,.13);color:#fff}
+.nav-av{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p500),var(--t500));
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:800;color:#fff;font-family:var(--ff-h);
+}
+
+/* LAYOUT */
+.wrap{
+  max-width:1100px;margin:0 auto;
+  padding:calc(var(--nav-h) + 2rem) 2rem 3rem;
+  display:grid;grid-template-columns:320px 1fr;gap:1.75rem;align-items:start;
+}
+
+/* =============================================
+   LEFT SIDEBAR
+   ============================================= */
+.sidebar{display:flex;flex-direction:column;gap:1.25rem}
+
+/* Agent info card */
+.agent-info-card{
+  background:var(--p900);border-radius:var(--r-xl);
+  padding:1.75rem;position:relative;overflow:hidden;
+}
+.agent-info-card::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(23,168,186,.25) 0%,transparent 65%);
+}
+.agent-info-card::after{
+  content:'';position:absolute;bottom:-40px;left:-30px;
+  width:140px;height:140px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,84,199,.2) 0%,transparent 65%);
+}
+.aic-icon{
+  width:52px;height:52px;border-radius:15px;
+  background:rgba(23,168,186,.2);border:1px solid rgba(23,168,186,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:1rem;position:relative;z-index:1;
+}
+.aic-title{
+  font-family:var(--ff-h);font-size:18px;font-weight:800;
+  color:#fff;margin-bottom:.4rem;position:relative;z-index:1;
+}
+.aic-sub{
+  font-size:13px;color:rgba(255,255,255,.55);
+  line-height:1.7;margin-bottom:1.25rem;position:relative;z-index:1;
+}
+.aic-rule{
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-md);padding:10px 12px;
+  position:relative;z-index:1;
+}
+.aic-rule-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.aic-rule-text{font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.6}
+
+/* How it works steps */
+.how-card{
+  background:var(--white);border-radius:var(--r-lg);
+  border:1.5px solid var(--border);padding:1.25rem;
+}
+.how-title{font-family:var(--ff-h);font-size:14px;font-weight:700;color:var(--text);margin-bottom:1rem}
+.how-steps{display:flex;flex-direction:column;gap:.75rem}
+.how-step{display:flex;align-items:flex-start;gap:10px}
+.hs-num{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--t500),var(--b500));
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;font-family:var(--ff-h);
+}
+.hs-text{font-size:13px;color:var(--text2);line-height:1.6;padding-top:2px}
+
+/* Previous topics */
+.prev-card{
+  background:var(--white);border-radius:var(--r-lg);
+  border:1.5px solid var(--border);padding:1.25rem;
+}
+.prev-title{font-family:var(--ff-h);font-size:14px;font-weight:700;color:var(--text);margin-bottom:.85rem}
+.prev-pills{display:flex;flex-wrap:wrap;gap:6px}
+.prev-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:4px 10px;border-radius:50px;
+  font-size:11.5px;font-weight:500;
+  background:var(--t50);border:1px solid var(--t100);color:var(--t700);
+}
+
+/* =============================================
+   MAIN CONTENT
+   ============================================= */
+.main{display:flex;flex-direction:column;gap:1.25rem}
+
+/* Input section */
+.input-card{
+  background:var(--white);border-radius:var(--r-xl);
+  border:1.5px solid var(--border);padding:2rem;
+}
+.ic-header{margin-bottom:1.5rem}
+.ic-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--t50);border:1px solid var(--t100);
+  border-radius:50px;padding:4px 12px;
+  font-size:11.5px;font-weight:700;color:var(--t700);
+  font-family:var(--ff-h);margin-bottom:.75rem;
+}
+.ic-title{font-family:var(--ff-h);font-size:22px;font-weight:800;color:var(--p900);margin-bottom:.4rem;letter-spacing:-.3px}
+.ic-sub{font-size:14px;color:var(--text3);line-height:1.65}
+
+/* Subject selector */
+.subj-select{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem;margin-bottom:1.5rem}
+.subj-btn{
+  padding:.75rem .5rem;border-radius:var(--r-md);
+  border:1.5px solid var(--border);background:var(--bg);
+  cursor:pointer;text-align:center;transition:all .2s;
+  font-family:var(--ff-b);
+}
+.subj-btn:hover{border-color:var(--t400);background:var(--t50)}
+.subj-btn.sel{
+  border-color:var(--t500);background:var(--t50);
+  box-shadow:0 0 0 3px rgba(23,168,186,.12);
+}
+.sb-icon{font-size:20px;display:block;margin-bottom:4px}
+.sb-name{font-size:12px;font-weight:600;color:var(--text2)}
+.subj-btn.sel .sb-name{color:var(--t700)}
+
+/* Text input */
+.learn-input-wrap{margin-bottom:1.25rem}
+.learn-input-wrap label{
+  display:block;font-size:13px;font-weight:600;
+  color:var(--text2);margin-bottom:.5rem;
+}
+.learn-textarea{
+  width:100%;min-height:120px;
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  padding:14px 16px;font-size:14px;font-family:var(--ff-b);
+  color:var(--text);background:var(--p50);
+  resize:vertical;outline:none;line-height:1.7;
+  transition:all .2s;
+}
+.learn-textarea:focus{
+  border-color:var(--t500);background:#fff;
+  box-shadow:0 0 0 4px rgba(23,168,186,.1);
+}
+.learn-textarea::placeholder{color:var(--text3);font-size:13.5px}
+.char-count{text-align:right;font-size:11.5px;color:var(--text3);margin-top:4px}
+
+/* Example prompts */
+.examples{margin-bottom:1.5rem}
+.ex-label{font-size:12px;font-weight:600;color:var(--text3);margin-bottom:.6rem}
+.ex-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ex-chip{
+  padding:5px 12px;border-radius:50px;
+  border:1px solid var(--border);background:var(--white);
+  font-size:12px;font-weight:500;color:var(--text2);
+  cursor:pointer;transition:all .2s;
+}
+.ex-chip:hover{border-color:var(--t400);color:var(--t700);background:var(--t50)}
+
+/* Submit */
+.bgo{
+  width:100%;padding:15px;border:none;border-radius:var(--r-md);
+  font-size:15px;font-weight:700;font-family:var(--ff-h);
+  cursor:pointer;color:#fff;
+  background:linear-gradient(135deg,var(--t600) 0%,var(--b600) 60%,var(--p600) 100%);
+  background-size:200% 100%;
+  box-shadow:0 5px 22px rgba(23,168,186,.3);
+  transition:all .3s;letter-spacing:.1px;
+}
+.bgo:hover{
+  background-position:right center;
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(37,84,199,.35);
+}
+.bgo:active{transform:translateY(0)}
+.bgo .arr{display:inline-block;margin-left:7px;transition:transform .25s}
+.bgo:hover .arr{transform:translateX(5px)}
+.bgo:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* =============================================
+   AI RESPONSE CARD
+   ============================================= */
+.response-card{
+  background:var(--white);border-radius:var(--r-xl);
+  border:1.5px solid var(--border);
+  overflow:hidden;display:none;
+  animation:up .4s cubic-bezier(.4,0,.2,1);
+}
+.response-card.show{display:block}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.rc-header{
+  padding:1.25rem 1.75rem;
+  background:linear-gradient(135deg,var(--p900),var(--b900));
+  display:flex;align-items:center;gap:12px;
+}
+.rc-agent-icon{
+  width:40px;height:40px;border-radius:11px;
+  background:rgba(23,168,186,.2);border:1px solid rgba(23,168,186,.3);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.rc-agent-info{}
+.rc-agent-name{font-family:var(--ff-h);font-size:14px;font-weight:700;color:#fff;margin-bottom:2px}
+.rc-agent-sub{font-size:12px;color:rgba(255,255,255,.5)}
+.rc-dot{width:8px;height:8px;border-radius:50%;background:var(--t400);animation:pulse 2s infinite;margin-left:auto}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.rc-body{padding:1.75rem}
+
+/* Summary box */
+.summary-box{
+  background:var(--t50);border:1px solid var(--t100);
+  border-radius:var(--r-md);padding:1rem 1.25rem;margin-bottom:1.5rem;
+}
+.summary-label{font-size:11px;font-weight:700;color:var(--t700);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.5rem}
+.summary-text{font-size:14px;color:var(--t800);line-height:1.7}
+
+/* Key concepts */
+.concepts-title{font-family:var(--ff-h);font-size:15px;font-weight:700;color:var(--text);margin-bottom:.85rem}
+.concept-list{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.5rem}
+.concept-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:.85rem 1rem;background:var(--bg);
+  border-radius:var(--r-md);border:1px solid var(--border2);
+}
+.ci-num{
+  width:24px;height:24px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--t500),var(--b500));
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:#fff;font-family:var(--ff-h);margin-top:1px;
+}
+.ci-text{font-size:13.5px;color:var(--text);line-height:1.65}
+.ci-text strong{color:var(--p700)}
+
+/* KCSE tip */
+.kcse-tip{
+  background:var(--b50);border:1px solid var(--b100);
+  border-radius:var(--r-md);padding:1rem 1.25rem;margin-bottom:1.5rem;
+}
+.kcse-tip-label{font-size:11px;font-weight:700;color:var(--b700);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.4rem}
+.kcse-tip-text{font-size:13.5px;color:var(--b700);line-height:1.7}
+
+/* Encouragement */
+.encourage-box{
+  background:linear-gradient(135deg,var(--p900),var(--b900));
+  border-radius:var(--r-md);padding:1rem 1.25rem;
+  display:flex;align-items:flex-start;gap:10px;margin-bottom:1.5rem;
+}
+.enc-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.enc-text{font-size:13.5px;color:rgba(255,255,255,.8);line-height:1.7}
+
+/* Action buttons */
+.action-row{display:flex;gap:.85rem;flex-wrap:wrap}
+.btn-quiz{
+  flex:1;min-width:160px;padding:13px 20px;border:none;border-radius:var(--r-md);
+  font-size:14px;font-weight:700;font-family:var(--ff-h);cursor:pointer;
+  background:linear-gradient(135deg,var(--p600),var(--b600));
+  color:#fff;box-shadow:0 4px 16px rgba(91,45,153,.28);
+  transition:all .25s;
+}
+.btn-quiz:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(91,45,153,.38)}
+.btn-guardian{
+  flex:1;min-width:160px;padding:13px 20px;
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  font-size:14px;font-weight:700;font-family:var(--ff-h);cursor:pointer;
+  background:var(--white);color:var(--text2);
+  transition:all .25s;
+}
+.btn-guardian:hover{border-color:var(--b500);color:var(--b600);background:var(--b50)}
+
+/* Loading state */
+.loading-card{
+  background:var(--white);border-radius:var(--r-xl);
+  border:1.5px solid var(--border);padding:3rem 2rem;
+  text-align:center;display:none;
+}
+.loading-card.show{display:block}
+.loading-dots{display:flex;gap:7px;justify-content:center;margin-bottom:1rem}
+.ld{width:10px;height:10px;border-radius:50%;background:var(--t400);animation:bounce 1.2s infinite}
+.ld:nth-child(2){animation-delay:.2s;background:var(--b400)}
+.ld:nth-child(3){animation-delay:.4s;background:var(--p400)}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.loading-text{font-size:14px;color:var(--text3);line-height:1.7}
+.loading-sub{font-size:12.5px;color:var(--text3);margin-top:.4rem}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:2rem;left:50%;
+  transform:translateX(-50%) translateY(90px);
+  background:var(--p900);color:#fff;padding:12px 22px;border-radius:50px;
+  font-size:14px;font-weight:500;border-left:4px solid var(--t400);
+  z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 32px rgba(14,8,38,.28);white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .wrap{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+@media(max-width:480px){
+  .wrap{padding:calc(var(--nav-h) + 1rem) 1rem 2rem}
+  .action-row{flex-direction:column}
+  .subj-select{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="02-dashboard.html">
+    <div class="nav-mark">📚</div>
+    <div class="nav-name">Tusome <em>KCSE</em></div>
+  </a>
+  <div class="nav-sep"></div>
+  <div class="nav-page">🔍 Scout Agent</div>
+  <div class="nav-space"></div>
+  <a class="nav-back" href="02-dashboard.html">← Dashboard</a>
+  <div class="nav-av" id="navAv">--</div>
+</nav>
+
+<!-- MAIN WRAP -->
+<div class="wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="agent-info-card">
+      <div class="aic-icon">🔍</div>
+      <div class="aic-title">Scout Agent</div>
+      <div class="aic-sub">
+        Tell me what you covered in class today. I'll generate a personalised KCSE quiz using local examples — right at your level.
+      </div>
+      <div class="aic-rule">
+        <div class="aic-rule-title">Spacing Effect</div>
+        <div class="aic-rule-text">Students who actively answer questions after a lesson remember up to 50% more than those who just re-read notes.</div>
+      </div>
+    </div>
+
+    <div class="how-card">
+      <div class="how-title">How the Scout works</div>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="hs-num">1</div>
+          <div class="hs-text">Select the subject you studied today</div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">2</div>
+          <div class="hs-text">Describe what topic or concept you covered in class</div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">3</div>
+          <div class="hs-text">The Scout reads your description and prepares a summary with key concepts</div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">4</div>
+          <div class="hs-text">You then take a KCSE-aligned quiz to test your understanding</div>
+        </div>
+        <div class="how-step">
+          <div class="hs-num">5</div>
+          <div class="hs-text">If anything is still unclear, the Guardian Agent explains it further</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prev-card" id="prevCard">
+      <div class="prev-title">🧠 Topics You've Covered</div>
+      <div class="prev-pills" id="prevPills">
+        <span style="font-size:13px;color:var(--text3)">No topics yet</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- Input card -->
+    <div class="input-card">
+      <div class="ic-header">
+        <div class="ic-badge">🔍 Scout Agent — Daily Learning Log</div>
+        <div class="ic-title">What did you learn today?</div>
+        <div class="ic-sub">Select your subject and describe the topic you covered. Be as specific as you can — the Scout will tailor your quiz to exactly what you studied.</div>
+      </div>
+
+      <!-- Subject selector -->
+      <div class="subj-select" id="subjSelect">
+        <button class="subj-btn" onclick="selSubj('Biology',this)">
+          <span class="sb-icon">🧬</span>
+          <span class="sb-name">Biology</span>
+        </button>
+        <button class="subj-btn" onclick="selSubj('Chemistry',this)">
+          <span class="sb-icon">🧪</span>
+          <span class="sb-name">Chemistry</span>
+        </button>
+        <button class="subj-btn" onclick="selSubj('Physics',this)">
+          <span class="sb-icon">⚛️</span>
+          <span class="sb-name">Physics</span>
+        </button>
+        <button class="subj-btn" onclick="selSubj('Mathematics',this)">
+          <span class="sb-icon">📐</span>
+          <span class="sb-name">Mathematics</span>
+        </button>
+      </div>
+
+      <!-- Text input -->
+      <div class="learn-input-wrap">
+        <label for="learnText">Describe what you studied today</label>
+        <textarea class="learn-textarea" id="learnText"
+          placeholder="e.g. Today in Chemistry we covered the Haber Process — how nitrogen and hydrogen combine under high pressure and temperature with an iron catalyst to make ammonia..."
+          oninput="updateChar()"
+          maxlength="600"></textarea>
+        <div class="char-count"><span id="charNum">0</span>/600</div>
+      </div>
+
+      <!-- Example prompts -->
+      <div class="examples">
+        <div class="ex-label">Quick examples — click to use:</div>
+        <div class="ex-chips" id="exChips">
+          <span class="ex-chip" onclick="useExample(this)">The Haber Process in Chemistry</span>
+          <span class="ex-chip" onclick="useExample(this)">Photosynthesis and respiration in Biology</span>
+          <span class="ex-chip" onclick="useExample(this)">Newton's Laws of Motion in Physics</span>
+          <span class="ex-chip" onclick="useExample(this)">Quadratic equations in Mathematics</span>
+          <span class="ex-chip" onclick="useExample(this)">Cell structure and organelles in Biology</span>
+          <span class="ex-chip" onclick="useExample(this)">Ohm's Law and electric circuits in Physics</span>
+        </div>
+      </div>
+
+      <button class="bgo" id="submitBtn" onclick="submitToScout()">
+        Send to Scout Agent <span class="arr">→</span>
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-card" id="loadingCard">
+      <div class="loading-dots">
+        <div class="ld"></div><div class="ld"></div><div class="ld"></div>
+      </div>
+      <div class="loading-text">The Scout is reading what you learned today...</div>
+      <div class="loading-sub">Preparing your summary and KCSE-aligned concepts</div>
+    </div>
+
+    <!-- AI Response -->
+    <div class="response-card" id="responseCard">
+      <div class="rc-header">
+        <div class="rc-agent-icon">🔍</div>
+        <div class="rc-agent-info">
+          <div class="rc-agent-name">Scout Agent</div>
+          <div class="rc-agent-sub">KCSE Revision Summary</div>
+        </div>
+        <div class="rc-dot"></div>
+      </div>
+      <div class="rc-body">
+        <div class="summary-box">
+          <div class="summary-label">📋 What you studied</div>
+          <div class="summary-text" id="rcSummary"></div>
+        </div>
+        <div class="concepts-title">Key Concepts to Remember</div>
+        <div class="concept-list" id="rcConcepts"></div>
+        <div class="kcse-tip">
+          <div class="kcse-tip-label">📝 KCSE Exam Tip</div>
+          <div class="kcse-tip-text" id="rcTip"></div>
+        </div>
+        <div class="encourage-box">
+          <div class="enc-icon">⭐</div>
+          <div class="enc-text" id="rcEncourage"></div>
+        </div>
+        <div class="action-row">
+          <button class="btn-quiz" onclick="goToQuiz()">
+            Take the Quiz 🧠
+          </button>
+          <button class="btn-guardian" onclick="goToGuardian()">
+            I need more explanation 🛡️
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =============================================
+   DATA
+   ============================================= */
+const S_KEY  = 'tk_students';
+const SESS   = 'tk_session';
+const QUIZ_KEY = 'tk_pending_quiz';
+const getStudents = () => { try{return JSON.parse(localStorage.getItem(S_KEY)||'{}')}catch{return{}} };
+const saveStudents = d => localStorage.setItem(S_KEY,JSON.stringify(d));
+
+const ICONS = {Biology:'🧬',Chemistry:'🧪',Physics:'⚛️',Mathematics:'📐'};
+
+// Dignity filter — these words must never appear in AI output
+const BANNED = ['stupid','dumb','fail','failure','idiot','useless','hopeless','cannot','can\'t do','give up'];
+
+let student = null;
+let selectedSubject = '';
+let pendingTopic = '';
+
+/* =============================================
+   INIT
+   ============================================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const raw  = sessionStorage.getItem(SESS);
+  const sess = raw ? JSON.parse(raw) : null;
+  const students = getStudents();
+  student = sess && students[sess.admKey] ? students[sess.admKey] : Object.values(students)[0];
+  if(student){
+    document.getElementById('navAv').textContent =
+      student.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+    renderPrevTopics();
+  }
+});
+
+/* =============================================
+   SUBJECT SELECTION
+   ============================================= */
+function selSubj(name, btn){
+  document.querySelectorAll('.subj-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedSubject = name;
+  // Update example chips based on subject
+  updateExamples(name);
+}
+
+function updateExamples(subj){
+  const examples = {
+    Biology:['Cell structure and organelles','Photosynthesis and respiration','Genetics and DNA replication','Transport in plants — osmosis and diffusion','Human circulatory system'],
+    Chemistry:['The Haber Process for making ammonia','Electrolysis and electrochemical cells','Organic chemistry — alkanes and alkenes','Acids, bases and neutralisation','Atomic structure and electron configuration'],
+    Physics:['Newton\'s Laws of Motion','Ohm\'s Law and electric circuits','Waves — reflection, refraction and diffraction','Radioactivity and half-life','Work, energy and power'],
+    Mathematics:['Quadratic equations and the formula','Trigonometry — sine, cosine, tangent','Differentiation and integration basics','Probability and statistics','Matrices and transformations'],
+  };
+  const chips = (examples[subj]||[]).map(e=>
+    `<span class="ex-chip" onclick="useExample(this)">${e}</span>`
+  ).join('');
+  document.getElementById('exChips').innerHTML = chips;
+}
+
+/* =============================================
+   EXAMPLE CHIPS
+   ============================================= */
+function useExample(el){
+  const text = el.textContent;
+  document.getElementById('learnText').value = `Today in class we covered ${text}. I want to understand this topic better and test my knowledge.`;
+  updateChar();
+  document.getElementById('learnText').focus();
+}
+
+function updateChar(){
+  const len = document.getElementById('learnText').value.length;
+  document.getElementById('charNum').textContent = len;
+}
+
+/* =============================================
+   SUBMIT TO SCOUT
+   ============================================= */
+async function submitToScout(){
+  const text = document.getElementById('learnText').value.trim();
+  if(!selectedSubject){ showToast('Please select a subject first'); return; }
+  if(text.length < 10){ showToast('Please describe what you learned in a bit more detail'); return; }
+
+  pendingTopic = text;
+
+  // Reset previous response
+  document.getElementById('responseCard').classList.remove('show');
+  document.getElementById('rcSummary').textContent = '';
+  document.getElementById('rcConcepts').innerHTML  = '';
+  document.getElementById('rcTip').innerHTML       = '';
+  document.getElementById('rcEncourage').textContent = '';
+
+  // Show loading, hide others
+  document.getElementById('loadingCard').classList.add('show');
+  document.getElementById('submitBtn').disabled = true;
+
+  const prevTopics = (student?.memory||[])
+    .filter(m=>m.subject===selectedSubject)
+    .map(m=>m.topic).join(', ') || 'None yet';
+
+  const prompt = `You are the Scout Agent for Tusome KCSE, a revision platform for Form 3 and Form 4 Kenyan students.
+
+A student has just described what they learned today:
+Subject: ${selectedSubject}
+What they studied: "${text}"
+Topics they have already covered in ${selectedSubject}: ${prevTopics}
+
+Your job:
+1. Write a 2-sentence SUMMARY of what the student studied (start with "You covered...")
+2. List exactly 4 KEY CONCEPTS from this topic that will likely appear in KCSE exams. For each concept write a clear 1-sentence explanation using simple language and Kenyan real-world examples where possible.
+3. Write one specific KCSE EXAM TIP about this topic (e.g. "In KCSE Paper 2, questions on the Haber Process often ask about the conditions and why they are chosen...")
+4. Write one short ENCOURAGEMENT message (2 sentences max). Never use words like fail, stupid, can't, hopeless. Be warm and motivating like an older sibling.
+
+Respond ONLY in this exact JSON format, no markdown, no explanation:
+{
+  "summary": "...",
+  "concepts": ["concept 1 with explanation","concept 2","concept 3","concept 4"],
+  "exam_tip": "...",
+  "encouragement": "..."
+}`;
+
+  try{
+    const res  = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    let raw = data.content?.map(c=>c.text||'').join('')||'{}';
+    raw = raw.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(raw);
+
+    // Apply dignity filter
+    let summary = applyFilter(parsed.summary||'');
+    let tip     = applyFilter(parsed.exam_tip||'');
+    let enc     = applyFilter(parsed.encouragement||'');
+    let concepts= (parsed.concepts||[]).map(applyFilter);
+
+    renderResponse(summary, concepts, tip, enc);
+    saveTopicToMemory(selectedSubject, extractTopicName(text));
+
+  } catch(e){
+    // API unavailable — use demo response
+    console.log('Scout API unavailable, using demo response');
+    document.getElementById('loadingCard').classList.remove('show');
+    document.getElementById('submitBtn').disabled = false;
+    const tl = text.toLowerCase();
+    const topic = extractTopicName(text);
+    const DEMO = {
+      Biology:{
+        summary:`You covered key concepts in Biology related to ${topic}. This is an important area of the KCSE Biology syllabus that frequently appears in both Paper 1 and Paper 2.`,
+        concepts:[
+          `Cell structure: Every living organism is made of cells — the basic unit of life. Plant cells have a cell wall and chloroplasts; animal cells do not.`,
+          `Transport in cells: Diffusion moves substances from high to low concentration without energy. Osmosis is the diffusion of water through a semi-permeable membrane.`,
+          `Photosynthesis equation: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂. This happens in the chloroplasts of green plants.`,
+          `Respiration: Glucose + Oxygen → Carbon dioxide + Water + ATP energy. This releases energy for all cell activities.`,
+        ],
+        exam_tip: tl.includes('osmosis')||tl.includes('diffusion')
+          ? `KCSE tip: Osmosis and diffusion questions ask you to predict the direction of water movement. Always identify which side has higher water potential (more dilute) — water moves FROM that side TO the concentrated side through a semi-permeable membrane.`
+          : tl.includes('photosyn')
+          ? `KCSE tip: Photosynthesis questions often require the balanced equation AND an explanation of what happens when light intensity or CO₂ changes. Always link the limiting factor to the rate of photosynthesis in your answer.`
+          : tl.includes('cell')
+          ? `KCSE tip: Cell structure questions frequently ask you to draw and label a plant or animal cell. Practise drawing neat, clearly labelled diagrams — marks are awarded for each correct label and clearly drawn structure.`
+          : `KCSE tip: In Biology Paper 1, always define your key term in the first sentence of your answer. Examiners award a specific mark for a correct definition before awarding marks for the explanation that follows.`,
+        encouragement:`You are building a strong foundation in Biology — every concept you learn today brings you closer to your KCSE goals. Keep this momentum going!`,
+      },
+      Chemistry:{
+        summary:`You covered important Chemistry concepts related to ${topic}. This topic is central to the KCSE Chemistry syllabus and carries significant marks in both papers.`,
+        concepts:[
+          `The Haber Process: N₂ + 3H₂ ⇌ 2NH₃. Conditions: 450°C, 200 atm pressure, iron catalyst. Higher pressure favours more ammonia production.`,
+          `Le Chatelier's Principle: If conditions change, the equilibrium shifts to oppose that change. Increasing pressure shifts equilibrium towards fewer gas molecules.`,
+          `Rates of reaction: Increasing temperature, concentration, surface area or using a catalyst all increase the rate of a chemical reaction.`,
+          `Electrolysis: Uses electrical energy to decompose a substance. At the cathode (negative) reduction occurs; at the anode (positive) oxidation occurs.`,
+        ],
+        exam_tip: tl.includes('haber')
+          ? `KCSE tip: Haber Process questions always ask WHY those conditions are used. For temperature — 450°C is a compromise: higher temperature increases rate but decreases yield. For pressure — high pressure increases yield but is expensive to maintain. Always explain the trade-off clearly.`
+          : tl.includes('electrolysis')
+          ? `KCSE tip: Electrolysis questions require you to state what is produced at EACH electrode with half-equations. Cathode = reduction (gains electrons). Anode = oxidation (loses electrons). Remember OIL RIG — Oxidation Is Loss, Reduction Is Gain.`
+          : tl.includes('acid')||tl.includes('base')
+          ? `KCSE tip: Acid-base questions often ask you to name the salt formed. The salt name comes from the metal in the base plus the acid type: hydrochloric → chloride, sulphuric → sulphate, nitric → nitrate. Write the word equation first, then the formula equation.`
+          : `KCSE tip: Always balance chemical equations — unbalanced equations lose marks even when the correct products are shown. Check each element on both sides one at a time before writing your final balanced equation.`,
+        encouragement:`Chemistry can feel complex but you are tackling it head-on — that is exactly what KCSE success looks like. You are doing brilliantly!`,
+      },
+      Physics:{
+        summary:`You covered important Physics principles related to ${topic}. This is a regularly examined area in KCSE Physics and understanding it deeply will serve you well.`,
+        concepts:[
+          `Newton's First Law (Inertia): An object stays at rest or moves at constant velocity unless acted on by an unbalanced force.`,
+          `Newton's Second Law: Force = Mass × Acceleration (F = ma). The larger the force, the greater the acceleration for the same mass.`,
+          `Newton's Third Law: For every action there is an equal and opposite reaction. Forces always come in pairs.`,
+          `Ohm's Law: Voltage = Current × Resistance (V = IR). This is fundamental to all electrical circuit calculations in KCSE.`,
+        ],
+        exam_tip: tl.includes('newton')||tl.includes('force')
+          ? `KCSE tip: Newton's Laws questions give a scenario and ask which law applies. Key — if an object moves at constant velocity, net force is ZERO (First Law). If it accelerates, use F = ma (Second Law). Always state which law you are applying before using it.`
+          : tl.includes('ohm')||tl.includes('circuit')||tl.includes('current')
+          ? `KCSE tip: For electricity questions, always draw the circuit diagram first if asked. Series circuits: total R = R₁ + R₂. Parallel circuits: 1/R = 1/R₁ + 1/R₂. State which type of circuit before calculating — this earns the first mark.`
+          : tl.includes('wave')
+          ? `KCSE tip: Wave questions use v = fλ (speed = frequency × wavelength). Always convert units first — frequency in Hz, wavelength in metres. Show the formula, substitution and calculation as three separate lines to earn full method marks.`
+          : `KCSE tip: In Physics Paper 2, write the formula first, then substitute values with units, then calculate. Examiners award marks for each correct step — so even a wrong final answer earns method marks when working is shown clearly.`,
+        encouragement:`Physics is built on patterns and principles — once you understand the core ideas, everything connects. You are making great progress today!`,
+      },
+      Mathematics:{
+        summary:`You covered important Mathematics techniques related to ${topic}. Mastering this area will directly improve your KCSE Paper 1 and Paper 2 performance.`,
+        concepts:[
+          `Quadratic equations: Can be solved by factorisation, completing the square, or the formula x = (-b ± √(b²-4ac)) / 2a.`,
+          `Gradient of a line: m = (y₂-y₁)/(x₂-x₁). In y = mx + c, m is the gradient and c is the y-intercept.`,
+          `Trigonometry ratios: sin θ = opposite/hypotenuse, cos θ = adjacent/hypotenuse, tan θ = opposite/adjacent. Remember SOH-CAH-TOA.`,
+          `Statistics: Mean = sum of values ÷ number of values. Median = middle value when arranged in order. Mode = most frequent value.`,
+        ],
+        exam_tip: tl.includes('quadratic')
+          ? `KCSE tip: Try factorisation first — if the equation doesn't factorise neatly, use the formula x = (-b ± √(b²-4ac))/2a. After solving, always verify by substituting your answers back into the original equation. Examiners award a mark for correct verification.`
+          : tl.includes('trig')||tl.includes('sine')||tl.includes('cosine')||tl.includes('angle')
+          ? `KCSE tip: Label your triangle first — identify hypotenuse, opposite and adjacent relative to the given angle. Then choose the correct ratio (SOH-CAH-TOA). For angles not in standard tables, use a calculator and give your answer to the degree of accuracy specified.`
+          : tl.includes('statistic')||tl.includes('mean')||tl.includes('probability')
+          ? `KCSE tip: For statistics questions using grouped data, set up a frequency table with columns for midpoint, frequency, and fx. The mean = Σfx ÷ Σf. Show the complete table — examiners award marks for the table, the formula and the final answer separately.`
+          : `KCSE tip: Always show ALL working in Mathematics — write the formula, substitute the values with units, then calculate. A correct answer with no working shown earns fewer marks than a partially correct answer with clear, logical steps.`,
+        encouragement:`Every Mathematics problem you solve builds your confidence and skill. You are investing in your future with every revision session — keep going!`,
+      },
+    };
+    const d = DEMO[selectedSubject] || DEMO['Biology'];
+    renderResponse(d.summary, d.concepts, d.exam_tip, d.encouragement);
+    saveTopicToMemory(selectedSubject, topic);
+  }
+}
+
+/* =============================================
+   DIGNITY FILTER
+   ============================================= */
+function applyFilter(text){
+  let out = text;
+  BANNED.forEach(w=>{
+    const re = new RegExp(w,'gi');
+    out = out.replace(re,'[removed]');
+  });
+  return out;
+}
+
+/* =============================================
+   RENDER RESPONSE
+   ============================================= */
+function renderResponse(summary, concepts, tip, enc){
+  document.getElementById('loadingCard').classList.remove('show');
+  document.getElementById('rcSummary').textContent   = summary;
+  document.getElementById('rcTip').innerHTML         = `<strong>📝 </strong>${tip}`;
+  document.getElementById('rcEncourage').textContent = enc;
+
+  document.getElementById('rcConcepts').innerHTML = concepts.map((c,i)=>`
+    <div class="concept-item">
+      <div class="ci-num">${i+1}</div>
+      <div class="ci-text">${c}</div>
+    </div>`).join('');
+
+  document.getElementById('responseCard').classList.add('show');
+  document.getElementById('submitBtn').disabled = false;
+  document.getElementById('responseCard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* =============================================
+   SAVE TO MEMORY
+   ============================================= */
+function extractTopicName(text){
+  // Pull first meaningful phrase (up to 50 chars)
+  const clean = text.replace(/today (in class )?we covered\s*/i,'').trim();
+  return clean.slice(0,55) + (clean.length>55?'...':'');
+}
+
+function saveTopicToMemory(subject, topic){
+  if(!student) return;
+  const students = getStudents();
+  const already  = student.memory.find(m=>m.subject===subject&&m.topic===topic);
+  if(!already){
+    student.memory.push({subject,topic,date:new Date().toISOString()});
+  }
+  student.lastSubject   = subject;
+  student.lastStudyDate = new Date().toISOString();
+  student.totalLessons  = (student.totalLessons||0) + 1;
+  student.streak        = (student.streak||0) + 1;
+  students[student.admKey] = student;
+  saveStudents(students);
+  renderPrevTopics();
+
+  // Store pending quiz context
+  localStorage.setItem(QUIZ_KEY, JSON.stringify({subject, topic, rawText: pendingTopic}));
+}
+
+function renderPrevTopics(){
+  const memory = (student?.memory||[]).slice().reverse().slice(0,8);
+  if(!memory.length) return;
+  document.getElementById('prevPills').innerHTML = memory.map(m=>
+    `<span class="prev-pill">${ICONS[m.subject]||'📖'} ${m.topic.slice(0,30)}</span>`
+  ).join('');
+}
+
+/* =============================================
+   NAVIGATION
+   ============================================= */
+function goToQuiz(){
+  window.location.href = '06-quiz.html';
+}
+function goToGuardian(){
+  window.location.href = '04-guardian.html';
+}
+
+/* =============================================
+   HELPERS
+   ============================================= */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+</script>
+</body>
+</html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
