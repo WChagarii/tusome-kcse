@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tusome KCSE — Ingia / Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =============================================
+   TOKENS — Purple · Teal · Blue
+   ============================================= */
+:root{
+  --p900:#1A0938; --p800:#2A1050; --p700:#3B1870;
+  --p600:#5B2D99; --p500:#7B45BF; --p400:#9E6DD4;
+  --p300:#C4A3E8; --p100:#EDE5F8; --p50:#F7F2FD;
+
+  --t800:#084F57; --t700:#0D6B75; --t600:#118899;
+  --t500:#17A8BA; --t400:#2EC4D6; --t300:#6DDDE8;
+  --t100:#CCF3F7; --t50:#EDFAFB;
+
+  --b900:#0C1E4A; --b700:#1A3D8F;
+  --b600:#2554C7; --b500:#3B6FE8; --b400:#6B93F0;
+  --b300:#A3BCFA; --b100:#DBEAFE; --b50:#EFF6FF;
+
+  --white:#FFFFFF;
+  --bg:#F2EFFE;
+  --text:#0E0826;
+  --text2:#3D3360;
+  --text3:#8878B0;
+  --border:rgba(59,24,112,.13);
+  --border2:rgba(59,24,112,.07);
+
+  --ff-h:'Syne',sans-serif;
+  --ff-b:'DM Sans',sans-serif;
+  --r-xl:24px; --r-lg:16px; --r-md:12px; --r-sm:8px;
+  --shadow-lg:0 24px 60px rgba(14,8,38,.2);
+  --shadow-md:0 8px 30px rgba(14,8,38,.12);
+  --shadow-sm:0 2px 12px rgba(14,8,38,.08);
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* =============================================
+   PAGE SPLIT
+   ============================================= */
+.page{display:grid;grid-template-columns:52% 48%;min-height:100vh}
+
+/* =============================================
+   HERO — LEFT
+   ============================================= */
+.hero{
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  padding:2.75rem 3rem;
+  background:var(--p900);
+}
+.hbg{position:absolute;inset:0;z-index:0}
+.hbg .o1{
+  position:absolute;top:-140px;right:-80px;width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(23,168,186,.3) 0%,transparent 65%);
+}
+.hbg .o2{
+  position:absolute;bottom:-100px;left:-60px;width:380px;height:380px;border-radius:50%;
+  background:radial-gradient(circle,rgba(37,84,199,.28) 0%,transparent 65%);
+}
+.hbg .o3{
+  position:absolute;top:42%;left:20%;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(91,45,153,.22) 0%,transparent 70%);
+}
+.hbg .dots{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:27px 27px;
+}
+.hbg .band{
+  position:absolute;inset:0;
+  background:linear-gradient(115deg,transparent 38%,rgba(46,196,214,.05) 50%,transparent 62%);
+}
+
+/* Logo */
+.logo{
+  position:relative;z-index:2;
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:2.75rem;
+}
+.lmark{
+  width:50px;height:50px;border-radius:14px;
+  background:linear-gradient(135deg,var(--t500),var(--b600));
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+  box-shadow:0 4px 20px rgba(23,168,186,.45);
+}
+.lname{display:flex;flex-direction:column;gap:2px}
+.lname-main{
+  font-family:var(--ff-h);font-size:22px;font-weight:800;
+  color:#fff;letter-spacing:-.3px;line-height:1;
+}
+.lname-main em{font-style:normal;color:var(--t300)}
+.lname-tag{font-size:11px;color:rgba(255,255,255,.42);letter-spacing:.5px;font-weight:500}
+
+/* Headline */
+.hmain{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center}
+.headline{
+  font-family:var(--ff-h);font-size:42px;font-weight:800;
+  line-height:1.1;letter-spacing:-1.5px;color:#fff;
+  margin-bottom:1rem;max-width:380px;
+}
+.headline .g{
+  background:linear-gradient(100deg,var(--t300) 0%,var(--b300) 55%,var(--p300) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hdesc{
+  font-size:14.5px;color:rgba(255,255,255,.55);
+  line-height:1.8;max-width:340px;margin-bottom:2.5rem;
+}
+
+/* Three Agents */
+.agents{display:flex;flex-direction:column;gap:10px;margin-bottom:2.5rem;position:relative;z-index:2}
+.agent{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--r-md);padding:12px 14px;
+  animation:slideIn .5s cubic-bezier(.4,0,.2,1) both;
+}
+.agent:nth-child(2){animation-delay:.1s}
+.agent:nth-child(3){animation-delay:.2s}
+@keyframes slideIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+.agent-icon{
+  width:38px;height:38px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;flex-shrink:0;
+}
+.ag-s{background:rgba(23,168,186,.25)}
+.ag-g{background:rgba(37,84,199,.25)}
+.ag-h{background:rgba(91,45,153,.25)}
+.agent-name{font-family:var(--ff-h);font-size:12.5px;font-weight:700;color:#fff;margin-bottom:2px}
+.agent-desc{font-size:11.5px;color:rgba(255,255,255,.48);line-height:1.5}
+
+/* Subjects row */
+.subjs{
+  display:flex;gap:8px;flex-wrap:wrap;
+  position:relative;z-index:2;margin-bottom:1.5rem;
+}
+.subj-pill{
+  padding:6px 13px;border-radius:50px;
+  font-size:12px;font-weight:600;font-family:var(--ff-h);
+  color:#fff;border:1px solid rgba(255,255,255,.12);
+}
+.sp-t{background:rgba(23,168,186,.2)}
+.sp-b{background:rgba(37,84,199,.2)}
+.sp-p{background:rgba(91,45,153,.2)}
+
+/* Bottom badge */
+.kbadge{
+  position:relative;z-index:2;
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.11);
+  border-radius:50px;padding:7px 16px;
+  font-size:12px;color:rgba(255,255,255,.55);font-weight:500;
+}
+
+/* =============================================
+   FORM PANEL — RIGHT
+   ============================================= */
+.fpanel{
+  background:var(--white);
+  display:flex;align-items:center;justify-content:center;
+  padding:3rem 3.5rem;position:relative;overflow:hidden;
+}
+.fpanel::before{
+  content:'';position:absolute;top:-80px;right:-80px;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,var(--t50) 0%,transparent 70%);pointer-events:none;
+}
+.fpanel::after{
+  content:'';position:absolute;bottom:-70px;left:-60px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,var(--b50) 0%,transparent 70%);pointer-events:none;
+}
+.fbox{width:100%;max-width:410px;position:relative;z-index:1}
+
+/* ---- STEP INDICATOR ---- */
+.steps{display:flex;align-items:center;margin-bottom:2rem}
+.step-item{display:flex;align-items:center;gap:7px;flex:1}
+.sc{
+  width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;font-family:var(--ff-h);
+  flex-shrink:0;transition:all .3s;
+}
+.step-item.done   .sc{background:var(--t500);color:#fff}
+.step-item.active .sc{background:var(--p600);color:#fff;box-shadow:0 0 0 4px rgba(91,45,153,.18)}
+.step-item.idle   .sc{background:var(--p50);color:var(--text3);border:1.5px solid var(--border)}
+.slbl{font-size:11px;font-weight:600;transition:color .3s;white-space:nowrap}
+.step-item.done   .slbl{color:var(--t600)}
+.step-item.active .slbl{color:var(--p600)}
+.step-item.idle   .slbl{color:var(--text3)}
+.sline{flex:none;width:20px;height:2px;background:var(--border);margin:0 3px;border-radius:99px;transition:background .3s}
+.sline.done{background:var(--t400)}
+
+/* ---- TAB SWITCH (step1 only) ---- */
+.tabs{
+  display:grid;grid-template-columns:1fr 1fr;
+  background:var(--p50);border-radius:var(--r-lg);
+  padding:4px;gap:4px;margin-bottom:1.75rem;
+  border:1px solid var(--border);
+}
+.tbtn{
+  padding:10px;border:none;border-radius:var(--r-md);
+  font-size:13.5px;font-weight:600;font-family:var(--ff-b);
+  cursor:pointer;color:var(--text3);background:transparent;transition:all .25s;
+}
+.tbtn.on{
+  background:linear-gradient(135deg,var(--p600),var(--t600));
+  color:#fff;box-shadow:0 3px 14px rgba(91,45,153,.25);
+}
+
+/* ---- FORM HEADER ---- */
+.fhead{margin-bottom:1.5rem}
+.fhead h2{
+  font-family:var(--ff-h);font-size:24px;font-weight:800;
+  color:var(--p900);letter-spacing:-.4px;margin-bottom:5px;
+}
+.fhead p{font-size:14px;color:var(--text3);line-height:1.65}
+.fhead .sw{font-size:12.5px;color:var(--t700);font-style:italic;margin-top:4px}
+
+/* ---- MSG ---- */
+.msg{
+  border-radius:var(--r-md);padding:10px 14px;
+  font-size:13px;font-weight:500;margin-bottom:1rem;
+  display:none;align-items:center;gap:8px;line-height:1.5;
+}
+.msg.err {background:#FEF2F2;color:#B91C1C;border:1px solid #FECACA;display:flex}
+.msg.ok  {background:var(--t50);color:var(--t800);border:1px solid var(--t100);display:flex}
+.msg.info{background:var(--b50);color:var(--b700);border:1px solid var(--b100);display:flex}
+
+/* ---- FIELDS ---- */
+.fields{display:flex;flex-direction:column;gap:1rem}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{
+  font-size:12.5px;font-weight:600;color:var(--text2);
+  display:flex;align-items:center;gap:6px;
+}
+.opt-badge{
+  font-size:10px;font-weight:600;color:var(--text3);
+  background:var(--border2);border-radius:4px;
+  padding:1px 6px;letter-spacing:.2px;
+}
+.req-badge{
+  font-size:10px;font-weight:700;color:var(--t700);
+  background:var(--t50);border-radius:4px;
+  padding:1px 6px;letter-spacing:.2px;
+}
+.fi{position:relative}
+.fic{
+  position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:15px;pointer-events:none;opacity:.4;
+}
+.fi input,.fi select{
+  width:100%;padding:13px 16px 13px 40px;
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  font-size:14px;font-family:var(--ff-b);color:var(--text);
+  background:var(--p50);outline:none;
+  transition:all .2s;-webkit-appearance:none;appearance:none;
+}
+.fi input::placeholder{color:var(--text3);font-size:13px}
+.fi input:focus,.fi select:focus{
+  border-color:var(--t500);background:#fff;
+  box-shadow:0 0 0 4px rgba(23,168,186,.12);
+}
+.hint{font-size:11px;color:var(--b600);display:flex;align-items:center;gap:4px;margin-top:3px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.eye{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;
+  font-size:15px;opacity:.38;transition:opacity .2s;
+}
+.eye:hover{opacity:.75}
+.sarr{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  font-size:10px;color:var(--text3);pointer-events:none;
+}
+
+/* Phone row */
+.phone-row{display:flex;gap:8px}
+.phone-code{
+  padding:13px 12px;border:1.5px solid var(--border);border-radius:var(--r-md);
+  background:var(--p50);font-size:14px;font-weight:600;color:var(--text2);
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+}
+.fi-phone{flex:1}
+
+/* OTP boxes */
+.otp-row{display:flex;gap:10px;justify-content:center;margin:.75rem 0}
+.otp-box{
+  width:54px;height:62px;border:1.5px solid var(--border);
+  border-radius:var(--r-md);background:var(--p50);
+  font-size:24px;font-weight:800;font-family:var(--ff-h);
+  text-align:center;color:var(--p700);outline:none;transition:all .2s;
+}
+.otp-box:focus{border-color:var(--t500);background:#fff;box-shadow:0 0 0 4px rgba(23,168,186,.12)}
+.otp-box.filled{border-color:var(--p400)}
+
+/* Resend */
+.resend{text-align:center;font-size:13px;color:var(--text3);margin-top:.5rem}
+.resend a{color:var(--t600);font-weight:600;cursor:pointer;text-decoration:none}
+.resend a:hover{text-decoration:underline}
+
+/* Consent box */
+.consent-box{
+  background:var(--b50);border:1px solid var(--b100);
+  border-radius:var(--r-md);padding:12px 14px;
+}
+.consent-title{font-size:12.5px;font-weight:700;color:var(--b700);margin-bottom:6px}
+.consent-text{font-size:12px;color:var(--b700);line-height:1.7;margin-bottom:8px}
+.consent-check{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+.consent-check input{margin-top:2px;accent-color:var(--b600);cursor:pointer}
+.consent-check span{font-size:12px;color:var(--b700);font-weight:500;line-height:1.5}
+
+/* Submit */
+.bgo{
+  width:100%;padding:14px;border:none;border-radius:var(--r-md);
+  font-size:15px;font-weight:700;font-family:var(--ff-h);
+  cursor:pointer;color:#fff;position:relative;
+  background:linear-gradient(135deg,var(--p600) 0%,var(--t600) 50%,var(--b600) 100%);
+  background-size:200% 100%;
+  box-shadow:0 5px 22px rgba(91,45,153,.28);
+  transition:all .3s;letter-spacing:.1px;
+  margin-top:.25rem;
+}
+.bgo:hover{
+  background-position:right center;
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(23,168,186,.35);
+}
+.bgo:active{transform:translateY(0)}
+.bgo .arr{display:inline-block;margin-left:7px;transition:transform .25s}
+.bgo:hover .arr{transform:translateX(5px)}
+
+/* Back */
+.back-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:13px;font-weight:600;color:var(--text3);
+  cursor:pointer;margin-bottom:1.25rem;
+  background:none;border:none;font-family:var(--ff-b);
+  transition:color .2s;padding:0;
+}
+.back-btn:hover{color:var(--p600)}
+
+/* Existing student card */
+.student-card{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;background:var(--p50);
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  cursor:pointer;transition:all .2s;margin-bottom:8px;
+}
+.student-card:hover{border-color:var(--t500);background:var(--t50)}
+.student-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--p500),var(--t500));
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:800;color:#fff;font-family:var(--ff-h);
+  flex-shrink:0;
+}
+.student-info{flex:1}
+.student-name{font-size:14px;font-weight:700;color:var(--text)}
+.student-meta{font-size:12px;color:var(--text3);margin-top:2px}
+.student-arrow{font-size:18px;color:var(--text3)}
+
+/* Divider */
+.or-div{
+  display:flex;align-items:center;gap:10px;
+  margin:1.1rem 0;color:var(--text3);font-size:12px;
+}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Trust strip */
+.trust{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  gap:.85rem;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);
+}
+.ti{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text3);font-weight:500}
+
+/* =============================================
+   ANIMATIONS
+   ============================================= */
+.logo,.hmain,.agents,.subjs,.fbox{animation:up .6s cubic-bezier(.4,0,.2,1) both}
+.logo   {animation-delay:.05s}
+.hmain  {animation-delay:.1s}
+.agents {animation-delay:.15s}
+.subjs  {animation-delay:.2s}
+.fbox   {animation-delay:.28s}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:2rem;left:50%;
+  transform:translateX(-50%) translateY(90px);
+  background:var(--p900);color:#fff;
+  padding:12px 24px;border-radius:50px;
+  font-size:14px;font-weight:500;
+  border-left:4px solid var(--t400);
+  z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 32px rgba(14,8,38,.28);white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .page{grid-template-columns:1fr}
+  .hero{padding:2rem;min-height:auto}
+  .headline{font-size:30px}
+  .agents{display:none}
+  .fpanel{padding:2.5rem 1.5rem}
+  .frow{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="page">
+
+  <!-- ===== HERO ===== -->
+  <aside class="hero">
+    <div class="hbg">
+      <div class="o1"></div><div class="o2"></div>
+      <div class="o3"></div><div class="dots"></div>
+      <div class="band"></div>
+    </div>
+
+    <div class="logo">
+      <div class="lmark">📚</div>
+      <div class="lname">
+        <div class="lname-main">Tusome <em>KCSE</em></div>
+        <div class="lname-tag">Learn · Remember · Excel</div>
+      </div>
+    </div>
+
+    <div class="hmain">
+      <h1 class="headline">
+        STEM Revision<br>
+        <span class="g">built for you.</span>
+      </h1>
+      <p class="hdesc">
+        A revision platform for Form 3 &amp; 4 Kenyan students. Three intelligent agents help you pass KCSE — guided by science, built with dignity.
+      </p>
+
+      <div class="agents">
+        <div class="agent">
+          <div class="agent-icon ag-s">🔍</div>
+          <div>
+            <div class="agent-name">Scout Agent</div>
+            <div class="agent-desc">"What did you learn today?" → Personalised KCSE quiz</div>
+          </div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon ag-g">🛡️</div>
+          <div>
+            <div class="agent-name">Scout Agent</div>
+            <div class="agent-desc">"What did you learn today?" → Generates your personalised KCSE quiz</div>
+          </div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon ag-g">🛡️</div>
+          <div>
+            <div class="agent-name">Guardian Agent</div>
+            <div class="agent-desc">"What felt hardest?" → Explains step-by-step, like a helpful older sibling</div>
+          </div>
+        </div>
+        <div class="agent">
+          <div class="agent-icon ag-h">🏹</div>
+          <div>
+            <div class="agent-name">Hunter Agent</div>
+            <div class="agent-desc">Rotates your subjects daily using spacing science — sends weekly SMS to parents</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subjs">
+        <span class="subj-pill sp-t">🧬 Biology</span>
+        <span class="subj-pill sp-b">🧪 Chemistry</span>
+        <span class="subj-pill sp-p">⚛️ Physics</span>
+        <span class="subj-pill sp-t">📐 Mathematics</span>
+      </div>
+
+      <div class="kbadge">🇰🇪 &nbsp;A revision platform for Form 3 &amp; 4 Kenyan students</div>
+    </div>
+    <div></div>
+  </aside>
+
+  <!-- ===== FORM PANEL ===== -->
+  <main class="fpanel">
+    <div class="fbox">
+
+      <!-- Step indicator -->
+      <div class="steps" id="stepBar">
+        <div class="step-item active" id="si1">
+          <div class="sc">1</div>
+          <div class="slbl">Your Details</div>
+        </div>
+        <div class="sline" id="sl1"></div>
+        <div class="step-item idle" id="si2">
+          <div class="sc">2</div>
+          <div class="slbl">Verify OTP</div>
+        </div>
+        <div class="sline" id="sl2"></div>
+        <div class="step-item idle" id="si3">
+          <div class="sc">3</div>
+          <div class="slbl">Start Revising</div>
+        </div>
+      </div>
+
+      <div class="msg" id="msg" role="alert"></div>
+
+      <!-- ==============================
+           STEP 1 — REGISTER / SIGN IN
+           ============================== -->
+      <div id="sStep1">
+        <div class="tabs">
+          <button class="tbtn on" id="tab-reg" onclick="switchTab('reg')">Register</button>
+          <button class="tbtn"    id="tab-in"  onclick="switchTab('in')">Sign In</button>
+        </div>
+
+        <!-- REGISTER -->
+        <div id="fReg">
+          <div class="fhead">
+            <h2>Create Account ✨</h2>
+            <p>Set up your student profile. Parent's phone number is required for verification.</p>
+          </div>
+          <div class="fields">
+
+            <!-- Student name -->
+            <div class="frow">
+              <div class="field">
+                <label>First Name <span class="req-badge">Required</span></label>
+                <div class="fi">
+                  <span class="fic">👤</span>
+                  <input id="rFirst" type="text" placeholder="e.g. Grace">
+                </div>
+              </div>
+              <div class="field">
+                <label>Last Name <span class="req-badge">Required</span></label>
+                <div class="fi">
+                  <span class="fic">👤</span>
+                  <input id="rLast" type="text" placeholder="e.g. Muthoni">
+                </div>
+              </div>
+            </div>
+
+            <!-- School + Form -->
+            <div class="frow">
+              <div class="field">
+                <label>School <span class="req-badge">Required</span></label>
+                <div class="fi">
+                  <span class="fic">🏫</span>
+                  <input id="rSchool" type="text" placeholder="e.g. Njonjo Girls">
+                </div>
+              </div>
+              <div class="field">
+                <label>Form <span class="req-badge">Required</span></label>
+                <div class="fi">
+                  <span class="fic">📚</span>
+                  <select id="rForm">
+                    <option value="" disabled selected>Select...</option>
+                    <option value="Form 3">Form 3</option>
+                    <option value="Form 4">Form 4</option>
+                  </select>
+                  <span class="sarr">▾</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- School email (optional) -->
+            <div class="field">
+              <label>School Email <span class="opt-badge">Optional</span></label>
+              <div class="fi">
+                <span class="fic">✉️</span>
+                <input id="rEmail" type="email" placeholder="e.g. grace@njonjogirlshigh.ac.ke">
+              </div>
+              <div class="hint">💡 School email only — personal email not required</div>
+            </div>
+
+            <!-- Parent phone — MANDATORY -->
+            <div class="field">
+              <label>
+                Parent / Guardian Phone Number <span class="req-badge">Required · Verified via SMS</span>
+              </label>
+              <div class="phone-row">
+                <div class="phone-code">🇰🇪 +254</div>
+                <div class="fi fi-phone">
+                  <span class="fic">📱</span>
+                  <input id="rPhone" type="tel" maxlength="9"
+                         placeholder="e.g. 712 345 678"
+                         oninput="this.value=this.value.replace(/\D/g,'')">
+                </div>
+              </div>
+              <div class="hint">💡 A one-time verification code will be sent to this number</div>
+            </div>
+
+            <!-- PIN -->
+            <div class="field">
+              <label>Create Student PIN (4 digits) <span class="req-badge">Required</span></label>
+              <div class="fi">
+                <span class="fic">🔒</span>
+                <input id="rPin" type="password" maxlength="4"
+                       placeholder="4-digit PIN for daily login"
+                       oninput="this.value=this.value.replace(/\D/g,'')">
+                <button class="eye" type="button" onclick="eyePw('rPin',this)">👁</button>
+              </div>
+              <div class="hint">💡 Student uses this PIN every time they log in</div>
+            </div>
+
+            <!-- Consent — Swahili for parent as per brief -->
+            <div class="consent-box">
+              <div class="consent-title">📋 Idhini ya Mzazi — Parental Consent</div>
+              <div class="consent-text">
+                Kwa kuthibitisha nambari yako ya simu, unakubali kwamba wewe ni mzazi au mlezi wa mwanafunzi huyu na unatoa idhini yako kwa matumizi ya Tusome KCSE chini ya Sheria ya Kulinda Data ya Kenya 2022. Taarifa zote zimehifadhiwa salama.
+              </div>
+              <label class="consent-check">
+                <input type="checkbox" id="rConsent">
+                <span>Nakubali — I agree and give my parental consent.</span>
+              </label>
+            </div>
+
+            <button class="bgo" onclick="sendOTP('reg')">
+              Send OTP to Parent's Phone <span class="arr">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- SIGN IN -->
+        <div id="fIn" style="display:none">
+          <div class="fhead">
+            <h2>Welcome back 👋</h2>
+            <p>Enter the parent's phone number to receive your verification code.</p>
+          </div>
+          <div class="fields">
+            <div class="field">
+              <label>Parent / Guardian Phone Number <span class="req-badge">Required</span></label>
+              <div class="phone-row">
+                <div class="phone-code">🇰🇪 +254</div>
+                <div class="fi fi-phone">
+                  <span class="fic">📱</span>
+                  <input id="iPhone" type="tel" maxlength="9"
+                         placeholder="e.g. 712 345 678"
+                         oninput="this.value=this.value.replace(/\D/g,'')">
+                </div>
+              </div>
+              <div class="hint">💡 An OTP code will be sent to the parent's number via SMS</div>
+            </div>
+
+            <button class="bgo" onclick="sendOTP('in')">
+              Send OTP Code <span class="arr">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==============================
+           STEP 2 — OTP VERIFY
+           ============================== -->
+      <div id="sStep2" style="display:none">
+        <button class="back-btn" onclick="goStep(1)">← Back</button>
+        <div class="fhead">
+          <h2>Verify OTP 🔐</h2>
+          <p>A 4-digit code was sent to <strong id="phoneMask"></strong></p>
+          <div class="sw" style="font-size:12px;color:var(--t700);margin-top:4px">
+            📱 Nambari ya siri imetumwa kwa simu ya mzazi kupitia ujumbe mfupi.
+          </div>
+        </div>
+        <div class="otp-row">
+          <input class="otp-box" id="o1" type="tel" maxlength="1"
+                 oninput="om(this,'o2')" onkeydown="ob(event,this,'')">
+          <input class="otp-box" id="o2" type="tel" maxlength="1"
+                 oninput="om(this,'o3')" onkeydown="ob(event,this,'o1')">
+          <input class="otp-box" id="o3" type="tel" maxlength="1"
+                 oninput="om(this,'o4')" onkeydown="ob(event,this,'o2')">
+          <input class="otp-box" id="o4" type="tel" maxlength="1"
+                 oninput="om(this,'')"   onkeydown="ob(event,this,'o3')">
+        </div>
+        <div class="resend" id="resendWrap">
+          Resend in <strong id="timerEl">30s</strong>
+        </div>
+        <div class="fields" style="margin-top:1.25rem">
+          <button class="bgo" onclick="verifyOTP()">
+            Verify &amp; Continue <span class="arr">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ==============================
+           STEP 3 — ENTER PIN / DONE
+           ============================== -->
+      <div id="sStep3" style="display:none">
+        <button class="back-btn" onclick="goStep(1)">← Back</button>
+
+        <!-- Existing students shown here for sign-in -->
+        <div id="existingWrap" style="display:none">
+          <div class="fhead">
+            <h2>Choose a Student 👦👧</h2>
+            <p>Select a student profile to continue.</p>
+          </div>
+          <div id="studentList"></div>
+          <div class="or-div">or add a new student</div>
+        </div>
+
+        <!-- PIN entry -->
+        <div id="pinWrap" style="display:none">
+          <div class="fhead">
+            <h2 id="pinTitle">Enter Your PIN 🔒</h2>
+            <p id="pinSub">Enter your 4-digit PIN to continue.</p>
+          </div>
+          <div class="fields">
+            <div class="field">
+              <label>Student PIN</label>
+              <div class="fi">
+                <span class="fic">🔒</span>
+                <input id="loginPin" type="password" maxlength="4"
+                       placeholder="••••"
+                       oninput="this.value=this.value.replace(/\D/g,'')">
+                <button class="eye" type="button" onclick="eyePw('loginPin',this)">👁</button>
+              </div>
+            </div>
+            <button class="bgo" onclick="doLogin()">
+              Start Revising 📚 <span class="arr">→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success screen -->
+        <div id="doneWrap" style="display:none;text-align:center;padding:1.5rem 0">
+          <div style="font-size:56px;margin-bottom:1rem">🎉</div>
+          <h2 style="font-family:var(--ff-h);font-size:22px;font-weight:800;color:var(--p900);margin-bottom:.5rem">
+            Account Created!
+          </h2>
+          <p style="font-size:14px;color:var(--text3);line-height:1.7;margin-bottom:1.5rem">
+            Welcome, <strong id="doneName"></strong>! Your profile is ready.<br>
+            Your three study agents are waiting for you.
+          </p>
+          <button class="bgo" onclick="window.location.href='02-dashboard.html'">
+            Go to Dashboard 📚 <span class="arr">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Trust strip -->
+      <div class="trust">
+        <div class="ti">🔐 Secure</div>
+        <div class="ti">📵 Ad-Free</div>
+        <div class="ti">🆓 Free</div>
+        <div class="ti">⚖️ Kenya DPA 2022</div>
+        <div class="ti">🌍 AWS Africa</div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+/* =============================================
+   DATA LAYER  (localStorage — XAMPP/MySQL later)
+   Keys:
+     tk_students  { [admKey]: studentObj }
+     tk_parents   { [phone]: parentObj   }
+     tk_session   JSON string
+   ============================================= */
+const S_KEY = 'tk_students';
+const P_KEY = 'tk_parents';
+const SESS  = 'tk_session';
+
+const getStudents = () => { try{return JSON.parse(localStorage.getItem(S_KEY)||'{}')}catch{return{}} };
+const getParents  = () => { try{return JSON.parse(localStorage.getItem(P_KEY)||'{}')}catch{return{}} };
+const saveStudents = d => localStorage.setItem(S_KEY, JSON.stringify(d));
+const saveParents  = d => localStorage.setItem(P_KEY, JSON.stringify(d));
+
+/* =============================================
+   STATE
+   ============================================= */
+let S = {
+  mode: 'reg',          // 'reg' | 'in'
+  phone: '',            // full e.g. +254712345678
+  otp: '',              // generated OTP
+  timerRef: null,
+  selectedAdmKey: '',   // for sign-in PIN entry
+  regData: null,        // temp store of reg form data
+};
+
+/* =============================================
+   STEP MANAGER
+   ============================================= */
+function goStep(n){
+  document.getElementById('sStep1').style.display = n===1?'block':'none';
+  document.getElementById('sStep2').style.display = n===2?'block':'none';
+  document.getElementById('sStep3').style.display = n===3?'block':'none';
+  clearMsg();
+
+  const cfg = [
+    {id:'si1',cls:n>1?'done':n===1?'active':'idle', ln:'sl1', ldc:n>1},
+    {id:'si2',cls:n>2?'done':n===2?'active':'idle', ln:'sl2', ldc:n>2},
+    {id:'si3',cls:n===3?'active':'idle'},
+  ];
+  cfg.forEach(c => {
+    const el = document.getElementById(c.id);
+    el.className = 'step-item '+c.cls;
+    el.style.opacity = c.cls==='idle'&&n<parseInt(c.id.replace('si',''))?'.4':'1';
+    if(c.ln) document.getElementById(c.ln).className = 'sline'+(c.ldc?' done':'');
+  });
+}
+
+/* =============================================
+   TAB SWITCH (Register / Sign In)
+   ============================================= */
+function switchTab(t){
+  S.mode = t;
+  const isReg = t==='reg';
+  document.getElementById('fReg').style.display = isReg?'block':'none';
+  document.getElementById('fIn').style.display  = isReg?'none':'block';
+  document.getElementById('tab-reg').classList.toggle('on', isReg);
+  document.getElementById('tab-in').classList.toggle('on', !isReg);
+  clearMsg();
+}
+
+/* =============================================
+   SEND OTP
+   ============================================= */
+function sendOTP(mode){
+  clearMsg();
+  S.mode = mode;
+
+  let phone = '';
+
+  if(mode === 'reg'){
+    const first   = document.getElementById('rFirst').value.trim();
+    const last    = document.getElementById('rLast').value.trim();
+    const school  = document.getElementById('rSchool').value.trim();
+    const form    = document.getElementById('rForm').value;
+    const email   = document.getElementById('rEmail').value.trim();
+    const ph      = document.getElementById('rPhone').value.trim();
+    const pin     = document.getElementById('rPin').value.trim();
+    const consent = document.getElementById('rConsent').checked;
+
+    if(!first)           { setMsg('err','Enter student first name. / Ingiza jina la kwanza.'); return; }
+    if(!last)            { setMsg('err','Enter student last name. / Ingiza jina la ukoo.'); return; }
+    if(!school)          { setMsg('err','Enter school name. / Ingiza jina la shule.'); return; }
+    if(!form)            { setMsg('err','Select form. / Chagua darasa.'); return; }
+    if(!ph||ph.length<9) { setMsg('err','Enter a valid 9-digit parent phone number. / Ingiza nambari sahihi ya simu ya mzazi.'); return; }
+    if(!pin||pin.length!==4){ setMsg('err','Create a 4-digit student PIN. / Unda PIN ya tarakimu 4.'); return; }
+    if(!consent)         { setMsg('err','Parental consent is required to continue. / Idhini ya mzazi inahitajika.'); return; }
+
+    phone = '+254'+ph;
+    S.regData = { first, last, school, form, email, pin, phone };
+
+  } else {
+    const ph = document.getElementById('iPhone').value.trim();
+    if(!ph||ph.length<9){ setMsg('err','Enter a valid parent phone number. / Ingiza nambari sahihi.'); return; }
+    phone = '+254'+ph;
+
+    // Check parent exists
+    const parents = getParents();
+    if(!parents[phone]){ setMsg('err','No account found for this number. Please register first. / Hakuna akaunti. Tafadhali sajili kwanza.'); return; }
+  }
+
+  S.phone = phone;
+
+  // Generate 4-digit OTP
+  S.otp = Math.floor(1000 + Math.random()*9000).toString();
+
+  // In production → Africa's Talking SMS API
+  // For demo → show in toast
+  showToast('📱 Demo OTP: ' + S.otp + '  (Production: sent via SMS to ' + phone + ')');
+
+  const masked = phone.slice(0,7) + '*** ' + phone.slice(-3);
+  document.getElementById('phoneMask').textContent = masked;
+
+  goStep(2);
+  startTimer();
+  ['o1','o2','o3','o4'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('o1').focus();
+}
+
+/* =============================================
+   OTP INPUTS
+   ============================================= */
+function om(el, nxt){
+  el.value = el.value.replace(/\D/g,'');
+  if(el.value && nxt) document.getElementById(nxt)?.focus();
+  ['o1','o2','o3','o4'].forEach(id => {
+    document.getElementById(id).classList.toggle('filled', !!document.getElementById(id).value);
+  });
+  const full = ['o1','o2','o3','o4'].every(id => document.getElementById(id).value);
+  if(full) setTimeout(verifyOTP, 250);
+}
+function ob(e, el, prv){
+  if(e.key==='Backspace' && !el.value && prv) document.getElementById(prv)?.focus();
+}
+
+/* =============================================
+   TIMER
+   ============================================= */
+function startTimer(){
+  clearInterval(S.timerRef);
+  let secs = 30;
+  const el = document.getElementById('timerEl');
+  const wrap = document.getElementById('resendWrap');
+  wrap.innerHTML = `Resend in <strong id="timerEl">${secs}s</strong>`;
+  S.timerRef = setInterval(()=>{
+    secs--;
+    const t = document.getElementById('timerEl');
+    if(t) t.textContent = secs+'s';
+    if(secs<=0){
+      clearInterval(S.timerRef);
+      document.getElementById('resendWrap').innerHTML =
+        `Didn't receive it? <a onclick="resendOTP()">Resend / Tuma tena</a>`;
+    }
+  }, 1000);
+}
+function resendOTP(){
+  S.otp = Math.floor(1000+Math.random()*9000).toString();
+  showToast('📱 New Demo OTP: '+S.otp);
+  startTimer();
+  ['o1','o2','o3','o4'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('o1').focus();
+}
+
+/* =============================================
+   VERIFY OTP
+   ============================================= */
+function verifyOTP(){
+  clearMsg();
+  const entered = ['o1','o2','o3','o4'].map(id=>document.getElementById(id).value).join('');
+  if(entered.length<4){ setMsg('err','Enter all 4 digits. / Ingiza nambari zote 4.'); return; }
+  if(entered !== S.otp){
+    setMsg('err','Incorrect OTP. Try again. / Nambari si sahihi. Jaribu tena.');
+    ['o1','o2','o3','o4'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('o1').focus();
+    return;
+  }
+
+  clearInterval(S.timerRef);
+  goStep(3);
+
+  if(S.mode === 'reg'){
+    // Create student & parent records
+    const d = S.regData;
+    const admKey = d.phone + '_' + d.first.toLowerCase() + d.last.toLowerCase();
+
+    const students = getStudents();
+    const parents  = getParents();
+
+    if(students[admKey]){
+      // Already exists — just sign in
+      S.selectedAdmKey = admKey;
+      showPinEntry(d.first + ' ' + d.last);
+      return;
+    }
+
+    students[admKey] = {
+      admKey,
+      name: d.first+' '+d.last,
+      firstName: d.first,
+      lastName: d.last,
+      school: d.school,
+      form: d.form,
+      email: d.email||'',
+      parentPhone: d.phone,
+      pin: d.pin,
+      joinDate: new Date().toISOString(),
+      streak: 0,
+      lastStudyDate: null,
+      lastSubject: null,          // Hunter agent
+      totalQuizzes: 0,
+      totalLessons: 0,
+      bestScore: 0,
+      memory: [],                 // [{subject,topic,date}]
+      quizHistory: [],            // [{subject,topic,score,total,date}]
+      struggles: [],              // Guardian agent
+    };
+    saveStudents(students);
+
+    if(!parents[d.phone]){
+      parents[d.phone] = { phone: d.phone, registeredAt: new Date().toISOString(), studentKeys: [] };
+    }
+    if(!parents[d.phone].studentKeys.includes(admKey)){
+      parents[d.phone].studentKeys.push(admKey);
+    }
+    saveParents(parents);
+
+    // Set session & show done
+    sessionStorage.setItem(SESS, JSON.stringify({ phone: d.phone, admKey }));
+    document.getElementById('doneName').textContent = d.first;
+    document.getElementById('doneWrap').style.display = 'block';
+    document.getElementById('existingWrap').style.display = 'none';
+    document.getElementById('pinWrap').style.display = 'none';
+
+  } else {
+    // Sign in — show student list
+    const parents  = getParents();
+    const students = getStudents();
+    const parent   = parents[S.phone];
+    const myStudents = (parent?.studentKeys||[]).map(k=>students[k]).filter(Boolean);
+
+    if(!myStudents.length){
+      setMsg('info','No students found under this number. Please register first. / Hakuna wanafunzi. Tafadhali sajili.');
+      goStep(1); switchTab('reg'); return;
+    }
+
+    renderStudentList(myStudents);
+    document.getElementById('existingWrap').style.display = 'block';
+    document.getElementById('pinWrap').style.display = 'none';
+    document.getElementById('doneWrap').style.display = 'none';
+  }
+}
+
+/* =============================================
+   STUDENT LIST & PIN ENTRY
+   ============================================= */
+function renderStudentList(students){
+  const html = students.map(s => `
+    <div class="student-card" onclick="selectStudent('${s.admKey}','${s.name}')">
+      <div class="student-avatar">${s.firstName[0]}${s.lastName[0]}</div>
+      <div class="student-info">
+        <div class="student-name">${s.name}</div>
+        <div class="student-meta">${s.form} · ${s.school}</div>
+      </div>
+      <div class="student-arrow">›</div>
+    </div>`).join('');
+  document.getElementById('studentList').innerHTML = html;
+}
+
+function selectStudent(admKey, name){
+  S.selectedAdmKey = admKey;
+  showPinEntry(name);
+}
+
+function showPinEntry(name){
+  document.getElementById('existingWrap').style.display = 'none';
+  document.getElementById('pinWrap').style.display = 'block';
+  document.getElementById('pinTitle').textContent = 'Welcome, '+name.split(' ')[0]+' 👋';
+  document.getElementById('pinSub').textContent   = 'Enter your 4-digit PIN to continue.';
+  document.getElementById('loginPin').value = '';
+  document.getElementById('loginPin').focus();
+}
+
+function doLogin(){
+  clearMsg();
+  const pin = document.getElementById('loginPin').value.trim();
+  if(!pin||pin.length!==4){ setMsg('err','Enter your 4-digit PIN. / Ingiza PIN yako.'); return; }
+  const students = getStudents();
+  const student  = students[S.selectedAdmKey];
+  if(!student){ setMsg('err','Student not found. / Mwanafunzi hajapatikana.'); return; }
+  if(student.pin !== pin){ setMsg('err','Incorrect PIN. Try again. / PIN si sahihi. Jaribu tena.'); return; }
+
+  sessionStorage.setItem(SESS, JSON.stringify({ phone: S.phone, admKey: S.selectedAdmKey }));
+  showToast('✅ Karibu, '+student.firstName+'! Welcome back!');
+  setTimeout(()=>{ window.location.href='02-dashboard.html'; }, 900);
+}
+
+/* =============================================
+   UI HELPERS
+   ============================================= */
+function setMsg(type, text){
+  const b=document.getElementById('msg');
+  b.textContent = (type==='err'?'⚠️ ':type==='ok'?'✅ ':'ℹ️ ')+text;
+  b.className='msg '+type;
+}
+function clearMsg(){
+  const b=document.getElementById('msg');
+  b.className='msg';b.textContent='';
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+function eyePw(id,btn){
+  const el=document.getElementById(id);
+  el.type=el.type==='password'?'text':'password';
+  btn.textContent=el.type==='password'?'👁':'🙈';
+}
+
+// Enter key
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Enter') return;
+  if(document.getElementById('sStep1').style.display!=='none'){
+    S.mode==='reg'?sendOTP('reg'):sendOTP('in');
+  } else if(document.getElementById('sStep2').style.display!=='none'){
+    verifyOTP();
+  } else if(document.getElementById('pinWrap').style.display!=='none'){
+    doLogin();
+  }
+});
+</script>
+</body>
+</html>

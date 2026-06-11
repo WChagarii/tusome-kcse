@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Tusome KCSE</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --p900:#1A0938;--p800:#2A1050;--p700:#3B1870;
+  --p600:#5B2D99;--p500:#7B45BF;--p400:#9E6DD4;
+  --p300:#C4A3E8;--p100:#EDE5F8;--p50:#F7F2FD;
+  --t800:#084F57;--t700:#0D6B75;--t600:#118899;
+  --t500:#17A8BA;--t400:#2EC4D6;--t300:#6DDDE8;
+  --t100:#CCF3F7;--t50:#EDFAFB;
+  --b900:#0C1E4A;--b700:#1A3D8F;
+  --b600:#2554C7;--b500:#3B6FE8;--b400:#6B93F0;
+  --b300:#A3BCFA;--b100:#DBEAFE;--b50:#EFF6FF;
+  --white:#FFFFFF;--bg:#F2EFFE;
+  --text:#0E0826;--text2:#3D3360;--text3:#8878B0;
+  --border:rgba(59,24,112,.12);--border2:rgba(59,24,112,.06);
+  --ff-h:'Syne',sans-serif;--ff-b:'DM Sans',sans-serif;
+  --r-xl:24px;--r-lg:16px;--r-md:12px;--r-sm:8px;
+  --shadow-md:0 8px 28px rgba(14,8,38,.1);
+  --nav-h:66px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(26,9,56,.97);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 2rem;gap:1.25rem}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.nav-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--t500),var(--b600));display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 3px 12px rgba(23,168,186,.38)}
+.nav-name{font-family:var(--ff-h);font-size:17px;font-weight:800;color:#fff;letter-spacing:-.2px}
+.nav-name em{font-style:normal;color:var(--t300)}
+.nav-sep{width:1px;height:24px;background:rgba(255,255,255,.1);flex-shrink:0}
+.nav-page{font-size:13px;font-weight:600;color:rgba(255,255,255,.45)}
+.nav-space{flex:1}
+.nav-timer{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:50px;padding:6px 14px;font-size:13px;font-weight:700;color:#fff;font-family:var(--ff-h)}
+.timer-dot{width:7px;height:7px;border-radius:50%;background:var(--t400);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.nav-back{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);text-decoration:none;transition:all .2s}
+.nav-back:hover{background:rgba(255,255,255,.13);color:#fff}
+.nav-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--p500),var(--t500));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;font-family:var(--ff-h)}
+
+.wrap{max-width:860px;margin:0 auto;padding:calc(var(--nav-h) + 2rem) 2rem 3rem}
+
+/* =============================================
+   SETUP SCREEN
+   ============================================= */
+.setup-card{background:var(--white);border-radius:var(--r-xl);border:1.5px solid var(--border);padding:2.25rem;animation:up .5s cubic-bezier(.4,0,.2,1)}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+.setup-badge{display:inline-flex;align-items:center;gap:6px;background:var(--p100);border:1px solid var(--p300);border-radius:50px;padding:4px 12px;font-size:11.5px;font-weight:700;color:var(--p700);font-family:var(--ff-h);margin-bottom:.85rem}
+.setup-title{font-family:var(--ff-h);font-size:24px;font-weight:800;color:var(--p900);letter-spacing:-.4px;margin-bottom:.4rem}
+.setup-sub{font-size:14px;color:var(--text3);line-height:1.65;margin-bottom:2rem}
+
+.setup-section{margin-bottom:1.75rem}
+.ss-label{font-size:12.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.85rem}
+
+/* Subject grid */
+.subj-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+.subj-btn{padding:1rem .75rem;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--bg);cursor:pointer;text-align:center;transition:all .2s;font-family:var(--ff-b)}
+.subj-btn:hover{border-color:var(--t400);background:var(--t50)}
+.subj-btn.sel{border-color:var(--p500);background:var(--p50);box-shadow:0 0 0 3px rgba(91,45,153,.12)}
+.sb-icon{font-size:22px;display:block;margin-bottom:5px}
+.sb-name{font-size:12.5px;font-weight:600;color:var(--text2)}
+.subj-btn.sel .sb-name{color:var(--p700)}
+
+/* Q count selector */
+.q-count-row{display:flex;gap:.65rem}
+.qc-btn{flex:1;padding:11px;border-radius:var(--r-md);border:1.5px solid var(--border);background:var(--bg);cursor:pointer;font-size:14px;font-weight:700;font-family:var(--ff-h);color:var(--text3);transition:all .2s;text-align:center}
+.qc-btn:hover{border-color:var(--t400);color:var(--t700);background:var(--t50)}
+.qc-btn.sel{border-color:var(--p500);background:var(--p50);color:var(--p700);box-shadow:0 0 0 3px rgba(91,45,153,.1)}
+
+/* Topic input */
+.fi{position:relative}
+.fic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:.4}
+.topic-input{width:100%;padding:13px 16px 13px 40px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14px;font-family:var(--ff-b);color:var(--text);background:var(--p50);outline:none;transition:all .2s}
+.topic-input:focus{border-color:var(--p500);background:#fff;box-shadow:0 0 0 4px rgba(91,45,153,.1)}
+.topic-input::placeholder{color:var(--text3);font-size:13px}
+
+.bgo{width:100%;padding:15px;border:none;border-radius:var(--r-md);font-size:15px;font-weight:700;font-family:var(--ff-h);cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--p600) 0%,var(--t600) 50%,var(--b600) 100%);background-size:200% 100%;box-shadow:0 5px 22px rgba(91,45,153,.28);transition:all .3s;letter-spacing:.1px;margin-top:.5rem}
+.bgo:hover{background-position:right center;transform:translateY(-2px);box-shadow:0 10px 30px rgba(23,168,186,.35)}
+.bgo:active{transform:translateY(0)}
+.bgo:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+/* =============================================
+   LOADING SCREEN
+   ============================================= */
+.loading-screen{display:none;text-align:center;padding:4rem 2rem;background:var(--white);border-radius:var(--r-xl);border:1.5px solid var(--border)}
+.loading-screen.show{display:block}
+.ld-dots{display:flex;gap:8px;justify-content:center;margin-bottom:1.25rem}
+.ld{width:12px;height:12px;border-radius:50%;animation:bounce 1.2s infinite}
+.ld:nth-child(1){background:var(--t400);animation-delay:0s}
+.ld:nth-child(2){background:var(--b400);animation-delay:.2s}
+.ld:nth-child(3){background:var(--p400);animation-delay:.4s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.ld-title{font-family:var(--ff-h);font-size:20px;font-weight:800;color:var(--p900);margin-bottom:.5rem}
+.ld-sub{font-size:14px;color:var(--text3);line-height:1.7}
+
+/* =============================================
+   QUIZ SCREEN
+   ============================================= */
+.quiz-screen{display:none}
+.quiz-screen.show{display:block}
+
+/* Progress bar */
+.quiz-progress{background:var(--white);border-radius:var(--r-lg);border:1.5px solid var(--border);padding:1.1rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem}
+.qp-label{font-size:13px;font-weight:700;color:var(--text2);white-space:nowrap;min-width:80px}
+.qp-bar{flex:1;height:8px;border-radius:99px;background:var(--border2);overflow:hidden}
+.qp-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--t500),var(--b500));transition:width .4s ease}
+.qp-score{font-family:var(--ff-h);font-size:14px;font-weight:800;color:var(--p700);white-space:nowrap}
+
+/* Question card */
+.question-card{background:var(--white);border-radius:var(--r-xl);border:1.5px solid var(--border);padding:2rem;margin-bottom:1.25rem;animation:up .35s cubic-bezier(.4,0,.2,1)}
+.q-num{font-size:11.5px;font-weight:700;color:var(--t600);text-transform:uppercase;letter-spacing:.6px;margin-bottom:.85rem;display:flex;align-items:center;gap:8px}
+.q-subj-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 10px;border-radius:50px;font-size:11px;font-weight:700;background:var(--p100);color:var(--p700)}
+.q-text{font-size:18px;font-weight:700;color:var(--p900);line-height:1.55;margin-bottom:1.75rem;font-family:var(--ff-h);letter-spacing:-.2px}
+
+/* Options */
+.options{display:flex;flex-direction:column;gap:.75rem}
+.opt{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;border-radius:var(--r-md);
+  border:2px solid var(--border);background:var(--white);
+  cursor:pointer;transition:all .2s;font-family:var(--ff-b);
+  text-align:left;width:100%;
+}
+.opt:hover:not(:disabled){border-color:var(--p400);background:var(--p50)}
+.opt.selected{border-color:var(--p500);background:var(--p50)}
+.opt.correct{border-color:var(--t500);background:var(--t50);pointer-events:none}
+.opt.wrong{border-color:#EF4444;background:#FEF2F2;pointer-events:none}
+.opt.reveal{border-color:var(--t500);background:var(--t50);pointer-events:none}
+.opt:disabled{cursor:not-allowed}
+.opt-letter{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;font-family:var(--ff-h);
+  background:var(--border2);color:var(--text3);transition:all .2s;
+}
+.opt.selected .opt-letter{background:var(--p500);color:#fff}
+.opt.correct  .opt-letter{background:var(--t500);color:#fff}
+.opt.wrong    .opt-letter{background:#EF4444;color:#fff}
+.opt.reveal   .opt-letter{background:var(--t500);color:#fff}
+.opt-text{font-size:14.5px;color:var(--text);line-height:1.5;flex:1}
+.opt.correct  .opt-text{color:var(--t800);font-weight:600}
+.opt.wrong    .opt-text{color:#B91C1C}
+.opt-icon{font-size:18px;margin-left:auto;flex-shrink:0}
+
+/* Feedback box */
+.feedback-box{border-radius:var(--r-md);padding:1rem 1.25rem;margin-top:1.25rem;font-size:14px;line-height:1.7;display:none;animation:up .3s ease}
+.feedback-box.show{display:block}
+.feedback-box.correct-fb{background:var(--t50);border:1px solid var(--t100);color:var(--t800)}
+.feedback-box.wrong-fb  {background:var(--b50);border:1px solid var(--b100);color:var(--b800)}
+.fb-title{font-family:var(--ff-h);font-size:14px;font-weight:700;margin-bottom:.35rem}
+
+/* Nav buttons */
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.btn-next{padding:13px 28px;border:none;border-radius:var(--r-md);font-size:14px;font-weight:700;font-family:var(--ff-h);cursor:pointer;background:linear-gradient(135deg,var(--p600),var(--b600));color:#fff;box-shadow:0 4px 16px rgba(91,45,153,.25);transition:all .25s}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(91,45,153,.35)}
+.btn-next:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-prev{padding:13px 20px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14px;font-weight:600;font-family:var(--ff-b);cursor:pointer;background:var(--white);color:var(--text2);transition:all .2s}
+.btn-prev:hover{border-color:var(--p400);color:var(--p600)}
+
+/* =============================================
+   RESULTS SCREEN
+   ============================================= */
+.results-screen{display:none}
+.results-screen.show{display:block;animation:up .5s cubic-bezier(.4,0,.2,1)}
+
+.results-hero{
+  background:var(--p900);border-radius:var(--r-xl);
+  padding:2.5rem 2rem;text-align:center;
+  position:relative;overflow:hidden;margin-bottom:1.25rem;
+}
+.results-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(23,168,186,.22) 0%,transparent 65%)}
+.results-hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(37,84,199,.18) 0%,transparent 65%)}
+.rh-inner{position:relative;z-index:1}
+
+/* Score ring */
+.score-ring{width:140px;height:140px;margin:0 auto 1.5rem;position:relative}
+.score-ring svg{transform:rotate(-90deg)}
+.ring-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-pct{font-family:var(--ff-h);font-size:32px;font-weight:800;color:#fff;line-height:1}
+.ring-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:3px}
+
+.results-title{font-family:var(--ff-h);font-size:26px;font-weight:800;color:#fff;margin-bottom:.5rem;letter-spacing:-.4px}
+.results-sub{font-size:14px;color:rgba(255,255,255,.55);line-height:1.6;max-width:420px;margin:0 auto 1.5rem}
+
+/* Stats row */
+.stats-row{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+.stat-pill{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:.85rem 1.25rem;text-align:center;min-width:90px}
+.sp-val{font-family:var(--ff-h);font-size:22px;font-weight:800;color:#fff;line-height:1}
+.sp-lbl{font-size:10.5px;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.6px;margin-top:3px}
+
+/* Encouragement */
+.encourage-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-md);padding:1rem 1.25rem;font-size:14px;color:rgba(255,255,255,.8);line-height:1.7;font-style:italic;max-width:480px;margin:0 auto}
+
+/* Review + actions */
+.results-body{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+.review-card{background:var(--white);border-radius:var(--r-lg);border:1.5px solid var(--border);padding:1.4rem}
+.rc-title{font-family:var(--ff-h);font-size:15px;font-weight:700;color:var(--text);margin-bottom:1rem}
+.review-list{display:flex;flex-direction:column;gap:.65rem;max-height:280px;overflow-y:auto}
+.review-item{display:flex;align-items:flex-start;gap:10px;padding:.75rem;border-radius:var(--r-sm);border:1px solid var(--border2)}
+.ri-correct{background:var(--t50);border-color:var(--t100)}
+.ri-wrong  {background:#FEF2F2;border-color:#FECACA}
+.ri-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.ri-text{font-size:12.5px;color:var(--text2);line-height:1.5}
+.ri-text strong{display:block;font-size:13px;color:var(--text);margin-bottom:2px}
+
+/* AI tip card */
+.tip-card{background:var(--white);border-radius:var(--r-lg);border:1.5px solid var(--border);padding:1.4rem}
+.tip-loading{display:flex;align-items:center;gap:10px;color:var(--text3);font-size:13.5px}
+.tip-dots{display:flex;gap:4px}
+.tip-dot{width:7px;height:7px;border-radius:50%;background:var(--text3);animation:bounce 1.2s infinite}
+.tip-dot:nth-child(2){animation-delay:.2s}
+.tip-dot:nth-child(3){animation-delay:.4s}
+.tip-text{font-size:14px;color:var(--text);line-height:1.75;display:none}
+.tip-text.show{display:block}
+
+/* Action buttons */
+.results-actions{display:flex;gap:.85rem;flex-wrap:wrap}
+.btn-retry{flex:1;min-width:140px;padding:13px 20px;border:none;border-radius:var(--r-md);font-size:14px;font-weight:700;font-family:var(--ff-h);cursor:pointer;background:linear-gradient(135deg,var(--p600),var(--b600));color:#fff;box-shadow:0 4px 16px rgba(91,45,153,.25);transition:all .25s}
+.btn-retry:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(91,45,153,.35)}
+.btn-guardian{flex:1;min-width:140px;padding:13px 20px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14px;font-weight:700;font-family:var(--ff-b);cursor:pointer;background:var(--white);color:var(--text2);transition:all .25s}
+.btn-guardian:hover{border-color:var(--b500);color:var(--b600);background:var(--b50)}
+.btn-dash{flex:1;min-width:140px;padding:13px 20px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14px;font-weight:700;font-family:var(--ff-b);cursor:pointer;background:var(--white);color:var(--text2);transition:all .25s}
+.btn-dash:hover{border-color:var(--t500);color:var(--t700);background:var(--t50)}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(90px);background:var(--p900);color:#fff;padding:12px 22px;border-radius:50px;font-size:14px;font-weight:500;border-left:4px solid var(--t400);z-index:999;transition:transform .35s cubic-bezier(.4,0,.2,1);box-shadow:0 8px 32px rgba(14,8,38,.28);white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .subj-grid{grid-template-columns:repeat(2,1fr)}
+  .results-body{grid-template-columns:1fr}
+  .wrap{padding:calc(var(--nav-h) + 1rem) 1rem 2rem}
+  .q-text{font-size:16px}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-brand" href="02-dashboard.html">
+    <div class="nav-mark">📚</div>
+    <div class="nav-name">Tusome <em>KCSE</em></div>
+  </a>
+  <div class="nav-sep"></div>
+  <div class="nav-page" id="navPage">🧠 Quiz</div>
+  <div class="nav-space"></div>
+  <div class="nav-timer" id="navTimer" style="display:none">
+    <div class="timer-dot"></div>
+    <span id="timerDisplay">0:00</span>
+  </div>
+  <a class="nav-back" href="02-dashboard.html">← Dashboard</a>
+  <div class="nav-av" id="navAv">--</div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ===== SETUP SCREEN ===== -->
+  <div id="screenSetup">
+    <div class="setup-card">
+      <div class="setup-badge">🧠 KCSE Quiz Generator</div>
+      <div class="setup-title">Test your understanding</div>
+      <div class="setup-sub">Choose a subject, enter the topic you studied, and the Scout will generate a personalised KCSE-style multi-choice quiz just for you.</div>
+
+      <!-- Subject -->
+      <div class="setup-section">
+        <div class="ss-label">Choose Subject</div>
+        <div class="subj-grid">
+          <button class="subj-btn" onclick="selSubj('Biology',this)">
+            <span class="sb-icon">🧬</span><span class="sb-name">Biology</span>
+          </button>
+          <button class="subj-btn" onclick="selSubj('Chemistry',this)">
+            <span class="sb-icon">🧪</span><span class="sb-name">Chemistry</span>
+          </button>
+          <button class="subj-btn" onclick="selSubj('Physics',this)">
+            <span class="sb-icon">⚛️</span><span class="sb-name">Physics</span>
+          </button>
+          <button class="subj-btn" onclick="selSubj('Mathematics',this)">
+            <span class="sb-icon">📐</span><span class="sb-name">Mathematics</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Topic -->
+      <div class="setup-section">
+        <div class="ss-label">Topic You Studied</div>
+        <div class="fi">
+          <span class="fic">📖</span>
+          <input class="topic-input" id="topicInput"
+                 placeholder="e.g. The Haber Process, Newton's Laws, Cell Division...">
+        </div>
+      </div>
+
+      <!-- Number of questions -->
+      <div class="setup-section">
+        <div class="ss-label">Number of Questions</div>
+        <div class="q-count-row">
+          <button class="qc-btn" onclick="selQ(5,this)">5</button>
+          <button class="qc-btn sel" onclick="selQ(10,this)">10</button>
+        </div>
+      </div>
+
+      <button class="bgo" id="startBtn" onclick="startQuiz()">
+        Generate My Quiz →
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div class="loading-screen" id="screenLoading">
+    <div class="ld-dots">
+      <div class="ld"></div><div class="ld"></div><div class="ld"></div>
+    </div>
+    <div class="ld-title">Generating your quiz...</div>
+    <div class="ld-sub">
+      The Scout is crafting <span id="ldQCount">10</span> KCSE-style questions on
+      <strong id="ldTopic">your topic</strong>.<br>
+      Using local Kenyan examples and exam patterns.
+    </div>
+  </div>
+
+  <!-- ===== QUIZ SCREEN ===== -->
+  <div class="quiz-screen" id="screenQuiz">
+
+    <!-- Progress bar -->
+    <div class="quiz-progress">
+      <div class="qp-label" id="qpLabel">Question 1 of 10</div>
+      <div class="qp-bar"><div class="qp-fill" id="qpFill" style="width:10%"></div></div>
+      <div class="qp-score" id="qpScore">0 pts</div>
+    </div>
+
+    <!-- Question -->
+    <div class="question-card" id="questionCard">
+      <!-- Injected by JS -->
+    </div>
+
+    <!-- Navigation -->
+    <div class="quiz-nav">
+      <button class="btn-prev" id="btnPrev" onclick="prevQ()" style="visibility:hidden">← Previous</button>
+      <button class="btn-next" id="btnNext" onclick="nextQ()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ===== RESULTS SCREEN ===== -->
+  <div class="results-screen" id="screenResults">
+
+    <div class="results-hero">
+      <div class="rh-inner">
+        <div class="score-ring">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="56" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="10"/>
+            <circle cx="70" cy="70" r="56" fill="none"
+              stroke="url(#rg)" stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="351.9" stroke-dashoffset="351.9" id="scoreArc"/>
+            <defs>
+              <linearGradient id="rg" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#17A8BA"/>
+                <stop offset="100%" stop-color="#6B93F0"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="ring-label">
+            <div class="ring-pct" id="ringPct">0%</div>
+            <div class="ring-sub">Score</div>
+          </div>
+        </div>
+
+        <div class="results-title" id="resultsTitle">Quiz Complete!</div>
+        <div class="results-sub" id="resultsSub"></div>
+
+        <div class="stats-row">
+          <div class="stat-pill">
+            <div class="sp-val" id="statCorrect">0</div>
+            <div class="sp-lbl">✅ Correct</div>
+          </div>
+          <div class="stat-pill">
+            <div class="sp-val" id="statWrong">0</div>
+            <div class="sp-lbl">❌ Incorrect</div>
+          </div>
+          <div class="stat-pill">
+            <div class="sp-val" id="statTime">0s</div>
+            <div class="sp-lbl">⏱ Time</div>
+          </div>
+          <div class="stat-pill">
+            <div class="sp-val" id="statStreak">🔥0</div>
+            <div class="sp-lbl">Streak</div>
+          </div>
+        </div>
+
+        <div class="encourage-box" id="encourageBox"></div>
+      </div>
+    </div>
+
+    <!-- Review + AI tip -->
+    <div class="results-body">
+      <div class="review-card">
+        <div class="rc-title">📋 Answer Review</div>
+        <div class="review-list" id="reviewList"></div>
+      </div>
+      <div class="tip-card">
+        <div class="rc-title">💡 Study Recommendation</div>
+        <div class="tip-loading" id="tipLoading">
+          <div class="tip-dots">
+            <div class="tip-dot"></div>
+            <div class="tip-dot"></div>
+            <div class="tip-dot"></div>
+          </div>
+          Generating your personalised tip...
+        </div>
+        <div class="tip-text" id="tipText"></div>
+      </div>
+    </div>
+
+    <div class="results-actions">
+      <button class="btn-retry" onclick="retryQuiz()">Retry Quiz 🔄</button>
+      <button class="btn-guardian" onclick="window.location.href='04-guardian.html'">Ask Guardian 🛡️</button>
+      <button class="btn-dash" onclick="window.location.href='02-dashboard.html'">Dashboard 🏠</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =============================================
+   DATA
+   ============================================= */
+const S_KEY    = 'tk_students';
+const SESS     = 'tk_session';
+const QUIZ_KEY = 'tk_pending_quiz';
+const getStudents  = () => { try{return JSON.parse(localStorage.getItem(S_KEY)||'{}')}catch{return{}} };
+const saveStudents = d => localStorage.setItem(S_KEY,JSON.stringify(d));
+
+const ICONS = {Biology:'🧬',Chemistry:'🧪',Physics:'⚛️',Mathematics:'📐'};
+
+// Dignity-safe encouragements — no negative words
+const ENCOURAGEMENTS = {
+  high:[
+    "Outstanding! You have clearly been putting in the work and it shows. Keep this momentum going into your KCSE exams!",
+    "Excellent performance! This is exactly the kind of preparation that leads to top grades. You should be proud of yourself.",
+    "Brilliant work! Your understanding of this topic is strong. Share what you know with a classmate — teaching others makes your own knowledge even stronger.",
+  ],
+  mid:[
+    "Good effort! You are making real progress on this topic. Review the questions you found tricky and you will nail them next time.",
+    "Well done for completing the quiz! Every attempt builds your knowledge. Focus on the explanations for the questions you found challenging.",
+    "You are on the right track! A few more revision sessions on this topic and you will be scoring even higher. Keep going!",
+  ],
+  low:[
+    "Thank you for giving this a go — that takes courage! Every expert started as a beginner. Read through the explanations and try again — you will see improvement.",
+    "Starting is the hardest part and you have already done it. Go through the Guardian Agent to understand the tricky concepts, then come back and try again.",
+    "Every question you attempted today is a step forward. Review the explanations carefully — the answers will start to make sense and your score will climb.",
+  ],
+};
+
+let student       = null;
+let selectedSubj  = '';
+let selectedQ     = 10;
+let questions     = [];
+let answered      = [];
+let currentIdx    = 0;
+let score         = 0;
+let startTime     = null;
+let timerRef      = null;
+let elapsed       = 0;
+
+/* =============================================
+   INIT
+   ============================================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  const raw  = sessionStorage.getItem(SESS);
+  const sess = raw ? JSON.parse(raw) : null;
+  const students = getStudents();
+  student = sess && students[sess.admKey] ? students[sess.admKey] : Object.values(students)[0];
+
+  if(student){
+    document.getElementById('navAv').textContent =
+      student.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  }
+
+  // Pre-fill from Scout context
+  const qRaw = localStorage.getItem(QUIZ_KEY);
+  if(qRaw){
+    const qCtx = JSON.parse(qRaw);
+    if(qCtx.subject){
+      const btn = document.querySelector(`.subj-btn:nth-child(${['Biology','Chemistry','Physics','Mathematics'].indexOf(qCtx.subject)+1})`);
+      if(btn) selSubj(qCtx.subject, btn);
+    }
+    if(qCtx.topic) document.getElementById('topicInput').value = qCtx.topic;
+  }
+});
+
+/* =============================================
+   SETUP
+   ============================================= */
+function selSubj(name, btn){
+  document.querySelectorAll('.subj-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedSubj = name;
+}
+function selQ(n, btn){
+  document.querySelectorAll('.qc-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedQ = n;
+}
+
+/* =============================================
+   DEMO QUESTION BANK (used when no API key)
+   ============================================= */
+const DEMO_QUESTIONS = {
+  Biology:[
+    {question:"Which organelle is known as the powerhouse of the cell because it produces ATP through cellular respiration?",options:["A. Nucleus","B. Ribosome","C. Mitochondria","D. Chloroplast"],correct:2,explanation:"Mitochondria produce ATP through cellular respiration — they are rightly called the powerhouse of the cell. Well done for tackling this!"},
+    {question:"In osmosis, water moves from a region of:",options:["A. Low water potential to high water potential","B. High water potential to low water potential","C. High solute concentration to low solute concentration","D. Low temperature to high temperature"],correct:1,explanation:"Osmosis moves water from HIGH to LOW water potential (from dilute to concentrated solution) through a semi-permeable membrane. You are getting this!"},
+    {question:"Which process do plants use to make their own food using sunlight?",options:["A. Respiration","B. Transpiration","C. Photosynthesis","D. Digestion"],correct:2,explanation:"Photosynthesis uses sunlight, water and carbon dioxide to produce glucose and oxygen. This is a key KCSE topic — keep revising it!"},
+    {question:"The functional unit of the kidney responsible for filtering blood is called the:",options:["A. Neuron","B. Nephron","C. Villus","D. Alveolus"],correct:1,explanation:"The nephron is the basic structural and functional unit of the kidney. Each kidney contains about one million nephrons. Great effort tackling this question!"},
+    {question:"During aerobic respiration, glucose is broken down to produce:",options:["A. Lactic acid only","B. Carbon dioxide, water and ATP","C. Ethanol and carbon dioxide","D. Oxygen and water"],correct:1,explanation:"Aerobic respiration: Glucose + Oxygen → Carbon dioxide + Water + ATP (energy). This is a must-know equation for KCSE Biology!"},
+    {question:"Which blood cells are responsible for fighting infections in the human body?",options:["A. Red blood cells","B. Platelets","C. White blood cells","D. Plasma cells"],correct:2,explanation:"White blood cells (leucocytes) are part of the immune system and fight infections. Red blood cells carry oxygen — make sure you know the difference!"},
+    {question:"The process by which plants lose water vapour through their leaves is called:",options:["A. Osmosis","B. Transpiration","C. Respiration","D. Diffusion"],correct:1,explanation:"Transpiration is the loss of water vapour from plant leaves through tiny pores called stomata. It also helps pull water up from the roots!"},
+    {question:"DNA stands for:",options:["A. Deoxyribose Nucleic Acid","B. Deoxyribonucleic Acid","C. Deoxyribose Nitrogen Acid","D. Double Nucleic Acid"],correct:1,explanation:"DNA stands for Deoxyribonucleic Acid — it carries genetic information in all living organisms. A very common KCSE question!"},
+    {question:"Which part of the human digestive system absorbs most nutrients into the bloodstream?",options:["A. Stomach","B. Large intestine","C. Small intestine","D. Oesophagus"],correct:2,explanation:"The small intestine, lined with villi and microvilli, is where most nutrient absorption happens. Its large surface area makes it perfect for this function!"},
+    {question:"Insulin, a hormone that regulates blood sugar, is produced by the:",options:["A. Liver","B. Kidney","C. Pancreas","D. Adrenal gland"],correct:2,explanation:"Insulin is produced by beta cells in the islets of Langerhans in the pancreas. It lowers blood glucose levels after a meal. Key KCSE content!"},
+  ],
+  Chemistry:[
+    {question:"The Haber Process is used to manufacture which important industrial chemical?",options:["A. Sulfuric acid","B. Ammonia","C. Hydrochloric acid","D. Sodium hydroxide"],correct:1,explanation:"The Haber Process combines nitrogen and hydrogen at high temperature and pressure with an iron catalyst to produce ammonia (NH₃). This is heavily tested in KCSE!"},
+    {question:"What is the atomic number of Carbon?",options:["A. 4","B. 6","C. 8","D. 12"],correct:1,explanation:"Carbon has atomic number 6, meaning it has 6 protons. Its relative atomic mass is 12. Carbon is the basis of all organic chemistry!"},
+    {question:"In electrolysis of brine (sodium chloride solution), what is produced at the cathode?",options:["A. Chlorine gas","B. Oxygen gas","C. Hydrogen gas","D. Sodium metal"],correct:2,explanation:"At the cathode (negative electrode), hydrogen gas is produced: 2H⁺ + 2e⁻ → H₂. Chlorine forms at the anode. This is a key KCSE electrolysis question!"},
+    {question:"Which of the following is an example of an exothermic reaction?",options:["A. Dissolving ammonium nitrate in water","B. Cooking an egg","C. Burning wood","D. Melting ice"],correct:2,explanation:"Burning wood releases heat energy to the surroundings — this is exothermic. Reactions that absorb heat (like dissolving NH₄NO₃) are endothermic."},
+    {question:"The pH of a neutral solution at 25°C is:",options:["A. 0","B. 7","C. 14","D. 5"],correct:1,explanation:"pH 7 is neutral. Below 7 is acidic, above 7 is alkaline. Pure water at 25°C has a pH of exactly 7. This appears in almost every KCSE Chemistry paper!"},
+    {question:"What type of bond is formed when electrons are shared between atoms?",options:["A. Ionic bond","B. Metallic bond","C. Covalent bond","D. Hydrogen bond"],correct:2,explanation:"Covalent bonds form when atoms SHARE electrons. Ionic bonds form when electrons are TRANSFERRED. This distinction is essential for KCSE!"},
+    {question:"Which gas is produced when zinc reacts with dilute sulphuric acid?",options:["A. Oxygen","B. Carbon dioxide","C. Sulphur dioxide","D. Hydrogen"],correct:3,explanation:"Zn + H₂SO₄ → ZnSO₄ + H₂↑. When a metal reacts with a dilute acid, hydrogen gas is produced. You can test it with a burning splint — it burns with a pop!"},
+    {question:"Crude oil is separated into fractions using a process called:",options:["A. Filtration","B. Distillation","C. Fractional distillation","D. Chromatography"],correct:2,explanation:"Fractional distillation separates crude oil into fractions (petrol, diesel, kerosene etc.) based on different boiling points. Very relevant in Kenya with the Mombasa refinery!"},
+    {question:"What is the chemical formula of water?",options:["A. HO","B. H₂O₂","C. H₂O","D. HO₂"],correct:2,explanation:"Water is H₂O — two hydrogen atoms bonded to one oxygen atom. H₂O₂ is hydrogen peroxide, a different compound. A foundational chemistry fact!"},
+    {question:"In the periodic table, elements in the same group have the same number of:",options:["A. Neutrons","B. Protons","C. Electrons","D. Valence electrons"],correct:3,explanation:"Elements in the same group (vertical column) have the same number of valence electrons, which is why they have similar chemical properties. This is key to understanding the periodic table!"},
+  ],
+  Physics:[
+    {question:"Newton's First Law of Motion states that an object will remain at rest or in uniform motion unless acted upon by:",options:["A. Gravity","B. An unbalanced external force","C. Friction","D. Momentum"],correct:1,explanation:"Newton's First Law (Law of Inertia) — objects resist changes to their motion unless an unbalanced force acts on them. This appears in almost every KCSE Physics paper!"},
+    {question:"What is the SI unit of electric current?",options:["A. Volt","B. Watt","C. Ohm","D. Ampere"],correct:3,explanation:"The Ampere (A) is the SI unit of electric current. Remember: Volt measures potential difference, Ohm measures resistance, Watt measures power. Know your units for KCSE!"},
+    {question:"According to Ohm's Law, if voltage doubles and resistance stays the same, current will:",options:["A. Halve","B. Stay the same","C. Double","D. Quadruple"],correct:2,explanation:"Ohm's Law: V = IR, so I = V/R. If V doubles and R is constant, I doubles too. This is one of the most tested relationships in KCSE Physics!"},
+    {question:"The speed of light in a vacuum is approximately:",options:["A. 3 × 10⁶ m/s","B. 3 × 10⁸ m/s","C. 3 × 10¹⁰ m/s","D. 3 × 10⁴ m/s"],correct:1,explanation:"The speed of light in a vacuum is approximately 3 × 10⁸ m/s (300,000,000 m/s). This is a fundamental constant you should memorise for KCSE!"},
+    {question:"Which type of wave does NOT require a medium to travel through?",options:["A. Sound waves","B. Water waves","C. Electromagnetic waves","D. Seismic waves"],correct:2,explanation:"Electromagnetic waves (light, radio, X-rays) can travel through a vacuum — they don't need a medium. Sound waves need a medium (solid, liquid or gas) to travel."},
+    {question:"The half-life of a radioactive substance is the time taken for:",options:["A. All atoms to decay","B. Half the atoms to decay","C. The substance to lose all its energy","D. The substance to become stable"],correct:1,explanation:"Half-life is the time for HALF the radioactive atoms in a sample to decay. After 2 half-lives, one quarter remains. After 3, one eighth remains. A key KCSE calculation topic!"},
+    {question:"What is the unit of power?",options:["A. Joule","B. Newton","C. Watt","D. Pascal"],correct:2,explanation:"Power is measured in Watts (W). Power = Work done ÷ Time. 1 Watt = 1 Joule per second. Joule is the unit of energy, not power — don't mix them up in KCSE!"},
+    {question:"A convex lens is also known as a:",options:["A. Diverging lens","B. Concave lens","C. Converging lens","D. Plane lens"],correct:2,explanation:"A convex lens converges (brings together) parallel rays of light to a focal point. A concave lens diverges them. Convex lenses are used in cameras and magnifying glasses!"},
+    {question:"When a body is in free fall (ignoring air resistance), its acceleration is approximately:",options:["A. 9.8 m/s","B. 9.8 m/s²","C. 10 m/s","D. 10 m/s³"],correct:1,explanation:"The acceleration due to gravity (g) is approximately 9.8 m/s² (often rounded to 10 m/s² in KCSE). Note the unit is m/s² not m/s — it's acceleration, not speed!"},
+    {question:"The law of conservation of energy states that energy can:",options:["A. Be created but not destroyed","B. Be destroyed but not created","C. Neither be created nor destroyed, only transformed","D. Be created and destroyed equally"],correct:2,explanation:"Energy cannot be created or destroyed — only converted from one form to another. This is one of the most fundamental laws in physics and a staple KCSE question!"},
+  ],
+  Mathematics:[
+    {question:"Solve the quadratic equation: x² - 5x + 6 = 0",options:["A. x = 2 or x = 3","B. x = -2 or x = -3","C. x = 1 or x = 6","D. x = -1 or x = -6"],correct:0,explanation:"Factorise: (x-2)(x-3) = 0, giving x = 2 or x = 3. You can verify: 4-10+6=0 ✓ and 9-15+6=0 ✓. Factorisation is the quickest method for KCSE!"},
+    {question:"What is the gradient of the line y = 3x + 7?",options:["A. 7","B. 3","C. -3","D. 10"],correct:1,explanation:"In y = mx + c, m is the gradient and c is the y-intercept. Here gradient m = 3 and y-intercept = 7. Always identify the form y = mx + c first in KCSE questions!"},
+    {question:"If sin θ = 0.5, what is the value of θ (0° ≤ θ ≤ 90°)?",options:["A. 30°","B. 45°","C. 60°","D. 90°"],correct:0,explanation:"sin 30° = 0.5 is a standard angle you must memorise. Also memorise: sin 45° = √2/2, sin 60° = √3/2. These appear every year in KCSE Paper 1!"},
+    {question:"What is the area of a circle with radius 7 cm? (Take π = 22/7)",options:["A. 22 cm²","B. 44 cm²","C. 154 cm²","D. 308 cm²"],correct:2,explanation:"Area = πr² = (22/7) × 7² = (22/7) × 49 = 22 × 7 = 154 cm². Using π = 22/7 with radius 7 makes calculation clean — a deliberate KCSE trick!"},
+    {question:"Simplify: 2³ × 2⁴",options:["A. 2⁷","B. 2¹²","C. 4⁷","D. 2⁻¹"],correct:0,explanation:"When multiplying powers with the same base, ADD the exponents: 2³ × 2⁴ = 2^(3+4) = 2⁷ = 128. Remember: same base, add powers; dividing, subtract powers!"},
+    {question:"The mean of 5 numbers is 12. If four of the numbers are 10, 14, 8 and 15, what is the fifth number?",options:["A. 11","B. 12","C. 13","D. 15"],correct:2,explanation:"Total = mean × count = 12 × 5 = 60. Sum of known numbers = 10+14+8+15 = 47. Fifth number = 60-47 = 13. Always find the total first in KCSE mean questions!"},
+    {question:"What is the value of log₁₀(1000)?",options:["A. 2","B. 3","C. 4","D. 10"],correct:1,explanation:"log₁₀(1000) = log₁₀(10³) = 3. Remember: log₁₀(10) = 1, log₁₀(100) = 2, log₁₀(1000) = 3. Logarithms are essential for KCSE Paper 2!"},
+    {question:"A straight line passes through (0, 4) and (2, 0). What is its equation?",options:["A. y = 2x + 4","B. y = -2x + 4","C. y = 2x - 4","D. y = -2x - 4"],correct:1,explanation:"Gradient = (0-4)/(2-0) = -2. Using y = mx + c: y = -2x + 4. Check: when x=0, y=4 ✓; when x=2, y=0 ✓. Always verify with both given points!"},
+    {question:"What is 15% of 240?",options:["A. 24","B. 36","C. 48","D. 16"],correct:1,explanation:"15% of 240 = (15/100) × 240 = 0.15 × 240 = 36. Shortcut: 10% = 24, 5% = 12, so 15% = 24+12 = 36. These percentage shortcuts save time in KCSE!"},
+    {question:"In a triangle, two angles are 65° and 75°. What is the third angle?",options:["A. 30°","B. 40°","C. 45°","D. 50°"],correct:1,explanation:"Angles in a triangle add up to 180°. Third angle = 180° - 65° - 75° = 40°. This is one of the most basic but frequently tested geometry facts in KCSE!"},
+  ],
+};
+
+/* =============================================
+   GENERATE QUIZ
+   ============================================= */
+async function startQuiz(){
+  const topic = document.getElementById('topicInput').value.trim();
+  if(!selectedSubj){ showToast('Please select a subject'); return; }
+  if(!topic)        { showToast('Please enter the topic you studied'); return; }
+
+  document.getElementById('screenSetup').style.display = 'none';
+  document.getElementById('screenLoading').classList.add('show');
+  document.getElementById('ldQCount').textContent = selectedQ;
+  document.getElementById('ldTopic').textContent  = topic;
+
+  const form = student?.form || 'Form 4';
+  const prev = (student?.memory||[]).filter(m=>m.subject===selectedSubj).map(m=>m.topic).join(', ')||'None';
+
+  const prompt = `You are a KCSE exam question generator for Kenyan secondary school students (${form}).
+
+Generate exactly ${selectedQ} multiple-choice questions on the topic "${topic}" in ${selectedSubj}.
+
+Rules:
+- Questions must be KCSE-style (Kenya Certificate of Secondary Education exam standard)
+- Use Kenyan real-world contexts and examples where relevant (e.g. Kenyan rivers, farms, industries)
+- Each question must have exactly 4 options labelled A, B, C, D
+- Questions should range from straightforward recall to application-level thinking
+- NEVER include discouraging language in explanations
+- Explanations must be encouraging and educational
+
+Respond ONLY in this exact JSON format — no markdown, no extra text:
+{"questions":[{"question":"...","options":["A. ...","B. ...","C. ...","D. ..."],"correct":0,"explanation":"..."}]}
+
+correct is the 0-based index (0=A, 1=B, 2=C, 3=D).`;
+
+  try{
+    const res  = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    let raw = data.content?.map(c=>c.text||'').join('')||'{}';
+    raw = raw.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(raw);
+    questions = parsed.questions||[];
+    if(!questions.length) throw new Error('No questions returned');
+
+    answered  = new Array(questions.length).fill(null);
+    score     = 0;
+    currentIdx= 0;
+
+    document.getElementById('screenLoading').classList.remove('show');
+    document.getElementById('screenQuiz').classList.add('show');
+    document.getElementById('navTimer').style.display = 'flex';
+    document.getElementById('navPage').textContent = `🧠 ${selectedSubj} Quiz`;
+
+    startTimer();
+    renderQuestion(0);
+
+  } catch(e){
+    // API not available — use demo questions
+    console.log('API unavailable, using demo questions:', e.message);
+    const pool = DEMO_QUESTIONS[selectedSubj] || DEMO_QUESTIONS['Biology'];
+    const shuffled = [...pool].sort(()=>Math.random()-.5);
+    questions = shuffled.slice(0, Math.min(selectedQ, pool.length));
+
+    if(!questions.length){
+      document.getElementById('screenLoading').classList.remove('show');
+      document.getElementById('screenSetup').style.display = 'block';
+      showToast('Could not load questions. Please try again.');
+      return;
+    }
+
+    answered  = new Array(questions.length).fill(null);
+    score     = 0;
+    currentIdx= 0;
+
+    document.getElementById('screenLoading').classList.remove('show');
+    document.getElementById('screenQuiz').classList.add('show');
+    document.getElementById('navTimer').style.display = 'flex';
+    document.getElementById('navPage').textContent = `🧠 ${selectedSubj} Quiz`;
+
+    startTimer();
+    renderQuestion(0);
+  }
+}
+
+/* =============================================
+   TIMER
+   ============================================= */
+function startTimer(){
+  startTime = Date.now();
+  timerRef  = setInterval(()=>{
+    elapsed = Math.floor((Date.now()-startTime)/1000);
+    const m = Math.floor(elapsed/60);
+    const s = elapsed % 60;
+    document.getElementById('timerDisplay').textContent =
+      m+':'+(s<10?'0':'')+s;
+  },1000);
+}
+
+/* =============================================
+   RENDER QUESTION
+   ============================================= */
+function renderQuestion(idx){
+  const q     = questions[idx];
+  const total = questions.length;
+  currentIdx  = idx;
+
+  const pct = Math.round(((idx+1)/total)*100);
+  document.getElementById('qpLabel').textContent = `Question ${idx+1} of ${total}`;
+  document.getElementById('qpFill').style.width  = pct+'%';
+  document.getElementById('qpScore').textContent = score+' pts';
+
+  const ans    = answered[idx];
+  const locked = ans !== null;
+  const letters= ['A','B','C','D'];
+
+  const optsHtml = q.options.map((opt,i)=>{
+    let cls = 'opt';
+    let icon = '';
+    if(locked){
+      if(i === q.correct)    { cls+=' correct'; icon='✅'; }
+      else if(i === ans)     { cls+=' wrong';   icon='❌'; }
+    } else if(ans === i)     { cls+=' selected'; }
+
+    return `<button class="${cls}" onclick="${locked?'':'selectAnswer('+i+')'}" ${locked?'disabled':''}>
+      <span class="opt-letter">${letters[i]}</span>
+      <span class="opt-text">${opt.replace(/^[A-D]\.\s*/,'')}</span>
+      ${icon?`<span class="opt-icon">${icon}</span>`:''}
+    </button>`;
+  }).join('');
+
+  const feedbackHtml = locked ? `
+    <div class="feedback-box ${ans===q.correct?'correct-fb':'wrong-fb'} show">
+      <div class="fb-title">${ans===q.correct?'✅ Correct!':'📖 Here is the correct answer:'}</div>
+      ${q.explanation}
+    </div>` : '';
+
+  document.getElementById('questionCard').innerHTML = `
+    <div class="q-num">
+      Question ${idx+1}
+      <span class="q-subj-badge">${ICONS[selectedSubj]||'📖'} ${selectedSubj}</span>
+    </div>
+    <div class="q-text">${q.question}</div>
+    <div class="options">${optsHtml}</div>
+    ${feedbackHtml}`;
+
+  // Nav buttons
+  document.getElementById('btnPrev').style.visibility = idx > 0 ? 'visible':'hidden';
+  const isLast = idx === total-1;
+  const btnNext = document.getElementById('btnNext');
+  btnNext.textContent = isLast && locked ? 'See Results 🎉' : 'Next →';
+  btnNext.disabled    = !locked;
+  if(isLast && locked) btnNext.onclick = showResults;
+  else                 btnNext.onclick = nextQ;
+}
+
+/* =============================================
+   ANSWER SELECTION
+   ============================================= */
+function selectAnswer(optIdx){
+  if(answered[currentIdx] !== null) return;
+  answered[currentIdx] = optIdx;
+  if(optIdx === questions[currentIdx].correct) score++;
+  renderQuestion(currentIdx);
+}
+
+function nextQ(){
+  if(answered[currentIdx]===null){ showToast('Please select an answer first'); return; }
+  if(currentIdx < questions.length-1) renderQuestion(currentIdx+1);
+  else showResults();
+}
+function prevQ(){
+  if(currentIdx > 0) renderQuestion(currentIdx-1);
+}
+
+/* =============================================
+   RESULTS
+   ============================================= */
+async function showResults(){
+  clearInterval(timerRef);
+  document.getElementById('navTimer').style.display='none';
+
+  const total = questions.length;
+  const pct   = Math.round((score/total)*100);
+
+  document.getElementById('screenQuiz').classList.remove('show');
+  document.getElementById('screenResults').classList.add('show');
+
+  // Animate ring
+  const circum = 351.9;
+  const offset = circum - (circum*(pct/100));
+  document.getElementById('ringPct').textContent = pct+'%';
+  setTimeout(()=>{
+    const arc = document.getElementById('scoreArc');
+    arc.style.transition = 'stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)';
+    arc.style.strokeDashoffset = offset;
+  },200);
+
+  // Title + stats
+  const title = pct>=80?'Excellent Work! 🏆':pct>=60?'Good Effort! 💪':pct>=40?'Keep Going! 🌱':'Every Step Counts! 🚀';
+  document.getElementById('resultsTitle').textContent = title;
+  document.getElementById('resultsSub').textContent   =
+    `You scored ${score} out of ${total} on ${selectedSubj} — ${document.getElementById('topicInput').value}`;
+  document.getElementById('statCorrect').textContent  = score;
+  document.getElementById('statWrong').textContent    = total-score;
+  document.getElementById('statTime').textContent     = elapsed+'s';
+  document.getElementById('statStreak').textContent   = '🔥'+(student?.streak||0);
+
+  // Encouragement — dignity safe
+  const pool = pct>=70?ENCOURAGEMENTS.high:pct>=45?ENCOURAGEMENTS.mid:ENCOURAGEMENTS.low;
+  document.getElementById('encourageBox').textContent = pool[Math.floor(Math.random()*pool.length)];
+
+  // Answer review
+  document.getElementById('reviewList').innerHTML = questions.map((q,i)=>{
+    const correct = answered[i] === q.correct;
+    return `<div class="review-item ${correct?'ri-correct':'ri-wrong'}">
+      <div class="ri-icon">${correct?'✅':'📖'}</div>
+      <div class="ri-text">
+        <strong>${q.question.slice(0,60)}${q.question.length>60?'...':''}</strong>
+        ${correct?'Correct answer chosen':'Correct: '+q.options[q.correct].replace(/^[A-D]\.\s*/,'')}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Save to student record
+  saveQuizResult(pct);
+
+  // AI study tip
+  generateStudyTip(pct);
+}
+
+/* =============================================
+   AI STUDY TIP
+   ============================================= */
+async function generateStudyTip(pct){
+  const topic   = document.getElementById('topicInput').value;
+  const wrong   = questions.filter((_,i)=>answered[i]!==questions[i].correct).map(q=>q.question.slice(0,60)).join('; ');
+
+  const prompt = `A Form 3 or 4 Kenyan student just scored ${pct}% on a ${selectedSubj} quiz about "${topic}".
+${wrong ? `Questions they found difficult: ${wrong.slice(0,300)}` : 'They got all questions right.'}
+
+Write a 3-sentence personalised KCSE study recommendation. Be warm, specific and encouraging. Never use words like fail, wrong, stupid, can't. Suggest exactly what to review next and how.`;
+
+  try{
+    const res  = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    const data = await res.json();
+    const tip  = data.content?.map(c=>c.text||'').join('')||'';
+    document.getElementById('tipLoading').style.display='none';
+    document.getElementById('tipText').textContent = tip;
+    document.getElementById('tipText').classList.add('show');
+  } catch(e){
+    document.getElementById('tipLoading').style.display='none';
+    const fallbacks = {
+      high: `Excellent work on ${topic}! To stay sharp, try explaining this topic to a classmate — teaching is one of the best ways to lock in your knowledge before KCSE.`,
+      mid:  `Good effort on ${topic}! Focus on reviewing the questions you found tricky. Read your class notes on those specific areas and attempt the quiz again — you will see improvement.`,
+      low:  `Every attempt builds your knowledge — well done for trying! Visit the Guardian Agent to get step-by-step explanations on ${topic}, then come back and try the quiz again. You will get there!`,
+    };
+    const key = pct >= 70 ? 'high' : pct >= 45 ? 'mid' : 'low';
+    document.getElementById('tipText').textContent = fallbacks[key];
+    document.getElementById('tipText').classList.add('show');
+  }
+}
+
+/* =============================================
+   SAVE RESULT
+   ============================================= */
+function saveQuizResult(pct){
+  if(!student) return;
+  const students = getStudents();
+  const topic    = document.getElementById('topicInput').value;
+
+  student.quizHistory = student.quizHistory||[];
+  student.quizHistory.push({
+    subject: selectedSubj,
+    topic,
+    score,
+    total: questions.length,
+    pct,
+    date: new Date().toISOString()
+  });
+  student.totalQuizzes = (student.totalQuizzes||0)+1;
+  if(pct > (student.bestScore||0)) student.bestScore = pct;
+
+  // Add to memory if not already there
+  const exists = (student.memory||[]).find(m=>m.subject===selectedSubj&&m.topic===topic);
+  if(!exists){
+    student.memory = student.memory||[];
+    student.memory.push({subject:selectedSubj, topic, date:new Date().toISOString()});
+  }
+
+  students[student.admKey] = student;
+  saveStudents(students);
+}
+
+/* =============================================
+   RETRY
+   ============================================= */
+function retryQuiz(){
+  answered  = new Array(questions.length).fill(null);
+  score     = 0;
+  currentIdx= 0;
+  elapsed   = 0;
+  document.getElementById('screenResults').classList.remove('show');
+  document.getElementById('screenQuiz').classList.add('show');
+  document.getElementById('navTimer').style.display='flex';
+  startTimer();
+  renderQuestion(0);
+}
+
+/* =============================================
+   HELPERS
+   ============================================= */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
