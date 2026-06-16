@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<meta name="description" content="Tusome KCSE Hunter Agent — Your personalised subject rotation plan to maximise memory retention through the spacing effect.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<title>Hunter Agent — Tusome KCSE</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.hunt-header{background:var(--navy);border-radius:var(--r-xl);padding:1.25rem 1.5rem;color:#fff;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.hunt-header::after{content:'🏹';position:absolute;right:1.25rem;top:50%;transform:translateY(-50%);font-size:48px;opacity:.12}
+.hh-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border-radius:50px;padding:4px 11px;font-size:11.5px;margin-bottom:.65rem}
+.hh-title{font-size:19px;font-weight:600;margin-bottom:.25rem}
+.hh-sub{font-size:13px;opacity:.75;line-height:1.6;max-width:280px}
+.science-strip{background:var(--purple-soft);border-radius:var(--r-md);padding:.85rem 1rem;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:10px}
+.ss-icon{font-size:22px;flex-shrink:0}
+.ss-text{font-size:13px;color:var(--purple);line-height:1.65}
+.ss-text strong{font-weight:600}
+
+/* RECOMMENDATION */
+.rec-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.rc-label{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;margin-bottom:.85rem}
+.subj-options{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.1rem}
+.so-item{display:flex;align-items:center;gap:12px;padding:.9rem 1rem;border-radius:var(--r-md);border:2px solid var(--border);cursor:pointer;transition:all .2s}
+.so-item.recommended{border-color:var(--teal);background:var(--teal-soft)}
+.so-item.ok{border-color:var(--border);background:var(--surface)}
+.so-item.blocked{border-color:var(--border);background:var(--surface);opacity:.45;cursor:not-allowed}
+.so-icon{font-size:22px;flex-shrink:0}
+.so-info{flex:1}
+.so-name{font-size:14.5px;font-weight:600;color:var(--navy)}
+.so-status{font-size:12px;margin-top:2px}
+.so-item.recommended .so-status{color:var(--teal)}
+.so-item.ok .so-status{color:var(--muted)}
+.so-item.blocked .so-status{color:var(--muted)}
+.so-badge{font-size:11px;font-weight:600;padding:3px 9px;border-radius:50px;flex-shrink:0}
+
+/* CALENDAR */
+.cal-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.cal-title{font-size:15px;font-weight:600;color:var(--navy)}
+.cal-week{font-size:12px;color:var(--muted)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-day{border-radius:var(--r-sm);padding:.55rem .25rem;text-align:center;border:1px solid var(--border)}
+.cd-name{font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem}
+.cd-subj{font-size:11px;font-weight:600;padding:3px 2px;border-radius:5px;min-height:20px;display:flex;align-items:center;justify-content:center}
+.cal-day.today{border-color:var(--purple);background:var(--purple-soft)}
+.subj-bio {background:var(--teal-soft);color:var(--teal)}
+.subj-chem{background:var(--purple-soft);color:var(--purple)}
+.subj-phys{background:var(--yellow-soft);color:#8B6914}
+.subj-math{background:var(--green-soft);color:var(--green)}
+.subj-none{background:var(--surface);color:var(--muted);font-size:9px}
+
+/* PROGRESS */
+.prog-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.prog-list{display:flex;flex-direction:column;gap:.85rem}
+.prog-item{}
+.pi-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem}
+.pi-name{font-size:14px;font-weight:500;color:var(--navy);display:flex;align-items:center;gap:7px}
+.pi-right{display:flex;align-items:center;gap:.65rem}
+.pi-pct{font-size:13px;font-weight:600;color:var(--muted)}
+.pi-behind{font-size:11px;padding:2px 8px;border-radius:50px;background:var(--yellow-soft);color:#8B6914}
+.pi-topics{font-size:11.5px;color:var(--muted);margin-top:3px}
+
+/* ESCALATION */
+.esc-card{background:var(--purple-soft);border:1px solid rgba(108,99,255,.2);border-radius:var(--r-lg);padding:1.1rem;margin-bottom:1.25rem;display:none}
+.esc-card.show{display:block}
+.esc-head{display:flex;align-items:center;gap:10px;margin-bottom:.65rem}
+.esc-icon{width:36px;height:36px;border-radius:var(--r-sm);background:var(--purple-soft);border:1px solid rgba(108,99,255,.2);display:flex;align-items:center;justify-content:center;font-size:17px}
+.esc-title{font-size:14px;font-weight:600;color:var(--purple)}
+.esc-text{font-size:13px;color:var(--slate);line-height:1.7;margin-bottom:.75rem}
+.esc-sms{background:var(--bg);border-radius:var(--r-sm);padding:.75rem;font-size:12.5px;color:var(--slate);line-height:1.65;font-style:italic;border:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<nav class="topnav">
+  <div class="topnav-title">Tusome <span>KCSE</span></div>
+  <div class="topnav-actions">
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">◑</button>
+    <a href="02-dashboard.html" class="icon-btn" style="font-size:14px;font-weight:600;text-decoration:none;color:var(--slate)">←</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="hunt-header fade-in">
+    <div class="hh-chip">🏹 Hunter Agent</div>
+    <div class="hh-title">Your rotation plan</div>
+    <div class="hh-sub">Spacing out subjects boosts memory retention by up to 40%.</div>
+  </div>
+
+  <div class="science-strip fade-in">
+    <div class="ss-icon">🔬</div>
+    <div class="ss-text"><strong>Why rotation works:</strong> When you switch between subjects, your brain forms stronger memory connections. Students who rotate subjects consistently score higher in KCSE than those who study one subject repeatedly.</div>
+  </div>
+
+  <!-- TODAY'S RECOMMENDATION -->
+  <div class="rec-card fade-in">
+    <div class="rc-label" id="recLabel">Today's recommendation</div>
+    <div class="subj-options" id="subjOptions"></div>
+    <button class="btn btn-primary" id="startBtn" onclick="startSession()">Start Today's Session →</button>
+  </div>
+
+  <!-- WEEKLY CALENDAR -->
+  <div class="cal-card fade-in">
+    <div class="cal-head">
+      <div class="cal-title">This Week's Plan</div>
+      <div class="cal-week" id="calWeek"></div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <!-- SUBJECT PROGRESS -->
+  <div class="prog-card fade-in">
+    <div class="cal-head">
+      <div class="cal-title">Subject Progress</div>
+      <a href="06-quiz.html" style="font-size:12.5px;font-weight:500;color:var(--purple)">Take a quiz →</a>
+    </div>
+    <div class="prog-list" id="progList"></div>
+  </div>
+
+  <!-- ESCALATION -->
+  <div class="esc-card" id="escCard">
+    <div class="esc-head">
+      <div class="esc-icon">👨‍🏫</div>
+      <div class="esc-title">Teacher Support Recommended</div>
+    </div>
+    <div class="esc-text" id="escText"></div>
+    <div class="esc-sms" id="escSms"></div>
+  </div>
+
+</div>
+
+<nav class="bottomnav">
+  <div class="bn-item" onclick="window.location.href='02-dashboard.html'"><div class="bn-icon">🏠</div><span>Home</span></div>
+  <div class="bn-item active"><div class="bn-icon">📖</div><span>Study</span></div>
+  <div class="bn-item" onclick="window.location.href='06-quiz.html'"><div class="bn-icon">🧠</div><span>Quiz</span></div>
+  <div class="bn-item" onclick="window.location.href='07-profile.html'"><div class="bn-icon">👤</div><span>Profile</span></div>
+</nav>
+
+<script src="app.js"></script>
+<script>
+const SUBJECTS=['Biology','Chemistry','Physics','Mathematics'];
+const ICONS={Biology:'🧬',Chemistry:'🧪',Physics:'⚛',Mathematics:'📐'};
+const SUBJ_CLS={Biology:'subj-bio',Chemistry:'subj-chem',Physics:'subj-phys',Mathematics:'subj-math'};
+const BAR_COLORS={Biology:'var(--teal)',Chemistry:'var(--purple)',Physics:'var(--yellow)',Mathematics:'var(--green)'};
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+let student=null, recommended=[];
+
+document.addEventListener('DOMContentLoaded',()=>{
+  applyTheme();
+  document.getElementById('themeBtn').textContent=(localStorage.getItem('tk_theme')||'light')==='dark'?'☀':'◑';
+  const sess=DB.session();
+  if(!sess){ window.location.href='01-login.html'; return; }
+  student=DB.students()[sess.admKey];
+  renderRecommendation();
+  renderCalendar();
+  renderProgress();
+  checkEscalation();
+});
+
+function renderRecommendation(){
+  const mem=student.memory||[];
+  const lastSubj=student.lastSubject;
+  const todayStr=new Date().toDateString();
+  const lastDate=student.lastStudyDate?new Date(student.lastStudyDate).toDateString():null;
+  const blockedSubj=(lastDate===todayStr||lastDate===new Date(Date.now()-86400000).toDateString())?lastSubj:null;
+  const counts={};
+  SUBJECTS.forEach(s=>{ counts[s]=mem.filter(m=>m.subject===s).length; });
+  recommended=SUBJECTS.filter(s=>s!==blockedSubj).sort((a,b)=>counts[a]-counts[b]);
+  const top=recommended[0]||SUBJECTS[0];
+
+  document.getElementById('recLabel').textContent=blockedSubj?`Study ${top} today — not ${blockedSubj}`:`Study ${top} today`;
+
+  document.getElementById('subjOptions').innerHTML=SUBJECTS.map(s=>{
+    const isBlocked=s===blockedSubj;
+    const isTop=s===top;
+    const cls=isBlocked?'blocked':isTop?'recommended':'ok';
+    const status=isBlocked?'Studied recently — rest it':isTop?'Recommended today':'Good to study';
+    const badge=isTop?`<span class="so-badge chip chip-teal">Top pick</span>`:isBlocked?`<span class="so-badge chip chip-yellow">Rest today</span>`:'';
+    return `<div class="so-item ${cls}" onclick="${isBlocked?`toast('Rest ${s} today — try another subject','error')`:`chooseSubject('${s}')`}">
+      <div class="so-icon">${ICONS[s]}</div>
+      <div class="so-info"><div class="so-name">${s}</div><div class="so-status">${status}</div></div>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+function renderCalendar(){
+  const today=new Date();
+  const dow=today.getDay();
+  const monday=new Date(today);
+  monday.setDate(today.getDate()-(dow===0?6:dow-1));
+  document.getElementById('calWeek').textContent='Week of '+monday.toLocaleDateString('en-KE',{day:'numeric',month:'short'});
+  const mem=student.memory||[];
+  const lastIdx=student.lastSubject?SUBJECTS.indexOf(student.lastSubject):-1;
+  const startIdx=(lastIdx+1)%SUBJECTS.length;
+  document.getElementById('calGrid').innerHTML=DAYS.map((d,i)=>{
+    const date=new Date(monday); date.setDate(monday.getDate()+i);
+    const isToday=date.toDateString()===today.toDateString();
+    const isPast=date<today&&!isToday;
+    const dateStr=date.toDateString();
+    const studied=mem.find(m=>new Date(m.date).toDateString()===dateStr);
+    const planned=SUBJECTS[(startIdx+i)%SUBJECTS.length];
+    let subjHtml='';
+    if(studied) subjHtml=`<span class="cd-subj ${SUBJ_CLS[studied.subject]}">${ICONS[studied.subject]}</span>`;
+    else if(!isPast) subjHtml=`<span class="cd-subj ${SUBJ_CLS[planned]}">${ICONS[planned]}</span>`;
+    else subjHtml=`<span class="cd-subj subj-none">—</span>`;
+    return `<div class="cal-day${isToday?' today':''}"><div class="cd-name">${d}</div>${subjHtml}</div>`;
+  }).join('');
+}
+
+function renderProgress(){
+  const mem=student.memory||[];
+  document.getElementById('progList').innerHTML=SUBJECTS.map(s=>{
+    const done=mem.filter(m=>m.subject===s).length;
+    const pct=Math.round((done/10)*100);
+    const behind=done<3;
+    return `<div class="prog-item">
+      <div class="pi-top">
+        <div class="pi-name">${ICONS[s]} ${s}${behind?' <span class="pi-behind">Needs attention</span>':''}</div>
+        <div class="pi-right"><div class="pi-pct">${pct}%</div></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:0%;background:${BAR_COLORS[s]}" data-w="${pct}%"></div></div>
+      <div class="pi-topics">${done} of 10 topics covered</div>
+    </div>`;
+  }).join('');
+  setTimeout(()=>document.querySelectorAll('.progress-fill').forEach(b=>{b.style.transition='width .9s cubic-bezier(.4,0,.2,1)';b.style.width=b.dataset.w;}),150);
+}
+
+function checkEscalation(){
+  const struggles=student.struggles||[];
+  if(struggles.length<5) return;
+  const recent=struggles.slice(-5);
+  const subjects=[...new Set(recent.map(s=>s.subject))];
+  if(subjects.length>2) return;
+  const struggling=subjects[0];
+  document.getElementById('escCard').classList.add('show');
+  document.getElementById('escText').textContent=`The Hunter has noticed you have asked the Guardian several questions about ${struggling}. This is a sign of real curiosity — some topics just need more time and a human touch. A teacher has been flagged to check in with you this week.`;
+  document.getElementById('escSms').innerHTML=`SMS kwa mzazi: "Habari! Mwanafunzi wako ${student.firstName} anahitaji msaada zaidi katika ${struggling}. Mwalimu atamfikia wiki hii. Tusome KCSE."`;
+}
+
+function chooseSubject(subj){
+  student.hunterRecommended=subj;
+  saveStudent(student);
+  toast(`Starting ${subj} with the Scout...`,'success');
+  setTimeout(()=>window.location.href='03-scout.html',900);
+}
+function startSession(){ chooseSubject(recommended[0]||SUBJECTS[0]); }
+</script>
+</body>
+</html>
