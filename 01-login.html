@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<meta name="description" content="Tusome KCSE — A personalised revision platform for Form 3 and Form 4 Kenyan students preparing for KCSE STEM examinations in Biology, Chemistry, Physics and Mathematics.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Tusome KCSE">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>Tusome KCSE — Login</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.login-hero{
+  background:var(--purple);
+  border-radius:var(--r-xl);
+  padding:2rem 1.5rem;
+  color:#fff;
+  margin-bottom:1.75rem;
+  position:relative;
+  overflow:hidden;
+}
+.login-hero::after{
+  content:'';position:absolute;
+  bottom:-40px;right:-40px;
+  width:140px;height:140px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+.lh-book{font-size:48px;margin-bottom:.75rem;display:block}
+.lh-title{font-size:26px;font-weight:600;margin-bottom:.35rem;line-height:1.2}
+.lh-sub{font-size:14px;opacity:.82;line-height:1.6}
+.lh-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.15);border-radius:50px;
+  padding:5px 12px;font-size:12px;font-weight:500;
+  margin-top:1rem;
+}
+.form-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.5rem;margin-bottom:1rem}
+.form-title{font-size:20px;font-weight:600;color:var(--navy);margin-bottom:.25rem}
+.form-sub{font-size:13.5px;color:var(--muted);margin-bottom:1.25rem;line-height:1.6}
+.fields{display:flex;flex-direction:column;gap:1rem}
+.phone-row{display:flex;gap:8px}
+.phone-code{
+  padding:13px 12px;border:1.5px solid var(--border);
+  border-radius:var(--r-md);background:var(--surface);
+  font-size:14.5px;font-weight:500;color:var(--slate);
+  display:flex;align-items:center;gap:6px;flex-shrink:0;
+  font-family:var(--ff);
+}
+.fi-phone{flex:1}
+.hint{font-size:12px;color:var(--teal);margin-top:4px;display:flex;align-items:center;gap:4px}
+.consent-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:1rem;margin-top:.25rem;
+}
+.consent-sw{font-size:12.5px;color:var(--slate);line-height:1.7;margin-bottom:.75rem}
+.consent-check{display:flex;align-items:flex-start;gap:9px;cursor:pointer}
+.consent-check input{margin-top:3px;accent-color:var(--purple);cursor:pointer;width:16px;height:16px;flex-shrink:0}
+.consent-check span{font-size:13px;color:var(--slate);font-weight:500;line-height:1.5}
+.pw-strength{margin-top:5px}
+.pw-bar{height:4px;border-radius:99px;background:var(--border);overflow:hidden;margin-bottom:3px}
+.pw-fill{height:100%;border-radius:99px;width:0;transition:width .3s,background .3s}
+.pw-lbl{font-size:11px;color:var(--muted)}
+.eye-btn{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;
+  font-size:16px;opacity:.45;transition:opacity .2s;color:var(--slate);
+}
+.eye-btn:hover{opacity:.8}
+.student-card{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 14px;background:var(--surface);
+  border:1.5px solid var(--border);border-radius:var(--r-md);
+  cursor:pointer;transition:all .2s;margin-bottom:8px;
+}
+.student-card:hover{border-color:var(--purple);background:var(--purple-soft)}
+.sc-av{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--purple-soft);color:var(--purple);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:600;flex-shrink:0;
+}
+.sc-info{flex:1}
+.sc-name{font-size:14.5px;font-weight:600;color:var(--navy)}
+.sc-meta{font-size:12px;color:var(--muted);margin-top:1px}
+.sc-arr{color:var(--muted);font-size:18px}
+.success-screen{text-align:center;padding:1.5rem 0}
+.ss-icon{font-size:58px;margin-bottom:1rem;display:block;animation:pop .4s cubic-bezier(.4,0,.2,1)}
+@keyframes pop{0%{transform:scale(.5);opacity:0}80%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.ss-title{font-size:22px;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.ss-sub{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:1.5rem}
+.tab-row{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--surface);border-radius:var(--r-md);padding:4px;margin-bottom:1.25rem;border:1px solid var(--border)}
+.tab-btn{padding:10px;border-radius:var(--r-sm);font-size:14px;font-weight:500;color:var(--muted);background:transparent;transition:all .2s;font-family:var(--ff)}
+.tab-btn.on{background:var(--bg);color:var(--purple);font-weight:600;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+.resend{text-align:center;font-size:13px;color:var(--muted);margin-top:.6rem}
+.resend a{color:var(--purple);font-weight:500;cursor:pointer}
+.back-link{display:inline-flex;align-items:center;gap:5px;font-size:13.5px;font-weight:500;color:var(--muted);cursor:pointer;margin-bottom:1rem;background:none;border:none;font-family:var(--ff)}
+.back-link:hover{color:var(--purple)}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-title">Tusome <span>KCSE</span></div>
+  <div class="topnav-actions">
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">◑</button>
+  </div>
+</nav>
+
+<div class="page-wrap fade-in">
+
+  <!-- HERO -->
+  <div class="login-hero">
+    <span class="lh-book">📚</span>
+    <div class="lh-title">STEM Revision Built for You</div>
+    <div class="lh-sub">A revision platform for Form 3 and Form 4 Kenyan students. Learn smarter, remember longer, excel in KCSE.</div>
+    <div class="lh-badge">🇰🇪 Kenya 8-4-4 · Biology · Chemistry · Physics · Mathematics</div>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps" id="stepBar">
+    <div class="step-item active" id="si1"><div class="step-circle">1</div><div class="step-label">Your Details</div></div>
+    <div class="step-line" id="sl1"></div>
+    <div class="step-item idle" id="si2"><div class="step-circle">2</div><div class="step-label">Verify OTP</div></div>
+    <div class="step-line" id="sl2"></div>
+    <div class="step-item idle" id="si3"><div class="step-circle">3</div><div class="step-label">Start Revising</div></div>
+  </div>
+
+  <!-- MSG -->
+  <div id="msgBox" style="display:none;padding:12px 14px;border-radius:var(--r-md);font-size:13.5px;font-weight:500;margin-bottom:1rem"></div>
+
+  <!-- STEP 1 -->
+  <div id="sStep1">
+    <div class="form-card">
+      <div class="tab-row">
+        <button class="tab-btn on" id="tab-reg" onclick="switchTab('reg')">Register</button>
+        <button class="tab-btn" id="tab-in" onclick="switchTab('in')">Sign In</button>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="fReg">
+        <div class="form-title">Create Account</div>
+        <div class="form-sub">Set up your student profile. Parent's phone is required for verification.</div>
+        <div class="fields">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+            <div class="field">
+              <label>First Name<span class="req">*</span></label>
+              <div class="input-icon"><span class="ico">👤</span><input class="input" id="rFirst" type="text" placeholder="Grace"></div>
+            </div>
+            <div class="field">
+              <label>Last Name<span class="req">*</span></label>
+              <div class="input-icon"><span class="ico">👤</span><input class="input" id="rLast" type="text" placeholder="Muthoni"></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+            <div class="field">
+              <label>School<span class="req">*</span></label>
+              <div class="input-icon"><span class="ico">🏫</span><input class="input" id="rSchool" type="text" placeholder="Njonjo Girls"></div>
+            </div>
+            <div class="field">
+              <label>Form<span class="req">*</span></label>
+              <div class="sel-wrap">
+                <select class="input" id="rForm" style="padding-left:14px">
+                  <option value="" disabled selected>Select...</option>
+                  <option>Form 3</option>
+                  <option>Form 4</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>School Email<span class="opt"> (optional)</span></label>
+            <div class="input-icon"><span class="ico">✉</span><input class="input" id="rEmail" type="email" placeholder="grace@njonjogirlshigh.ac.ke"></div>
+          </div>
+          <div class="field">
+            <label>Parent / Guardian Phone<span class="req">*</span></label>
+            <div class="phone-row">
+              <div class="phone-code">🇰🇪 +254</div>
+              <div class="input-icon fi-phone"><span class="ico">📱</span><input class="input" id="rPhone" type="tel" maxlength="9" placeholder="712 345 678" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+            </div>
+            <div class="hint">A one-time code will be sent to this number</div>
+          </div>
+          <div class="field">
+            <label>Student PIN (4 digits)<span class="req">*</span></label>
+            <div class="input-icon" style="position:relative">
+              <span class="ico">🔒</span>
+              <input class="input" id="rPin" type="password" maxlength="4" placeholder="Daily login PIN" oninput="this.value=this.value.replace(/\D/g,'')">
+              <button class="eye-btn" onclick="eyePw('rPin',this)">👁</button>
+            </div>
+          </div>
+          <div class="consent-box">
+            <div class="consent-sw">Kwa kuthibitisha nambari yako ya simu, unakubali kwamba wewe ni mzazi au mlezi wa mwanafunzi huyu na unatoa idhini yako kwa matumizi ya Tusome KCSE chini ya Sheria ya Kulinda Data ya Kenya 2022.</div>
+            <label class="consent-check">
+              <input type="checkbox" id="rConsent">
+              <span>Nakubali — I agree and give my parental consent.</span>
+            </label>
+          </div>
+          <button class="btn btn-primary" onclick="sendOTP('reg')">Send OTP to Parent's Phone</button>
+        </div>
+      </div>
+
+      <!-- SIGN IN -->
+      <div id="fIn" style="display:none">
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Enter the parent's phone number to receive a verification code.</div>
+        <div class="fields">
+          <div class="field">
+            <label>Parent / Guardian Phone<span class="req">*</span></label>
+            <div class="phone-row">
+              <div class="phone-code">🇰🇪 +254</div>
+              <div class="input-icon fi-phone"><span class="ico">📱</span><input class="input" id="iPhone" type="tel" maxlength="9" placeholder="712 345 678" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+            </div>
+            <div class="hint">An OTP code will be sent to the parent's number</div>
+          </div>
+          <button class="btn btn-primary" onclick="sendOTP('in')">Send OTP Code</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Install PWA -->
+    <div class="install-banner" id="installBtn" onclick="installPWA()">
+      <span style="font-size:22px">📲</span>
+      <div style="flex:1">
+        <div style="font-size:13.5px;font-weight:600;color:var(--purple)">Install Tusome KCSE</div>
+        <div style="font-size:12px;color:var(--muted)">Add to home screen for offline access</div>
+      </div>
+      <button class="btn btn-sm btn-secondary" style="width:auto;padding:8px 14px">Install</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 — OTP -->
+  <div id="sStep2" style="display:none">
+    <div class="form-card">
+      <button class="back-link" onclick="goStep(1)">← Back</button>
+      <div class="form-title">Verify OTP</div>
+      <div class="form-sub">A 4-digit code was sent to <strong id="phoneMask"></strong></div>
+      <div style="font-size:12.5px;color:var(--teal);margin-bottom:1.25rem">📱 Nambari ya siri imetumwa kwa simu ya mzazi kupitia ujumbe mfupi.</div>
+      <div class="otp-row" style="margin:1.25rem 0">
+        <input class="otp-box" id="o1" type="tel" maxlength="1" oninput="om(this,'o2')" onkeydown="ob(event,this,'')">
+        <input class="otp-box" id="o2" type="tel" maxlength="1" oninput="om(this,'o3')" onkeydown="ob(event,this,'o1')">
+        <input class="otp-box" id="o3" type="tel" maxlength="1" oninput="om(this,'o4')" onkeydown="ob(event,this,'o2')">
+        <input class="otp-box" id="o4" type="tel" maxlength="1" oninput="om(this,'')"   onkeydown="ob(event,this,'o3')">
+      </div>
+      <div class="resend" id="resendWrap">Resend in <strong id="timerEl">30s</strong></div>
+      <button class="btn btn-primary" style="margin-top:1.25rem" onclick="verifyOTP()">Verify & Continue</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="sStep3" style="display:none">
+    <div class="form-card">
+      <button class="back-link" onclick="goStep(1)">← Back</button>
+
+      <!-- Existing students -->
+      <div id="existingWrap" style="display:none">
+        <div class="form-title">Choose Student</div>
+        <div class="form-sub">Select a profile or add a new student.</div>
+        <div id="studentList" style="margin-bottom:1rem"></div>
+        <div class="or-divider">or add new student</div>
+      </div>
+
+      <!-- PIN entry -->
+      <div id="pinWrap" style="display:none">
+        <div class="form-title" id="pinTitle">Enter Your PIN</div>
+        <div class="form-sub">Enter your 4-digit PIN to continue.</div>
+        <div class="fields" style="margin-top:1rem">
+          <div class="field">
+            <label>Student PIN</label>
+            <div class="input-icon" style="position:relative">
+              <span class="ico">🔒</span>
+              <input class="input" id="loginPin" type="password" maxlength="4" placeholder="••••" oninput="this.value=this.value.replace(/\D/g,'')">
+              <button class="eye-btn" onclick="eyePw('loginPin',this)">👁</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="doLogin()">Start Revising</button>
+        </div>
+      </div>
+
+      <!-- Success -->
+      <div id="doneWrap" style="display:none" class="success-screen">
+        <span class="ss-icon">🎉</span>
+        <div class="ss-title">Account Created!</div>
+        <div class="ss-sub">Welcome, <strong id="doneName"></strong>! Your three study agents are ready. Let's start revising.</div>
+        <button class="btn btn-primary" onclick="window.location.href='02-dashboard.html'">Go to Dashboard</button>
+      </div>
+
+      <!-- New student form (for returning parent adding new student) -->
+      <div id="newStudentForm" style="display:none">
+        <div class="form-title">Add Student</div>
+        <div class="form-sub">Set up a new student profile.</div>
+        <div class="fields" style="margin-top:1rem">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+            <div class="field"><label>First Name<span class="req">*</span></label><input class="input" id="ns_first" placeholder="Grace"></div>
+            <div class="field"><label>Last Name<span class="req">*</span></label><input class="input" id="ns_last" placeholder="Muthoni"></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+            <div class="field"><label>Form<span class="req">*</span></label>
+              <div class="sel-wrap"><select class="input" id="ns_form"><option value="" disabled selected>Select...</option><option>Form 3</option><option>Form 4</option></select></div>
+            </div>
+            <div class="field"><label>School<span class="req">*</span></label><input class="input" id="ns_school" placeholder="Njonjo Girls"></div>
+          </div>
+          <div class="field"><label>Student PIN (4 digits)<span class="req">*</span></label>
+            <div class="input-icon" style="position:relative"><span class="ico">🔒</span>
+              <input class="input" id="ns_pin" type="password" maxlength="4" placeholder="••••" oninput="this.value=this.value.replace(/\D/g,'')">
+              <button class="eye-btn" onclick="eyePw('ns_pin',this)">👁</button>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="createNewStudent()">Create Profile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+<script>
+/* ---- STATE ---- */
+let S = { mode:'reg', phone:'', otp:'', timerRef:null, regData:null, selectedAdmKey:'' };
+
+/* ---- INIT ---- */
+document.addEventListener('DOMContentLoaded', () => {
+  applyTheme();
+  document.getElementById('themeBtn').textContent = (localStorage.getItem('tk_theme')||'light') === 'dark' ? '☀' : '◑';
+  // Check session
+  const sess = DB.session();
+  if(sess && DB.students()[sess.admKey]) {
+    window.location.href = '02-dashboard.html';
+  }
+  // Offline banner
+  if(!navigator.onLine) toast('You are offline — some features may be limited', 'error');
+});
+
+/* ---- TAB ---- */
+function switchTab(t) {
+  S.mode = t;
+  const isReg = t === 'reg';
+  document.getElementById('fReg').style.display = isReg ? 'block' : 'none';
+  document.getElementById('fIn').style.display  = isReg ? 'none'  : 'block';
+  document.getElementById('tab-reg').classList.toggle('on', isReg);
+  document.getElementById('tab-in').classList.toggle('on', !isReg);
+  clearMsg();
+}
+
+/* ---- STEPS ---- */
+function goStep(n) {
+  ['sStep1','sStep2','sStep3'].forEach((id,i) => document.getElementById(id).style.display = i+1===n ? 'block':'none');
+  clearMsg();
+  const cfg = [{id:'si1',ln:'sl1'},{id:'si2',ln:'sl2'},{id:'si3'}];
+  cfg.forEach((c,i) => {
+    const el = document.getElementById(c.id);
+    const cls = i+1 < n ? 'done' : i+1 === n ? 'active' : 'idle';
+    el.className = 'step-item ' + cls;
+    if(c.ln) document.getElementById(c.ln).className = 'step-line' + (i+1 < n ? ' done' : '');
+  });
+}
+
+/* ---- MSG ---- */
+function setMsg(type, text) {
+  const b = document.getElementById('msgBox');
+  b.textContent = (type==='err'?'⚠ ':'✓ ') + text;
+  b.style.display = 'block';
+  b.style.background = type==='err' ? 'var(--red-soft)' : 'var(--green-soft)';
+  b.style.color = type==='err' ? 'var(--red)' : 'var(--green)';
+  b.style.border = type==='err' ? '1px solid var(--red)' : '1px solid var(--green)';
+}
+function clearMsg() { document.getElementById('msgBox').style.display = 'none'; }
+
+/* ---- OTP ---- */
+function sendOTP(mode) {
+  clearMsg(); S.mode = mode;
+  let phone = '';
+  if(mode === 'reg') {
+    const first=document.getElementById('rFirst').value.trim();
+    const last=document.getElementById('rLast').value.trim();
+    const school=document.getElementById('rSchool').value.trim();
+    const form=document.getElementById('rForm').value;
+    const ph=document.getElementById('rPhone').value.trim();
+    const pin=document.getElementById('rPin').value.trim();
+    const consent=document.getElementById('rConsent').checked;
+    if(!first) { setMsg('err','Enter first name'); return; }
+    if(!last)  { setMsg('err','Enter last name');  return; }
+    if(!school){ setMsg('err','Enter school name');return; }
+    if(!form)  { setMsg('err','Select your form'); return; }
+    if(!ph||ph.length<9) { setMsg('err','Enter a valid 9-digit parent phone number'); return; }
+    if(!pin||pin.length!==4) { setMsg('err','Create a 4-digit student PIN'); return; }
+    if(!consent) { setMsg('err','Parental consent is required to continue'); return; }
+    phone = '+254'+ph;
+    S.regData = { first, last, school, form, email:document.getElementById('rEmail').value.trim(), pin, phone };
+  } else {
+    const ph = document.getElementById('iPhone').value.trim();
+    if(!ph||ph.length<9) { setMsg('err','Enter a valid parent phone number'); return; }
+    phone = '+254'+ph;
+    if(!DB.parents()[phone]) { setMsg('err','No account found. Please register first.'); return; }
+  }
+  S.phone = phone;
+  S.otp = Math.floor(1000+Math.random()*9000).toString();
+  toast('Demo OTP: ' + S.otp + ' (Production: sent via SMS)');
+  const masked = phone.slice(0,7)+'***'+phone.slice(-3);
+  document.getElementById('phoneMask').textContent = masked;
+  goStep(2);
+  startTimer();
+  ['o1','o2','o3','o4'].forEach(id=>document.getElementById(id).value='');
+  setTimeout(()=>document.getElementById('o1').focus(),300);
+}
+
+function om(el,nxt) {
+  el.value=el.value.replace(/\D/g,'');
+  if(el.value&&nxt) document.getElementById(nxt)?.focus();
+  ['o1','o2','o3','o4'].forEach(id=>document.getElementById(id).classList.toggle('filled',!!document.getElementById(id).value));
+  const full=['o1','o2','o3','o4'].every(id=>document.getElementById(id).value);
+  if(full) setTimeout(verifyOTP,300);
+}
+function ob(e,el,prv) { if(e.key==='Backspace'&&!el.value&&prv) document.getElementById(prv)?.focus(); }
+
+function startTimer() {
+  clearInterval(S.timerRef); let s=30;
+  const wrap=document.getElementById('resendWrap');
+  wrap.innerHTML='Resend in <strong id="timerEl">30s</strong>';
+  S.timerRef=setInterval(()=>{
+    s--;
+    const t=document.getElementById('timerEl');
+    if(t) t.textContent=s+'s';
+    if(s<=0){ clearInterval(S.timerRef); wrap.innerHTML='Didn\'t get it? <a onclick="resendOTP()">Resend</a>'; }
+  },1000);
+}
+function resendOTP() {
+  S.otp=Math.floor(1000+Math.random()*9000).toString();
+  toast('New Demo OTP: '+S.otp);
+  startTimer();
+  ['o1','o2','o3','o4'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('o1').focus();
+}
+
+function verifyOTP() {
+  clearMsg();
+  const entered=['o1','o2','o3','o4'].map(id=>document.getElementById(id).value).join('');
+  if(entered.length<4){ setMsg('err','Enter all 4 digits'); return; }
+  if(entered!==S.otp){ setMsg('err','Incorrect code. Try again.'); ['o1','o2','o3','o4'].forEach(id=>document.getElementById(id).value=''); document.getElementById('o1').focus(); return; }
+  clearInterval(S.timerRef);
+  goStep(3);
+  if(S.mode==='reg') {
+    const d=S.regData;
+    const admKey=d.phone+'_'+d.first.toLowerCase()+d.last.toLowerCase();
+    const students=DB.students(), parents=DB.parents();
+    if(students[admKey]){ S.selectedAdmKey=admKey; showPinEntry(d.first+' '+d.last); return; }
+    students[admKey]={ admKey, name:d.first+' '+d.last, firstName:d.first, lastName:d.last, school:d.school, form:d.form, email:d.email||'', parentPhone:d.phone, pin:d.pin, joinDate:new Date().toISOString(), streak:0, lastStudyDate:null, lastSubject:null, totalQuizzes:0, totalLessons:0, bestScore:0, memory:[], quizHistory:[], struggles:[] };
+    DB.save.students(students);
+    if(!parents[d.phone]) parents[d.phone]={phone:d.phone,registeredAt:new Date().toISOString(),studentKeys:[]};
+    if(!parents[d.phone].studentKeys.includes(admKey)) parents[d.phone].studentKeys.push(admKey);
+    DB.save.parents(parents);
+    DB.save.session({phone:d.phone,admKey});
+    document.getElementById('doneName').textContent=d.first;
+    document.getElementById('doneWrap').style.display='block';
+    document.getElementById('existingWrap').style.display='none';
+    document.getElementById('pinWrap').style.display='none';
+    document.getElementById('newStudentForm').style.display='none';
+  } else {
+    const parent=DB.parents()[S.phone];
+    const myStudents=(parent?.studentKeys||[]).map(k=>DB.students()[k]).filter(Boolean);
+    if(!myStudents.length){ setMsg('err','No students found. Please register.'); goStep(1); switchTab('reg'); return; }
+    renderStudents(myStudents);
+    document.getElementById('existingWrap').style.display='block';
+    document.getElementById('pinWrap').style.display='none';
+    document.getElementById('doneWrap').style.display='none';
+    document.getElementById('newStudentForm').style.display='none';
+  }
+}
+
+function renderStudents(students) {
+  document.getElementById('studentList').innerHTML = students.map(s=>`
+    <div class="student-card" onclick="selectStudent('${s.admKey}','${s.name}')">
+      <div class="sc-av">${s.firstName[0]}${s.lastName[0]}</div>
+      <div class="sc-info"><div class="sc-name">${s.name}</div><div class="sc-meta">${s.form} · ${s.school}</div></div>
+      <div class="sc-arr">›</div>
+    </div>`).join('');
+  // Add new student button
+  document.getElementById('studentList').innerHTML += `<button class="btn btn-ghost btn-sm" style="width:100%;margin-top:.5rem" onclick="showNewStudentForm()">+ Add another student</button>`;
+}
+
+function selectStudent(admKey,name) { S.selectedAdmKey=admKey; showPinEntry(name); }
+function showPinEntry(name) {
+  document.getElementById('existingWrap').style.display='none';
+  document.getElementById('newStudentForm').style.display='none';
+  document.getElementById('pinWrap').style.display='block';
+  document.getElementById('pinTitle').textContent='Welcome back, '+name.split(' ')[0];
+  document.getElementById('loginPin').value='';
+  setTimeout(()=>document.getElementById('loginPin').focus(),300);
+}
+function showNewStudentForm() {
+  document.getElementById('existingWrap').style.display='none';
+  document.getElementById('newStudentForm').style.display='block';
+}
+
+function doLogin() {
+  clearMsg();
+  const pin=document.getElementById('loginPin').value.trim();
+  if(!pin||pin.length!==4){ setMsg('err','Enter your 4-digit PIN'); return; }
+  const s=DB.students()[S.selectedAdmKey];
+  if(!s){ setMsg('err','Student not found'); return; }
+  if(s.pin!==pin){ setMsg('err','Incorrect PIN. Try again.'); return; }
+  DB.save.session({phone:S.phone,admKey:S.selectedAdmKey});
+  toast('Welcome back, '+s.firstName+'!','success');
+  setTimeout(()=>window.location.href='02-dashboard.html',800);
+}
+
+function createNewStudent() {
+  const first=document.getElementById('ns_first').value.trim();
+  const last=document.getElementById('ns_last').value.trim();
+  const form=document.getElementById('ns_form').value;
+  const school=document.getElementById('ns_school').value.trim();
+  const pin=document.getElementById('ns_pin').value.trim();
+  if(!first||!last||!form||!school){ toast('Fill in all fields','error'); return; }
+  if(!pin||pin.length!==4){ toast('Create a 4-digit PIN','error'); return; }
+  const admKey=S.phone+'_'+first.toLowerCase()+last.toLowerCase();
+  const students=DB.students(), parents=DB.parents();
+  if(students[admKey]){ toast('Student already registered','error'); return; }
+  students[admKey]={ admKey, name:first+' '+last, firstName:first, lastName:last, school, form, email:'', parentPhone:S.phone, pin, joinDate:new Date().toISOString(), streak:0, lastStudyDate:null, lastSubject:null, totalQuizzes:0, totalLessons:0, bestScore:0, memory:[], quizHistory:[], struggles:[] };
+  DB.save.students(students);
+  if(!parents[S.phone]) parents[S.phone]={phone:S.phone,registeredAt:new Date().toISOString(),studentKeys:[]};
+  if(!parents[S.phone].studentKeys.includes(admKey)) parents[S.phone].studentKeys.push(admKey);
+  DB.save.parents(parents);
+  DB.save.session({phone:S.phone,admKey});
+  document.getElementById('doneName').textContent=first;
+  document.getElementById('newStudentForm').style.display='none';
+  document.getElementById('doneWrap').style.display='block';
+}
+
+function eyePw(id,btn) { const el=document.getElementById(id); el.type=el.type==='password'?'text':'password'; btn.textContent=el.type==='password'?'👁':'🙈'; }
+
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter') return;
+  if(document.getElementById('sStep1').style.display!=='none') S.mode==='reg'?sendOTP('reg'):sendOTP('in');
+  else if(document.getElementById('sStep2').style.display!=='none') verifyOTP();
+  else if(document.getElementById('pinWrap').style.display!=='none') doLogin();
+});
+</script>
+</body>
+</html>
