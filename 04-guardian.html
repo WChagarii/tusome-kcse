@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<meta name="description" content="Tusome KCSE Guardian Agent — Get clear step-by-step explanations for any KCSE Biology, Chemistry, Physics or Mathematics concept you find difficult.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<title>Guardian Agent — Tusome KCSE</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.guard-header{background:var(--purple);border-radius:var(--r-xl);padding:1.25rem 1.5rem;color:#fff;margin-bottom:1.25rem}
+.gh-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border-radius:50px;padding:4px 11px;font-size:11.5px;margin-bottom:.65rem}
+.gh-title{font-size:19px;font-weight:600;margin-bottom:.25rem}
+.gh-sub{font-size:13px;opacity:.85;line-height:1.6}
+
+.chat-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow);margin-bottom:1rem;display:flex;flex-direction:column}
+.chat-head{background:var(--purple);padding:.9rem 1.25rem;display:flex;align-items:center;gap:10px}
+.ch-av{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ch-name{font-size:14px;font-weight:600;color:#fff}
+.ch-sub{font-size:11.5px;color:rgba(255,255,255,.65);margin-top:1px}
+.ch-live{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,.6)}
+.ch-dot{width:7px;height:7px;border-radius:50%;background:#7FFFD4;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+.quick-qs{padding:.85rem 1.25rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.qq-label{font-size:11.5px;color:var(--muted);margin-bottom:.55rem;font-weight:500}
+.qq-scroll{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.qq-scroll::-webkit-scrollbar{display:none}
+.qq-chip{padding:7px 13px;border-radius:50px;border:1px solid var(--border);background:var(--bg);font-size:12.5px;color:var(--slate);cursor:pointer;white-space:nowrap;font-family:var(--ff);transition:all .2s;flex-shrink:0}
+.qq-chip:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-soft)}
+
+.chat-messages{flex:1;overflow-y:auto;padding:1.1rem;display:flex;flex-direction:column;gap:.85rem;min-height:280px;max-height:420px}
+.typing-bubble{display:flex;gap:5px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:4px 16px 16px 16px;width:fit-content}
+.tb-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bounce 1.2s infinite}
+.tb-dot:nth-child(2){animation-delay:.2s}
+.tb-dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+.chat-input-area{padding:.85rem 1rem;border-top:1px solid var(--border);display:flex;gap:.65rem;align-items:flex-end;background:var(--bg)}
+.chat-ta{flex:1;border:1.5px solid var(--border);border-radius:var(--r-md);padding:10px 13px;font-size:14px;font-family:var(--ff);color:var(--navy);background:var(--surface);resize:none;outline:none;height:44px;max-height:110px;line-height:1.55;transition:border .2s}
+.chat-ta:focus{border-color:var(--purple);background:var(--bg);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.chat-ta::placeholder{color:var(--muted);font-size:13px}
+.send-btn{width:44px;height:44px;border-radius:var(--r-md);background:var(--purple);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;cursor:pointer;border:none}
+.send-btn:hover{background:#5a52e0;transform:scale(1.05)}
+.send-btn:active{transform:scale(.96)}
+
+.action-bar{padding:.85rem 1rem;border-top:1px solid var(--border);display:none;gap:.65rem;background:var(--surface)}
+.action-bar.show{display:flex}
+
+.step-msg{display:flex;flex-direction:column;gap:5px}
+.step-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--purple-soft);color:var(--purple);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-t{font-size:13.5px;color:var(--navy);line-height:1.65}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<nav class="topnav">
+  <div class="topnav-title">Tusome <span>KCSE</span></div>
+  <div class="topnav-actions">
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">◑</button>
+    <a href="02-dashboard.html" class="icon-btn" style="font-size:14px;font-weight:600;text-decoration:none;color:var(--slate)">←</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="guard-header fade-in">
+    <div class="gh-chip">🛡 Guardian Agent</div>
+    <div class="gh-title">What felt hardest?</div>
+    <div class="gh-sub">Ask about any concept that confused you. Clear, step-by-step explanations — no question is too basic.</div>
+  </div>
+
+  <div class="chat-card fade-in">
+    <div class="chat-head">
+      <div class="ch-av">🛡</div>
+      <div><div class="ch-name">Guardian Agent</div><div class="ch-sub">Step-by-step explanations</div></div>
+      <div class="ch-live"><div class="ch-dot"></div>Ready</div>
+    </div>
+
+    <div class="quick-qs">
+      <div class="qq-label">Common questions — tap to ask</div>
+      <div class="qq-scroll" id="quickChips">
+        <span class="qq-chip" onclick="quickAsk(this)">Why does pressure affect the Haber Process?</span>
+        <span class="qq-chip" onclick="quickAsk(this)">How does osmosis differ from diffusion?</span>
+        <span class="qq-chip" onclick="quickAsk(this)">What is the difference between speed and velocity?</span>
+        <span class="qq-chip" onclick="quickAsk(this)">How do I solve a quadratic equation?</span>
+        <span class="qq-chip" onclick="quickAsk(this)">What happens during mitosis?</span>
+        <span class="qq-chip" onclick="quickAsk(this)">How does Ohm's Law work?</span>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <div class="chat-input-area">
+      <textarea class="chat-ta" id="chatInput" placeholder="Ask anything that confused you in class..." onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+
+    <div class="action-bar" id="actionBar">
+      <button class="btn btn-primary btn-half" onclick="window.location.href='06-quiz.html'">Take Quiz 🧠</button>
+      <button class="btn btn-ghost btn-half" onclick="window.location.href='03-scout.html'">Log Learning 🔍</button>
+    </div>
+  </div>
+
+</div>
+
+<nav class="bottomnav">
+  <div class="bn-item" onclick="window.location.href='02-dashboard.html'"><div class="bn-icon">🏠</div><span>Home</span></div>
+  <div class="bn-item active"><div class="bn-icon">📖</div><span>Study</span></div>
+  <div class="bn-item" onclick="window.location.href='06-quiz.html'"><div class="bn-icon">🧠</div><span>Quiz</span></div>
+  <div class="bn-item" onclick="window.location.href='07-profile.html'"><div class="bn-icon">👤</div><span>Profile</span></div>
+</nav>
+
+<script src="app.js"></script>
+<script>
+const BANNED=['stupid','dumb','fail','failure','idiot','useless','hopeless','wrong answer','cannot do'];
+let student=null, chatHistory=[], msgCount=0, pendingQuiz=null;
+
+document.addEventListener('DOMContentLoaded',()=>{
+  applyTheme();
+  document.getElementById('themeBtn').textContent=(localStorage.getItem('tk_theme')||'light')==='dark'?'☀':'◑';
+  const sess=DB.session();
+  if(!sess){ window.location.href='01-login.html'; return; }
+  student=DB.students()[sess.admKey];
+  const qRaw=localStorage.getItem('tk_pending_quiz');
+  pendingQuiz=qRaw?JSON.parse(qRaw):null;
+  updateQuickChips();
+  const name=student?.firstName||'there';
+  const ctx=pendingQuiz
+    ?`I can see you just studied "${pendingQuiz.topic}" in ${pendingQuiz.subject} with the Scout. What part felt hardest or unclear? Ask me anything.`
+    :'What concept or topic would you like me to explain today? Every question you ask is a step forward.';
+  addMessage('guardian',`Hi ${name}! I am your Guardian Agent. ${ctx}`);
+});
+
+function updateQuickChips(){
+  if(!pendingQuiz) return;
+  const CHIPS={
+    Biology:['Explain osmosis with a simple example','What is the difference between mitosis and meiosis?','How does the heart pump blood?','What is the role of chlorophyll?'],
+    Chemistry:['Why does temperature affect reaction rate?','What is exothermic vs endothermic?','Explain ionic and covalent bonding','How does electrolysis work?'],
+    Physics:['What is the difference between mass and weight?','Explain how a transformer works','What is refraction and why does it happen?','Explain radioactive decay'],
+    Mathematics:['How do I use the quadratic formula?','Explain differentiation step by step','What is the difference between mean, median and mode?','How do I find probability?'],
+  };
+  const list=CHIPS[pendingQuiz.subject]||[];
+  if(list.length) document.getElementById('quickChips').innerHTML=list.map(q=>`<span class="qq-chip" onclick="quickAsk(this)">${q}</span>`).join('');
+}
+
+function quickAsk(el){ document.getElementById('chatInput').value=el.textContent; sendMessage(); }
+
+async function sendMessage(){
+  const input=document.getElementById('chatInput');
+  const text=input.value.trim();
+  if(!text) return;
+  input.value=''; input.style.height='44px';
+  addMessage('student',text);
+  chatHistory.push({role:'user',content:text});
+  const typId=showTyping();
+
+  const sys=`You are the Guardian Agent for Tusome KCSE — a warm, patient STEM tutor for Form 3 and Form 4 Kenyan students.
+Student: ${student?.firstName||'Student'}, ${student?.form||'Form 4'}.
+${pendingQuiz?`They just studied "${pendingQuiz.topic}" in ${pendingQuiz.subject}.`:''}
+Rules:
+- Explain like a helpful older sibling — never a strict teacher
+- Use numbered steps for processes
+- Use real Kenyan examples (matatu for speed, tea farming for osmosis, Mombasa port for trade)
+- NEVER use: stupid, wrong, fail, failure, hopeless, cannot
+- End every response with one encouraging sentence
+- Plain text only — no markdown asterisks or hash symbols
+- Keep responses focused and clear`;
+
+  const result=await callAI(chatHistory.map(m=>m.content).join('\n\nStudent: ')+'\n\nGuardian:', sys);
+  removeTyping(typId);
+
+  let reply=result||getDemoGuardianResponse(text,pendingQuiz?.subject);
+  reply=applyFilter(reply);
+  chatHistory.push({role:'assistant',content:reply});
+  addMessage('guardian',reply);
+  msgCount++;
+  if(msgCount>=2) document.getElementById('actionBar').classList.add('show');
+  saveStruggle(text);
+}
+
+function getDemoGuardianResponse(text, subj){
+  const tl=text.toLowerCase();
+  if(!subj){
+    if(tl.includes('biology')||tl.includes('cell')||tl.includes('osmosis')||tl.includes('photosyn')||tl.includes('gene')) subj='Biology';
+    else if(tl.includes('chemistry')||tl.includes('haber')||tl.includes('acid')||tl.includes('bond')||tl.includes('reaction')) subj='Chemistry';
+    else if(tl.includes('physics')||tl.includes('newton')||tl.includes('force')||tl.includes('current')||tl.includes('wave')) subj='Physics';
+    else if(tl.includes('math')||tl.includes('equation')||tl.includes('quadratic')||tl.includes('calculus')||tl.includes('angle')) subj='Mathematics';
+    else subj=student?.lastSubject||'Biology';
+  }
+  const DEMOS={
+    Biology:`Great question — let me break this down step by step for you.
+
+1. Start with the big picture: In Biology, most processes are about maintaining balance inside living organisms. Understanding WHY a process happens makes it much easier to remember HOW it works.
+
+2. Key principle: Substances always move from where there is MORE of them to where there is LESS. This drives diffusion, osmosis and active transport in cells.
+
+3. Kenyan example: Think of tea brewing. Colour spreads from the teabag into the water without you stirring — that is diffusion happening naturally!
+
+4. For your KCSE answer: Always define your key term first, then explain the process step by step. Examiners award a mark for each correct point.
+
+5. Build on this: Once you understand movement of substances, you can apply it to how oxygen enters blood in the lungs, how water enters plant roots, and how glucose reaches body cells.
+
+Every question you ask shows you are thinking deeply — that is exactly how KCSE grades improve!`,
+
+    Chemistry:`Excellent question — let me explain this carefully, step by step.
+
+1. Think of Chemistry as a language of patterns: Once you learn the rules, everything connects. Atoms follow predictable behaviour you can rely on in any exam.
+
+2. For the Haber Process: N₂ + 3H₂ ⇌ 2NH₃. The ⇌ means the reaction is reversible — it can go both ways at the same time.
+
+3. Why 450°C? This is a compromise. Higher temperature increases the rate of reaction but decreases the yield (equilibrium shifts left). 450°C gives an acceptable rate AND yield.
+
+4. Why high pressure? There are 4 moles of gas on the left (1 N₂ + 3 H₂) and only 2 moles on the right (2 NH₃). High pressure shifts equilibrium towards fewer moles — producing more ammonia.
+
+5. Iron catalyst: It increases the rate of BOTH forward and reverse reactions equally. It does not change the equilibrium position — only the speed of reaching it.
+
+You are asking exactly the right questions — that is how understanding is built!`,
+
+    Physics:`Good thinking — let me walk you through this carefully.
+
+1. Physics is built on patterns: Every formula describes a real relationship between things you can observe and measure.
+
+2. Newton's Laws in everyday life: When a matatu brakes suddenly and you lurch forward — that is Newton's First Law (inertia). You keep moving because no force acted on you yet.
+
+3. Using F = ma: Write down what you know, identify what you need to find, then substitute. Example: A 1000 kg matatu accelerates at 2 m/s². Force = 1000 × 2 = 2000 N.
+
+4. Units matter in KCSE: Always include units in your final answer. Writing 9.8 loses marks — writing 9.8 m/s² earns them. Examiners check units carefully.
+
+5. Sense check: After calculating, ask — does this answer make physical sense? A matatu travelling at 10,000 m/s is clearly wrong. This habit catches errors.
+
+You are building strong Physics instincts — keep going!`,
+
+    Mathematics:`Great question — let me break this into clear, manageable steps.
+
+1. Read twice, underline once: Read the question twice then underline the key values and what you are asked to find. This simple habit prevents the most common KCSE errors.
+
+2. Quadratic equations: Try factorisation first. If (x + a)(x + b) = 0, then x = -a or x = -b. If it does not factorise neatly, use x = (-b ± √(b²-4ac)) / 2a.
+
+3. Show every step: In KCSE Mathematics, method marks are awarded for correct working even if your final answer has a small error. Never skip steps.
+
+4. Kenyan example: Calculating the area of a farm plot — if rectangular, Area = Length × Width. If triangular, Area = ½ × base × height. The formula is the same everywhere.
+
+5. Verify your answer: After solving, substitute back into the original equation. If both sides balance, you are correct. This takes 20 seconds and saves marks.
+
+Every Mathematics problem you work through builds confidence for the next one — you are making real progress!`,
+  };
+  return DEMOS[subj]||DEMOS['Biology'];
+}
+
+function addMessage(role,text){
+  const msgs=document.getElementById('chatMessages');
+  const initials=student?.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase()||'ST';
+  const div=document.createElement('div');
+  div.className='msg msg-'+role;
+  div.innerHTML=`<div class="msg-av">${role==='guardian'?'🛡':initials}</div><div class="msg-bubble">${formatMsg(text)}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function formatMsg(text){
+  let out=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Numbered steps → styled
+  out=out.replace(/^(\d+)\.\s(.+)$/gm,'<div class="step-row"><div class="step-n">$1</div><div class="step-t">$2</div></div>');
+  out=out.replace(/\n/g,'<br>');
+  out=out.replace(/<\/div><br>/g,'</div>');
+  return out;
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chatMessages');
+  const id='typ-'+Date.now();
+  const div=document.createElement('div');
+  div.className='msg msg-guardian'; div.id=id;
+  div.innerHTML=`<div class="msg-av">🛡</div><div class="typing-bubble"><div class="tb-dot"></div><div class="tb-dot"></div><div class="tb-dot"></div></div>`;
+  msgs.appendChild(div); msgs.scrollTop=msgs.scrollHeight; return id;
+}
+function removeTyping(id){ document.getElementById(id)?.remove(); }
+function applyFilter(t){ let o=t; BANNED.forEach(w=>{ o=o.replace(new RegExp('\\b'+w+'\\b','gi'),'still learning'); }); return o; }
+function handleKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendMessage(); } }
+function autoResize(el){ el.style.height='44px'; el.style.height=Math.min(el.scrollHeight,110)+'px'; }
+function saveStruggle(q){ if(!student) return; student.struggles=student.struggles||[]; student.struggles.push({question:q,subject:pendingQuiz?.subject||'General',date:new Date().toISOString()}); if(student.struggles.length>20) student.struggles=student.struggles.slice(-20); saveStudent(student); }
+</script>
+</body>
+</html>
