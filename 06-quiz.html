@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<meta name="description" content="Tusome KCSE Quiz — Test your understanding with KCSE-aligned multi-choice questions on Biology, Chemistry, Physics and Mathematics.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<title>Quiz — Tusome KCSE</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* SETUP */
+.quiz-header{background:var(--purple);border-radius:var(--r-xl);padding:1.25rem 1.5rem;color:#fff;margin-bottom:1.25rem}
+.qh-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border-radius:50px;padding:4px 11px;font-size:11.5px;margin-bottom:.65rem}
+.qh-title{font-size:19px;font-weight:600;margin-bottom:.25rem}
+.qh-sub{font-size:13px;opacity:.85;line-height:1.6}
+.setup-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.4rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.sc-label{font-size:13.5px;font-weight:500;color:var(--slate);margin-bottom:.65rem;display:block}
+.q-count-row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1.1rem}
+.qc-btn{padding:12px;border-radius:var(--r-md);border:2px solid var(--border);background:var(--surface);font-size:15px;font-weight:600;color:var(--slate);transition:all .2s;font-family:var(--ff);cursor:pointer}
+.qc-btn.sel{border-color:var(--purple);background:var(--purple-soft);color:var(--purple)}
+.topic-input{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--r-md);font-size:14.5px;font-family:var(--ff);color:var(--navy);background:var(--surface);outline:none;transition:all .2s;margin-bottom:1.1rem}
+.topic-input:focus{border-color:var(--purple);background:var(--bg);box-shadow:0 0 0 3px rgba(108,99,255,.1)}
+.topic-input::placeholder{color:var(--muted);font-size:13.5px}
+
+/* LOADING */
+.quiz-loading{display:none;text-align:center;padding:3rem 1.5rem;background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);margin-bottom:1rem}
+.quiz-loading.show{display:block}
+.ql-title{font-size:15px;font-weight:500;color:var(--navy);margin:1rem 0 .35rem}
+.ql-sub{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* QUIZ */
+.quiz-screen{display:none}
+.quiz-screen.show{display:block}
+.quiz-top{background:var(--bg);border-radius:var(--r-lg);border:1px solid var(--border);padding:1rem 1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.qt-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.qt-label{font-size:13px;font-weight:500;color:var(--slate)}
+.qt-score{font-size:14px;font-weight:600;color:var(--purple)}
+.qt-timer{font-size:13px;font-weight:600;color:var(--teal);display:flex;align-items:center;gap:5px}
+.q-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.4rem;margin-bottom:1rem;box-shadow:var(--shadow);animation:fadeIn .3s ease}
+.q-num{font-size:12px;font-weight:500;color:var(--muted);margin-bottom:.75rem;display:flex;align-items:center;gap:7px}
+.q-text{font-size:17px;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:1.25rem}
+.feedback{border-radius:var(--r-md);padding:.9rem 1rem;margin-top:.9rem;font-size:13.5px;line-height:1.7;display:none;animation:fadeIn .3s ease}
+.feedback.show{display:block}
+.feedback.correct{background:var(--green-soft);border:1px solid var(--green);color:var(--green)}
+.feedback.wrong{background:var(--purple-soft);border:1px solid var(--purple);color:var(--purple)}
+.fb-title{font-weight:600;margin-bottom:.3rem;font-size:14px}
+.quiz-nav{display:flex;gap:.75rem;margin-bottom:1.5rem}
+
+/* RESULTS */
+.results-screen{display:none}
+.results-screen.show{display:block;animation:fadeIn .5s ease}
+.results-hero{background:var(--purple);border-radius:var(--r-xl);padding:2rem 1.5rem;text-align:center;color:#fff;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.results-hero::after{content:'';position:absolute;bottom:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.07)}
+.score-ring{width:130px;height:130px;margin:0 auto 1.25rem;position:relative}
+.score-ring svg{transform:rotate(-90deg)}
+.ring-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.ring-pct{font-size:30px;font-weight:600;color:#fff;line-height:1}
+.ring-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px}
+.results-title{font-size:22px;font-weight:600;margin-bottom:.5rem}
+.results-sub{font-size:13px;opacity:.75;line-height:1.6;max-width:260px;margin:0 auto 1.25rem}
+.stats-pills{display:flex;justify-content:center;gap:.65rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.stat-pill{background:rgba(255,255,255,.12);border-radius:var(--r-md);padding:.6rem 1rem;text-align:center}
+.sp-val{font-size:20px;font-weight:600}
+.sp-lbl{font-size:10px;opacity:.55;text-transform:uppercase;letter-spacing:.4px;margin-top:1px}
+.enc-box{background:rgba(255,255,255,.1);border-radius:var(--r-md);padding:.85rem 1rem;font-size:13px;line-height:1.7;font-style:italic;max-width:320px;margin:0 auto}
+.review-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.review-list{display:flex;flex-direction:column;gap:.6rem;max-height:260px;overflow-y:auto}
+.ri{display:flex;align-items:flex-start;gap:9px;padding:.75rem;border-radius:var(--r-md)}
+.ri.correct{background:var(--green-soft)}
+.ri.wrong{background:var(--red-soft)}
+.ri-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.ri-text{font-size:12.5px;line-height:1.55}
+.ri-text strong{display:block;font-size:13px;color:var(--navy);margin-bottom:2px}
+.tip-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.tip-loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13.5px}
+.tip-text{font-size:14px;color:var(--navy);line-height:1.75;display:none}
+.tip-text.show{display:block}
+.results-actions{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<nav class="topnav">
+  <div class="topnav-title">Tusome <span>KCSE</span></div>
+  <div class="topnav-actions">
+    <div style="font-size:13px;font-weight:600;color:var(--teal);display:flex;align-items:center;gap:5px" id="navTimer" style="display:none">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block;animation:pulse 1s infinite"></span>
+      <span id="timerDisplay">0:00</span>
+    </div>
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">◑</button>
+    <a href="02-dashboard.html" class="icon-btn" style="font-size:14px;font-weight:600;text-decoration:none;color:var(--slate)">←</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- SETUP -->
+  <div id="screenSetup">
+    <div class="quiz-header fade-in">
+      <div class="qh-chip">🧠 KCSE Quiz</div>
+      <div class="qh-title">Test your understanding</div>
+      <div class="qh-sub">Choose a subject, enter your topic and get KCSE-style questions.</div>
+    </div>
+    <div class="setup-card fade-in">
+      <label class="sc-label">Choose Subject</label>
+      <div class="subj-grid" style="margin-bottom:1.1rem">
+        <button class="subj-btn" onclick="selSubj('Biology',this)"><span class="sb-icon">🧬</span><span class="sb-name">Biology</span></button>
+        <button class="subj-btn" onclick="selSubj('Chemistry',this)"><span class="sb-icon">🧪</span><span class="sb-name">Chemistry</span></button>
+        <button class="subj-btn" onclick="selSubj('Physics',this)"><span class="sb-icon">⚛</span><span class="sb-name">Physics</span></button>
+        <button class="subj-btn" onclick="selSubj('Mathematics',this)"><span class="sb-icon">📐</span><span class="sb-name">Mathematics</span></button>
+      </div>
+      <label class="sc-label">Topic you studied</label>
+      <input class="topic-input" id="topicInput" placeholder="e.g. The Haber Process, Newton's Laws, Cell Division...">
+      <label class="sc-label">Number of questions</label>
+      <div class="q-count-row">
+        <button class="qc-btn" onclick="selQ(5,this)">5</button>
+        <button class="qc-btn sel" onclick="selQ(10,this)">10</button>
+      </div>
+      <button class="btn btn-primary" id="startBtn" onclick="startQuiz()">Generate My Quiz →</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="quiz-loading" id="screenLoading">
+    <div class="loading-dots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>
+    <div class="ql-title">Generating your quiz...</div>
+    <div class="ql-sub">Preparing <span id="ldCount">10</span> KCSE-style questions on <strong id="ldTopic">your topic</strong>.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-screen" id="screenQuiz">
+    <div class="quiz-top">
+      <div class="qt-row">
+        <div class="qt-label" id="qpLabel">Question 1 of 10</div>
+        <div class="qt-score" id="qpScore">0 pts</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="qpFill" style="width:10%"></div></div>
+    </div>
+    <div id="questionCard"></div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost" id="btnPrev" onclick="prevQ()" style="display:none;flex:1">← Previous</button>
+      <button class="btn btn-primary" id="btnNext" onclick="nextQ()" style="flex:2">Next →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="results-screen" id="screenResults">
+    <div class="results-hero">
+      <div class="score-ring">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="10"/>
+          <circle cx="65" cy="65" r="52" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="10"
+            stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" id="scoreArc"/>
+        </svg>
+        <div class="ring-label"><div class="ring-pct" id="ringPct">0%</div><div class="ring-sub">Score</div></div>
+      </div>
+      <div class="results-title" id="resultsTitle">Quiz Complete!</div>
+      <div class="results-sub" id="resultsSub"></div>
+      <div class="stats-pills">
+        <div class="stat-pill"><div class="sp-val" id="stCorrect">0</div><div class="sp-lbl">Correct</div></div>
+        <div class="stat-pill"><div class="sp-val" id="stWrong">0</div><div class="sp-lbl">Incorrect</div></div>
+        <div class="stat-pill"><div class="sp-val" id="stTime">0s</div><div class="sp-lbl">Time</div></div>
+      </div>
+      <div class="enc-box" id="encBox"></div>
+    </div>
+    <div class="review-card">
+      <div style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:.85rem">Answer Review</div>
+      <div class="review-list" id="reviewList"></div>
+    </div>
+    <div class="tip-card">
+      <div style="font-size:15px;font-weight:600;color:var(--navy);margin-bottom:.85rem">Study Recommendation</div>
+      <div class="tip-loading" id="tipLoading"><div class="loading-dots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div><span style="margin-left:8px">Generating your tip...</span></div>
+      <div class="tip-text" id="tipText"></div>
+    </div>
+    <div class="results-actions">
+      <button class="btn btn-primary" onclick="retryQuiz()">Retry Quiz</button>
+      <button class="btn btn-secondary" onclick="window.location.href='04-guardian.html'">Ask Guardian 🛡</button>
+      <button class="btn btn-ghost" onclick="window.location.href='02-dashboard.html'">Back to Dashboard</button>
+    </div>
+  </div>
+
+</div>
+
+<nav class="bottomnav">
+  <div class="bn-item" onclick="window.location.href='02-dashboard.html'"><div class="bn-icon">🏠</div><span>Home</span></div>
+  <div class="bn-item" onclick="window.location.href='03-scout.html'"><div class="bn-icon">📖</div><span>Study</span></div>
+  <div class="bn-item active"><div class="bn-icon">🧠</div><span>Quiz</span></div>
+  <div class="bn-item" onclick="window.location.href='07-profile.html'"><div class="bn-icon">👤</div><span>Profile</span></div>
+</nav>
+
+<script src="app.js"></script>
+<script>
+const ENCS={
+  high:["Outstanding! You have clearly been putting in the work — keep this momentum going into your KCSE.","Excellent performance! This is exactly how top grades are built. You should be proud.","Brilliant work! Your understanding of this topic is strong. Teach a classmate — it locks in knowledge even further."],
+  mid:["Good effort! Review the tricky questions and you will nail them next time.","You are making real progress. Focus on the explanations and your score will climb next attempt.","Well done for completing the quiz! Every attempt builds knowledge — keep going!"],
+  low:["Thank you for giving this a go — every attempt matters. Read the explanations carefully and try again.","Starting is the hardest part and you have already done that. Use the Guardian Agent for help, then come back.","Every question you attempted today is a step forward. Review the explanations — the answers will start to click!"],
+};
+let student=null,selectedSubj='',selectedQ=10,questions=[],answered=[],currentIdx=0,score=0,startTime=null,timerRef=null,elapsed=0;
+
+document.addEventListener('DOMContentLoaded',()=>{
+  applyTheme();
+  document.getElementById('themeBtn').textContent=(localStorage.getItem('tk_theme')||'light')==='dark'?'☀':'◑';
+  const sess=DB.session();
+  if(!sess){ window.location.href='01-login.html'; return; }
+  student=DB.students()[sess.admKey];
+  // Pre-fill from Scout
+  const qRaw=localStorage.getItem('tk_pending_quiz');
+  if(qRaw){
+    const qCtx=JSON.parse(qRaw);
+    if(qCtx.subject){ document.querySelectorAll('.subj-btn').forEach(b=>{ if(b.querySelector('.sb-name')?.textContent===qCtx.subject) selSubj(qCtx.subject,b); }); }
+    if(qCtx.topic) document.getElementById('topicInput').value=qCtx.topic;
+  }
+});
+
+function selSubj(name,btn){ document.querySelectorAll('.subj-btn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); selectedSubj=name; }
+function selQ(n,btn){ document.querySelectorAll('.qc-btn').forEach(b=>b.classList.remove('sel')); btn.classList.add('sel'); selectedQ=n; }
+
+async function startQuiz(){
+  const topic=document.getElementById('topicInput').value.trim();
+  if(!selectedSubj){ toast('Please select a subject','error'); return; }
+  if(!topic){ toast('Please enter the topic you studied','error'); return; }
+  document.getElementById('screenSetup').style.display='none';
+  document.getElementById('screenLoading').classList.add('show');
+  document.getElementById('ldCount').textContent=selectedQ;
+  document.getElementById('ldTopic').textContent=topic;
+
+  const prompt=`Generate exactly ${selectedQ} multiple-choice KCSE questions on "${topic}" in ${selectedSubj} for Form 3/4 Kenyan students.
+Return ONLY valid JSON (no markdown):
+{"questions":[{"question":"...","options":["A. ...","B. ...","C. ...","D. ..."],"correct":0,"explanation":"..."}]}
+correct = 0-based index. Use Kenyan contexts. Keep explanations encouraging.`;
+
+  const result=await callAI(prompt);
+  let qs=null;
+  if(result){ try{ const p=JSON.parse(result.replace(/```json|```/g,'').trim()); qs=p.questions; }catch{} }
+  if(!qs||!qs.length) qs=getDemoQuestions(selectedSubj,topic,selectedQ);
+
+  questions=qs; answered=new Array(questions.length).fill(null);
+  score=0; currentIdx=0; elapsed=0;
+  document.getElementById('screenLoading').classList.remove('show');
+  document.getElementById('screenQuiz').classList.add('show');
+  document.getElementById('navTimer').style.display='flex';
+  startTimerFn(); renderQuestion(0);
+}
+
+function startTimerFn(){
+  startTime=Date.now();
+  timerRef=setInterval(()=>{
+    elapsed=Math.floor((Date.now()-startTime)/1000);
+    const m=Math.floor(elapsed/60),s=elapsed%60;
+    document.getElementById('timerDisplay').textContent=m+':'+(s<10?'0':'')+s;
+  },1000);
+}
+
+function renderQuestion(idx){
+  const q=questions[idx]; const total=questions.length;
+  currentIdx=idx;
+  const pct=Math.round(((idx+1)/total)*100);
+  document.getElementById('qpLabel').textContent=`Question ${idx+1} of ${total}`;
+  document.getElementById('qpFill').style.width=pct+'%';
+  document.getElementById('qpScore').textContent=score+' pts';
+  const ans=answered[idx]; const locked=ans!==null;
+  const letters=['A','B','C','D'];
+  const optsHtml=q.options.map((opt,i)=>{
+    let cls='opt';
+    let icon='';
+    if(locked){ if(i===q.correct){cls+=' correct';icon='✓';} else if(i===ans){cls+=' wrong';icon='✗';} } else if(ans===i) cls+=' selected';
+    return `<button class="${cls}" onclick="${locked?'':'selectAnswer('+i+')'}" ${locked?'disabled':''}><span class="opt-letter">${letters[i]}</span><span class="opt-text">${opt.replace(/^[A-D]\.\s*/,'')}</span>${icon?`<span style="margin-left:auto;font-weight:700">${icon}</span>`:''}</button>`;
+  }).join('');
+  const fbHtml=locked?`<div class="feedback ${ans===q.correct?'correct':'wrong'} show"><div class="fb-title">${ans===q.correct?'Correct!':'Here is the correct answer:'}</div>${q.explanation}</div>`:'';
+  document.getElementById('questionCard').innerHTML=`<div class="q-card"><div class="q-num"><span class="chip chip-purple" style="font-size:11px">${selectedSubj}</span></div><div class="q-text">${q.question}</div><div class="opt-list">${optsHtml}</div>${fbHtml}</div>`;
+  document.getElementById('btnPrev').style.display=idx>0?'block':'none';
+  const isLast=idx===total-1;
+  const btnNext=document.getElementById('btnNext');
+  btnNext.disabled=!locked;
+  btnNext.textContent=isLast&&locked?'See Results 🎉':'Next →';
+  if(isLast&&locked) btnNext.onclick=showResults;
+  else btnNext.onclick=nextQ;
+}
+
+function selectAnswer(i){
+  if(answered[currentIdx]!==null) return;
+  answered[currentIdx]=i;
+  if(i===questions[currentIdx].correct) score++;
+  renderQuestion(currentIdx);
+}
+function nextQ(){ if(answered[currentIdx]===null){toast('Select an answer first','error');return;} if(currentIdx<questions.length-1) renderQuestion(currentIdx+1); else showResults(); }
+function prevQ(){ if(currentIdx>0) renderQuestion(currentIdx-1); }
+
+async function showResults(){
+  clearInterval(timerRef);
+  document.getElementById('navTimer').style.display='none';
+  const total=questions.length; const pct=Math.round((score/total)*100);
+  document.getElementById('screenQuiz').classList.remove('show');
+  document.getElementById('screenResults').classList.add('show');
+  const circ=326.7; const offset=circ-(circ*(pct/100));
+  document.getElementById('ringPct').textContent=pct+'%';
+  setTimeout(()=>{ const arc=document.getElementById('scoreArc'); arc.style.transition='stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1)'; arc.style.strokeDashoffset=offset; },200);
+  const title=pct>=80?'Excellent Work!':pct>=60?'Good Effort!':pct>=40?'Keep Going!':'Every Step Counts!';
+  document.getElementById('resultsTitle').textContent=title;
+  document.getElementById('resultsSub').textContent=`You scored ${score} out of ${total} on ${selectedSubj}`;
+  document.getElementById('stCorrect').textContent=score;
+  document.getElementById('stWrong').textContent=total-score;
+  document.getElementById('stTime').textContent=elapsed+'s';
+  const pool=pct>=70?ENCS.high:pct>=45?ENCS.mid:ENCS.low;
+  document.getElementById('encBox').textContent=pool[Math.floor(Math.random()*pool.length)];
+  document.getElementById('reviewList').innerHTML=questions.map((q,i)=>{
+    const ok=answered[i]===q.correct;
+    return `<div class="ri ${ok?'correct':'wrong'}"><div class="ri-icon">${ok?'✓':'✗'}</div><div class="ri-text"><strong>${q.question.slice(0,65)}${q.question.length>65?'...':''}</strong>${ok?'Correct answer chosen':'Correct: '+q.options[q.correct].replace(/^[A-D]\.\s*/,'')}</div></div>`;
+  }).join('');
+  saveResult(pct);
+  generateTip(pct);
+}
+
+async function generateTip(pct){
+  const topic=document.getElementById('topicInput').value;
+  const wrong=questions.filter((_,i)=>answered[i]!==questions[i].correct).map(q=>q.question.slice(0,50)).join('; ');
+  const prompt=`A Form 3/4 Kenyan student scored ${pct}% on ${selectedSubj} quiz about "${topic}". ${wrong?`Tricky questions: ${wrong.slice(0,200)}.`:''} Write a 2-sentence warm study recommendation. Never say fail, wrong, stupid.`;
+  const result=await callAI(prompt);
+  document.getElementById('tipLoading').style.display='none';
+  const tips={high:`You have shown strong understanding of ${topic}! To push even higher, try explaining this topic to a classmate — teaching is one of the most powerful ways to deepen knowledge before KCSE.`,mid:`Good progress on ${topic}! Focus your next revision session on the questions you found tricky — read through the explanations carefully and the concepts will become much clearer.`,low:`You made a great start on ${topic}! Visit the Guardian Agent for step-by-step explanations on the areas you found challenging, then come back and try the quiz again.`};
+  const fallback=pct>=70?tips.high:pct>=45?tips.mid:tips.low;
+  document.getElementById('tipText').textContent=result||fallback;
+  document.getElementById('tipText').classList.add('show');
+}
+
+function saveResult(pct){
+  if(!student) return;
+  const topic=document.getElementById('topicInput').value;
+  student.quizHistory=student.quizHistory||[];
+  student.quizHistory.push({subject:selectedSubj,topic,score,total:questions.length,pct,date:new Date().toISOString()});
+  student.totalQuizzes=(student.totalQuizzes||0)+1;
+  if(pct>(student.bestScore||0)) student.bestScore=pct;
+  const exists=(student.memory||[]).find(m=>m.subject===selectedSubj&&m.topic===topic);
+  if(!exists){ student.memory=student.memory||[]; student.memory.push({subject:selectedSubj,topic,date:new Date().toISOString()}); }
+  saveStudent(student);
+}
+
+function retryQuiz(){ answered=new Array(questions.length).fill(null); score=0; currentIdx=0; elapsed=0; document.getElementById('screenResults').classList.remove('show'); document.getElementById('screenQuiz').classList.add('show'); document.getElementById('navTimer').style.display='flex'; startTimerFn(); renderQuestion(0); }
+</script>
+</body>
+</html>
