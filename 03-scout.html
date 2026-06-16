@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<meta name="description" content="Tusome KCSE Scout Agent — Log what you studied in class and receive a personalised KCSE-aligned quiz to reinforce your learning.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<title>Scout Agent — Tusome KCSE</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.scout-header{background:var(--teal);border-radius:var(--r-xl);padding:1.25rem 1.5rem;color:#fff;margin-bottom:1.25rem}
+.sh-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.2);border-radius:50px;padding:4px 11px;font-size:11.5px;margin-bottom:.65rem}
+.sh-title{font-size:19px;font-weight:600;margin-bottom:.25rem}
+.sh-sub{font-size:13px;opacity:.85;line-height:1.6}
+.input-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.4rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.ic-label{font-size:13.5px;font-weight:500;color:var(--slate);margin-bottom:.6rem;display:block}
+.learn-ta{width:100%;min-height:110px;border:1.5px solid var(--border);border-radius:var(--r-md);padding:13px 14px;font-size:14.5px;font-family:var(--ff);color:var(--navy);background:var(--surface);resize:none;outline:none;line-height:1.7;transition:border .2s}
+.learn-ta:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,191,166,.12);background:var(--bg)}
+.learn-ta::placeholder{color:var(--muted);font-size:13.5px}
+.char-row{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:4px}
+.example-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem}
+.ex-chip{padding:6px 12px;border-radius:50px;border:1px solid var(--border);background:var(--bg);font-size:12.5px;font-weight:400;color:var(--slate);cursor:pointer;transition:all .2s;font-family:var(--ff)}
+.ex-chip:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-soft)}
+
+/* RESPONSE */
+.response-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);overflow:hidden;display:none;animation:fadeIn .4s ease;margin-bottom:1rem}
+.response-card.show{display:block}
+.rc-head{background:var(--teal);padding:1rem 1.25rem;display:flex;align-items:center;gap:10px}
+.rc-av{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+.rc-name{font-size:14px;font-weight:600;color:#fff}
+.rc-sub{font-size:11.5px;color:rgba(255,255,255,.7);margin-top:1px}
+.rc-live{margin-left:auto;width:8px;height:8px;border-radius:50%;background:#7FFFD4;animation:pulse 2s infinite}
+.rc-body{padding:1.25rem}
+.summary-box{background:var(--teal-soft);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:1.1rem}
+.summary-lbl{font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.35rem}
+.summary-text{font-size:13.5px;color:var(--slate);line-height:1.7}
+.concepts-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:.75rem}
+.concept-list{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.1rem}
+.concept-item{display:flex;align-items:flex-start;gap:10px;padding:.85rem;background:var(--surface);border-radius:var(--r-md)}
+.ci-num{width:24px;height:24px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px}
+.ci-text{font-size:13.5px;color:var(--navy);line-height:1.65}
+.tip-box{background:var(--purple-soft);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:1.1rem}
+.tip-lbl{font-size:11px;font-weight:600;color:var(--purple);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.35rem}
+.tip-text{font-size:13.5px;color:var(--slate);line-height:1.7}
+.enc-box{background:var(--navy);border-radius:var(--r-md);padding:.9rem 1rem;margin-bottom:1.1rem;display:flex;align-items:flex-start;gap:10px}
+.enc-text{font-size:13.5px;color:rgba(255,255,255,.85);line-height:1.7}
+.action-row{display:flex;gap:.75rem}
+.btn-half{flex:1}
+
+/* LOADING */
+.loading-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:2.5rem 1.5rem;text-align:center;display:none;margin-bottom:1rem}
+.loading-card.show{display:block}
+.lc-title{font-size:15px;font-weight:500;color:var(--navy);margin:1rem 0 .35rem}
+.lc-sub{font-size:13px;color:var(--muted)}
+
+/* PREV TOPICS */
+.prev-card{background:var(--surface);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.prev-title{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:.65rem}
+.prev-pills{display:flex;flex-wrap:wrap;gap:6px}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-title">Tusome <span>KCSE</span></div>
+  <div class="topnav-actions">
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">◑</button>
+    <a href="02-dashboard.html" class="icon-btn" title="Back" style="font-size:14px;font-weight:600;text-decoration:none;color:var(--slate)">←</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <div class="scout-header fade-in">
+    <div class="sh-chip">🔍 Scout Agent</div>
+    <div class="sh-title">What did you learn today?</div>
+    <div class="sh-sub">Describe your class topic and get a personalised KCSE quiz to reinforce your learning.</div>
+  </div>
+
+  <!-- PREVIOUS TOPICS -->
+  <div class="prev-card fade-in" id="prevCard" style="display:none">
+    <div class="prev-title">Topics you have covered</div>
+    <div class="prev-pills" id="prevPills"></div>
+  </div>
+
+  <!-- INPUT CARD -->
+  <div class="input-card fade-in">
+    <!-- Subject selector -->
+    <label class="ic-label">Select your subject</label>
+    <div class="subj-grid" style="margin-bottom:1.1rem" id="subjGrid">
+      <button class="subj-btn" onclick="selSubj('Biology',this)"><span class="sb-icon">🧬</span><span class="sb-name">Biology</span></button>
+      <button class="subj-btn" onclick="selSubj('Chemistry',this)"><span class="sb-icon">🧪</span><span class="sb-name">Chemistry</span></button>
+      <button class="subj-btn" onclick="selSubj('Physics',this)"><span class="sb-icon">⚛</span><span class="sb-name">Physics</span></button>
+      <button class="subj-btn" onclick="selSubj('Mathematics',this)"><span class="sb-icon">📐</span><span class="sb-name">Mathematics</span></button>
+    </div>
+
+    <!-- Examples -->
+    <label class="ic-label">Quick examples — tap to use</label>
+    <div class="example-chips" id="exChips">
+      <span class="ex-chip" onclick="useExample(this)">The Haber Process</span>
+      <span class="ex-chip" onclick="useExample(this)">Photosynthesis and respiration</span>
+      <span class="ex-chip" onclick="useExample(this)">Newton's Laws of Motion</span>
+      <span class="ex-chip" onclick="useExample(this)">Quadratic equations</span>
+      <span class="ex-chip" onclick="useExample(this)">Cell structure</span>
+      <span class="ex-chip" onclick="useExample(this)">Ohm's Law and circuits</span>
+    </div>
+
+    <!-- Text input -->
+    <label class="ic-label">Describe what you studied</label>
+    <textarea class="learn-ta" id="learnText" maxlength="600" oninput="updateChar()"
+      placeholder="e.g. Today in Chemistry we covered the Haber Process — how nitrogen and hydrogen react under high pressure and temperature with an iron catalyst to produce ammonia..."></textarea>
+    <div class="char-row"><span id="charNum">0</span>/600 characters</div>
+
+    <button class="btn btn-teal" style="margin-top:1rem" id="submitBtn" onclick="submitToScout()">Send to Scout Agent →</button>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-card" id="loadingCard">
+    <div class="loading-dots"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>
+    <div class="lc-title">Scout is reading what you learned...</div>
+    <div class="lc-sub">Preparing your summary and KCSE concepts</div>
+  </div>
+
+  <!-- RESPONSE -->
+  <div class="response-card" id="responseCard">
+    <div class="rc-head">
+      <div class="rc-av">🔍</div>
+      <div><div class="rc-name">Scout Agent</div><div class="rc-sub">KCSE Revision Summary</div></div>
+      <div class="rc-live"></div>
+    </div>
+    <div class="rc-body">
+      <div class="summary-box"><div class="summary-lbl">What you studied</div><div class="summary-text" id="rcSummary"></div></div>
+      <div class="concepts-title">Key Concepts to Remember</div>
+      <div class="concept-list" id="rcConcepts"></div>
+      <div class="tip-box"><div class="tip-lbl">KCSE Exam Tip</div><div class="tip-text" id="rcTip"></div></div>
+      <div class="enc-box"><div style="font-size:20px;flex-shrink:0">⭐</div><div class="enc-text" id="rcEnc"></div></div>
+      <div class="action-row">
+        <button class="btn btn-primary btn-half" onclick="window.location.href='06-quiz.html'">Take Quiz 🧠</button>
+        <button class="btn btn-secondary btn-half" onclick="window.location.href='04-guardian.html'">Need help 🛡</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottomnav">
+  <div class="bn-item" id="bn-home" onclick="window.location.href='02-dashboard.html'"><div class="bn-icon">🏠</div><span>Home</span></div>
+  <div class="bn-item active" id="bn-study"><div class="bn-icon">📖</div><span>Study</span></div>
+  <div class="bn-item" id="bn-quiz" onclick="window.location.href='06-quiz.html'"><div class="bn-icon">🧠</div><span>Quiz</span></div>
+  <div class="bn-item" id="bn-profile" onclick="window.location.href='07-profile.html'"><div class="bn-icon">👤</div><span>Profile</span></div>
+</nav>
+
+<script src="app.js"></script>
+<script>
+const ICONS={Biology:'🧬',Chemistry:'🧪',Physics:'⚛',Mathematics:'📐'};
+const EXAMPLES={
+  Biology:['Cell structure and organelles','Photosynthesis and respiration','Osmosis and diffusion','Genetics and DNA','Human circulatory system'],
+  Chemistry:['The Haber Process for ammonia','Electrolysis and electrochemical cells','Acids, bases and neutralisation','Atomic structure','Organic chemistry — alkanes'],
+  Physics:['Newton\'s Laws of Motion','Ohm\'s Law and circuits','Waves — reflection and refraction','Radioactivity and half-life','Work, energy and power'],
+  Mathematics:['Quadratic equations','Trigonometry — sine, cosine, tangent','Differentiation basics','Probability and statistics','Matrices and transformations'],
+};
+let selectedSubject='', student=null, pendingText='';
+
+document.addEventListener('DOMContentLoaded',()=>{
+  applyTheme();
+  document.getElementById('themeBtn').textContent=(localStorage.getItem('tk_theme')||'light')==='dark'?'☀':'◑';
+  const sess=DB.session();
+  if(!sess){ window.location.href='01-login.html'; return; }
+  student=DB.students()[sess.admKey];
+  renderPrevTopics();
+  // Pre-select from Hunter recommendation
+  if(student?.hunterRecommended){ const btns=document.querySelectorAll('.subj-btn'); btns.forEach(b=>{ if(b.querySelector('.sb-name')?.textContent===student.hunterRecommended) selSubj(student.hunterRecommended,b); }); }
+});
+
+function selSubj(name,btn){
+  document.querySelectorAll('.subj-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedSubject=name;
+  const ex=EXAMPLES[name]||[];
+  document.getElementById('exChips').innerHTML=ex.map(e=>`<span class="ex-chip" onclick="useExample(this)">${e}</span>`).join('');
+}
+function useExample(el){ document.getElementById('learnText').value=`Today in class we covered ${el.textContent}. I want to understand this better and test my knowledge.`; updateChar(); }
+function updateChar(){ document.getElementById('charNum').textContent=document.getElementById('learnText').value.length; }
+
+function renderPrevTopics(){
+  const mem=(student?.memory||[]).slice().reverse().slice(0,8);
+  if(!mem.length) return;
+  document.getElementById('prevCard').style.display='block';
+  document.getElementById('prevPills').innerHTML=mem.map(m=>`<span class="chip chip-teal" style="font-size:12px">${ICONS[m.subject]} ${m.topic.slice(0,28)}</span>`).join('');
+}
+
+async function submitToScout(){
+  const text=document.getElementById('learnText').value.trim();
+  if(!selectedSubject){ toast('Please select a subject','error'); return; }
+  if(text.length<10){ toast('Please describe what you learned in more detail','error'); return; }
+  pendingText=text;
+  document.getElementById('responseCard').classList.remove('show');
+  document.getElementById('rcSummary').textContent='';
+  document.getElementById('rcConcepts').innerHTML='';
+  document.getElementById('rcTip').innerHTML='';
+  document.getElementById('rcEnc').textContent='';
+  document.getElementById('loadingCard').classList.add('show');
+  document.getElementById('submitBtn').disabled=true;
+
+  const prev=(student?.memory||[]).filter(m=>m.subject===selectedSubject).map(m=>m.topic).join(', ')||'None';
+  const prompt=`You are the Scout Agent for Tusome KCSE, a revision platform for Form 3 and Form 4 Kenyan students.
+Student studied: "${text}" in ${selectedSubject}.
+Previously covered: ${prev}.
+Respond ONLY in JSON (no markdown, no backticks):
+{"summary":"2 sentence summary starting with You covered...","concepts":["concept 1 with explanation","concept 2","concept 3","concept 4"],"exam_tip":"specific KCSE exam tip for this topic","encouragement":"2 sentence warm encouraging message — never use words like fail, wrong, stupid"}`;
+
+  const result=await callAI(prompt);
+  let data=null;
+  if(result){ try{ data=JSON.parse(result.replace(/```json|```/g,'').trim()); }catch{} }
+  if(!data){ data=getDemoScoutResponse(selectedSubject,text); }
+
+  document.getElementById('loadingCard').classList.remove('show');
+  document.getElementById('submitBtn').disabled=false;
+  document.getElementById('rcSummary').textContent=data.summary||'';
+  document.getElementById('rcTip').textContent=data.exam_tip||'';
+  document.getElementById('rcEnc').textContent=data.encouragement||'';
+  document.getElementById('rcConcepts').innerHTML=(data.concepts||[]).map((c,i)=>`<div class="concept-item"><div class="ci-num">${i+1}</div><div class="ci-text">${c}</div></div>`).join('');
+  document.getElementById('responseCard').classList.add('show');
+  document.getElementById('responseCard').scrollIntoView({behavior:'smooth',block:'start'});
+  saveTopicToMemory(selectedSubject,extractTopic(text));
+  localStorage.setItem('tk_pending_quiz',JSON.stringify({subject:selectedSubject,topic:extractTopic(text),rawText:text}));
+}
+
+function extractTopic(t){ return t.replace(/today in class we covered\s*/i,'').trim().slice(0,55); }
+function saveTopicToMemory(subject,topic){
+  if(!student) return;
+  const exists=(student.memory||[]).find(m=>m.subject===subject&&m.topic===topic);
+  if(!exists){ student.memory=student.memory||[]; student.memory.push({subject,topic,date:new Date().toISOString()}); }
+  student.lastSubject=subject; student.lastStudyDate=new Date().toISOString();
+  student.totalLessons=(student.totalLessons||0)+1;
+  student.streak=(student.streak||0)+1;
+  saveStudent(student);
+  renderPrevTopics();
+}
+
+function getDemoScoutResponse(subj,text){
+  const tl=text.toLowerCase();
+  const topic=extractTopic(text);
+  const DEMOS={
+    Biology:{summary:`You covered key Biology concepts on ${topic}. This topic appears regularly in KCSE Paper 1 and Paper 2 and is worth mastering thoroughly.`,concepts:['Cell structure: Plant cells have a cell wall, chloroplasts and large vacuole — animal cells do not. This distinction is tested in almost every KCSE exam.','Osmosis: Water moves from high water potential (dilute) to low water potential (concentrated) through a semi-permeable membrane — no energy required.','Photosynthesis equation: 6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂. Occurs in chloroplasts. Light, CO₂ and temperature are limiting factors.','Respiration: Glucose + Oxygen → CO₂ + Water + ATP energy. Aerobic respiration occurs in mitochondria and releases energy for all cell activities.'],exam_tip:tl.includes('osmosis')?'KCSE tip: Osmosis questions ask you to predict water movement. Always identify which side has higher water potential (more dilute) — water moves FROM that side TO the concentrated side.':tl.includes('photosyn')?'KCSE tip: Always write the balanced photosynthesis equation and link each limiting factor (light, CO₂, temperature) to the rate of reaction in your answer.':'KCSE tip: In Biology Paper 1, always define your key term in the first sentence. Examiners award a specific mark for the correct definition before the explanation.',encouragement:'You are tackling Biology with real dedication — that is exactly how KCSE success is built. Keep this momentum and every concept will become clearer!'},
+    Chemistry:{summary:`You covered important Chemistry concepts on ${topic}. This is a central topic in the KCSE Chemistry syllabus that carries significant marks in both papers.`,concepts:['The Haber Process: N₂ + 3H₂ ⇌ 2NH₃. Conditions: 450°C, 200 atm, iron catalyst. A reversible reaction — the ⇌ symbol is key.','Le Chatelier\'s Principle: Increasing pressure shifts equilibrium towards fewer moles of gas — increasing ammonia yield in the Haber Process.','Rates of reaction: Increasing temperature, concentration, surface area or adding a catalyst all increase the rate of a chemical reaction.','Electrolysis: At the cathode (negative) — reduction occurs. At the anode (positive) — oxidation occurs. Remember OIL RIG.'],exam_tip:tl.includes('haber')?'KCSE tip: Haber Process questions always ask WHY specific conditions are chosen. Explain the rate vs yield trade-off: 450°C is a compromise — higher temp increases rate but decreases yield.':tl.includes('electrolysis')?'KCSE tip: Always state what is produced at EACH electrode and write the half-equations. Cathode: 2H⁺ + 2e⁻ → H₂. Anode: 2Cl⁻ → Cl₂ + 2e⁻.':'KCSE tip: Always balance chemical equations — check each element separately on both sides. Unbalanced equations lose marks even when the correct products are shown.',encouragement:'You are approaching Chemistry with exactly the right attitude — systematic and curious. Every concept you master today is a mark secured in your KCSE paper!'},
+    Physics:{summary:`You covered key Physics principles on ${topic}. This area is regularly examined in KCSE Physics and a solid understanding will serve you in both Paper 1 and Paper 2.`,concepts:['Newton\'s First Law (Inertia): An object remains at rest or moves at constant velocity unless acted on by an unbalanced external force.','Newton\'s Second Law: Force = Mass × Acceleration (F = ma). The most used formula in KCSE mechanics — write it, substitute values, then calculate.','Ohm\'s Law: V = IR. Voltage = Current × Resistance. For series: R total = R₁ + R₂. For parallel: 1/R = 1/R₁ + 1/R₂.','Wave equation: Speed = frequency × wavelength (v = fλ). Always convert units first before substituting into the formula.'],exam_tip:tl.includes('newton')?'KCSE tip: Newton\'s Law questions give a scenario — state which law applies, then use it. Constant velocity = zero net force (First Law). Acceleration = use F=ma (Second Law).':tl.includes('ohm')||tl.includes('circuit')?'KCSE tip: State which type of circuit (series or parallel) before calculating. Examiners award the first mark for correctly identifying the circuit type.':'KCSE tip: Always show your working in Physics — write the formula, substitute with units, then calculate. Correct working with a wrong answer still earns method marks.',encouragement:'Physics is all about patterns — once you see them, everything connects. You are building strong foundations that will serve you far beyond KCSE. Well done!'},
+    Mathematics:{summary:`You covered important Mathematics techniques on ${topic}. Mastering this area will directly improve your performance in KCSE Paper 1 and Paper 2.`,concepts:['Quadratic equations: Solve by factorisation first. If it does not factorise, use x = (-b ± √(b²-4ac)) / 2a. Always verify by substituting back.','Gradient: m = (y₂-y₁)/(x₂-x₁). In y = mx + c, m is gradient and c is y-intercept. Identify the form first before answering.','Trigonometry: SOH-CAH-TOA. Label hypotenuse, opposite and adjacent relative to the given angle BEFORE choosing a ratio.','Statistics: Mean = Σfx ÷ Σf. Set up a frequency table — examiners award marks for the table, formula and final answer separately.'],exam_tip:tl.includes('quadratic')?'KCSE tip: After solving a quadratic, always substitute your answers back into the original equation to verify. Examiners award a specific verification mark.':tl.includes('trig')?'KCSE tip: Label the triangle first — hypotenuse is always opposite the right angle. Then identify opposite and adjacent relative to the given angle before selecting SOH-CAH-TOA.':'KCSE tip: Show ALL working in Mathematics. A correct answer with no working shown earns fewer marks than a partially correct answer with clear logical steps.',encouragement:'Every Mathematics problem you work through builds your skills and confidence. You are making genuine progress — keep practising and the exam will feel very familiar!'},
+  };
+  return DEMOS[subj]||DEMOS['Biology'];
+}
+</script>
+</body>
+</html>
