@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<meta name="description" content="Tusome KCSE Profile — View and update your student profile, track your revision progress and manage your account settings.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<title>Profile — Tusome KCSE</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.profile-hero{background:var(--purple);border-radius:var(--r-xl);padding:1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem;position:relative;overflow:hidden}
+.profile-hero::after{content:'';position:absolute;bottom:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)}
+.ph-av{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:600;color:#fff;border:3px solid rgba(255,255,255,.3);flex-shrink:0;position:relative;z-index:1}
+.ph-info{flex:1;position:relative;z-index:1}
+.ph-name{font-size:20px;font-weight:600;color:#fff;margin-bottom:3px}
+.ph-meta{font-size:13px;color:rgba(255,255,255,.7);line-height:1.6}
+.ph-edit{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:50px;padding:6px 14px;font-size:12.5px;font-weight:500;color:#fff;cursor:pointer;font-family:var(--ff);transition:background .2s;position:relative;z-index:1}
+.ph-edit:hover{background:rgba(255,255,255,.25)}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.25rem}
+.stat-card{background:var(--bg);border-radius:var(--r-lg);border:1px solid var(--border);padding:1rem;box-shadow:var(--shadow);text-align:center}
+.sc-val{font-size:26px;font-weight:600;color:var(--purple);margin-bottom:3px}
+.sc-lbl{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+/* EDIT FORM */
+.edit-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.4rem;margin-bottom:1.25rem;box-shadow:var(--shadow);display:none}
+.edit-card.show{display:block;animation:fadeIn .35s ease}
+.edit-title{font-size:17px;font-weight:600;color:var(--navy);margin-bottom:1.1rem}
+.edit-fields{display:flex;flex-direction:column;gap:.9rem}
+.edit-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.pin-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+
+/* SUBJECT PROGRESS DETAILED */
+.subj-detail{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.sd-title{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:1rem}
+.sd-list{display:flex;flex-direction:column;gap:.85rem}
+.sd-item{}
+.sd-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.45rem}
+.sd-name{font-size:14px;font-weight:500;color:var(--navy);display:flex;align-items:center;gap:7px}
+.sd-count{font-size:12.5px;color:var(--muted)}
+.sd-topics{display:flex;flex-wrap:wrap;gap:5px;margin-top:.5rem}
+
+/* QUIZ HISTORY */
+.history-card{background:var(--bg);border-radius:var(--r-xl);border:1px solid var(--border);padding:1.25rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.hist-list{display:flex;flex-direction:column;gap:.65rem}
+.hist-item{display:flex;align-items:center;gap:10px;padding:.75rem;background:var(--surface);border-radius:var(--r-md)}
+.hi-icon{width:34px;height:34px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:var(--purple-soft)}
+.hi-info{flex:1;min-width:0}
+.hi-title{font-size:13px;font-weight:500;color:var(--navy);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hi-meta{font-size:11.5px;color:var(--muted);margin-top:1px}
+.hi-score{font-size:13px;font-weight:600;padding:3px 9px;border-radius:50px;flex-shrink:0}
+
+/* DANGER ZONE */
+.danger-card{background:var(--red-soft);border:1px solid var(--red);border-radius:var(--r-lg);padding:1.1rem;margin-bottom:1.5rem}
+.danger-title{font-size:14px;font-weight:600;color:var(--red);margin-bottom:.35rem}
+.danger-sub{font-size:13px;color:var(--red);opacity:.8;line-height:1.6;margin-bottom:.75rem}
+.btn-danger{background:var(--red);color:#fff;border:none;border-radius:var(--r-md);padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:var(--ff);transition:all .2s}
+.btn-danger:hover{background:#e55;}
+
+/* OFF-CANVAS settings */
+.oc-settings-item{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;border-bottom:1px solid var(--border)}
+.oc-settings-item:last-child{border-bottom:none}
+.osi-label{font-size:14px;font-weight:500;color:var(--navy)}
+.osi-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--purple)}
+.toggle::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle.on::after{left:23px}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="overlay" id="overlay" onclick="closeCanvas('settingsCanvas')"></div>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-title">Tusome <span>KCSE</span></div>
+  <div class="topnav-actions">
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">◑</button>
+    <button class="icon-btn" onclick="openCanvas('settingsCanvas')" title="Settings">☰</button>
+  </div>
+</nav>
+
+<!-- SETTINGS OFF-CANVAS -->
+<div class="off-canvas" id="settingsCanvas">
+  <div class="oc-header">
+    <div class="oc-title">Settings</div>
+    <button class="oc-close" onclick="closeCanvas('settingsCanvas')">×</button>
+  </div>
+  <div class="oc-body">
+    <div class="oc-settings-item">
+      <div><div class="osi-label">Dark Mode</div><div class="osi-sub">Switch to dark theme</div></div>
+      <div class="toggle" id="darkToggle" onclick="toggleTheme();updateToggles()"></div>
+    </div>
+    <div class="oc-settings-item">
+      <div><div class="osi-label">Notifications</div><div class="osi-sub">Daily revision reminders</div></div>
+      <div class="toggle" id="notifToggle" onclick="toggleNotif()"></div>
+    </div>
+    <div class="oc-settings-item">
+      <div><div class="osi-label">Install App</div><div class="osi-sub">Add to your home screen</div></div>
+      <button class="btn btn-sm btn-secondary" style="width:auto;padding:8px 14px" onclick="installPWA()">Install</button>
+    </div>
+    <div class="oc-settings-item">
+      <div><div class="osi-label">About Tusome KCSE</div><div class="osi-sub">Version 2.0 · Kenya 8-4-4</div></div>
+    </div>
+    <div style="margin-top:1.5rem">
+      <button class="btn btn-ghost" onclick="confirmLogout()">Sign Out</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- PROFILE HERO -->
+  <div class="profile-hero fade-in" id="profileHero">
+    <div class="ph-av" id="profileAv">--</div>
+    <div class="ph-info">
+      <div class="ph-name" id="profileName">Loading...</div>
+      <div class="ph-meta" id="profileMeta"></div>
+    </div>
+    <button class="ph-edit" onclick="toggleEdit()">Edit</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid fade-in">
+    <div class="stat-card"><div class="sc-val" id="statStreak">0🔥</div><div class="sc-lbl">Day Streak</div></div>
+    <div class="stat-card"><div class="sc-val" id="statTopics">0</div><div class="sc-lbl">Topics Covered</div></div>
+    <div class="stat-card"><div class="sc-val" id="statQuizzes">0</div><div class="sc-lbl">Quizzes Done</div></div>
+    <div class="stat-card"><div class="sc-val" id="statBest">—</div><div class="sc-lbl">Best Score</div></div>
+  </div>
+
+  <!-- EDIT FORM -->
+  <div class="edit-card" id="editCard">
+    <div class="edit-title">Update Your Profile</div>
+    <div class="edit-fields">
+      <div class="edit-row">
+        <div class="field"><label>First Name</label><input class="input" id="eFirst" placeholder="Grace"></div>
+        <div class="field"><label>Last Name</label><input class="input" id="eLast" placeholder="Muthoni"></div>
+      </div>
+      <div class="edit-row">
+        <div class="field"><label>School</label><input class="input" id="eSchool" placeholder="Njonjo Girls"></div>
+        <div class="field"><label>Form</label>
+          <div class="sel-wrap"><select class="input" id="eForm"><option value="Form 3">Form 3</option><option value="Form 4">Form 4</option></select></div>
+        </div>
+      </div>
+      <div class="field"><label>School Email <span style="font-size:11px;color:var(--muted)">(optional)</span></label><input class="input" id="eEmail" type="email" placeholder="grace@njonjogirlshigh.ac.ke"></div>
+      <div style="background:var(--surface);border-radius:var(--r-md);padding:1rem;border:1px solid var(--border)">
+        <div style="font-size:13.5px;font-weight:500;color:var(--slate);margin-bottom:.75rem">Change PIN</div>
+        <div class="pin-row">
+          <div class="field"><label>Current PIN</label><input class="input" id="ePinOld" type="password" maxlength="4" placeholder="••••" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+          <div class="field"><label>New PIN</label><input class="input" id="ePinNew" type="password" maxlength="4" placeholder="••••" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+          <div class="field"><label>Confirm</label><input class="input" id="ePinConf" type="password" maxlength="4" placeholder="••••" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+        </div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:.5rem">Leave blank to keep current PIN</div>
+      </div>
+      <div style="display:flex;gap:.75rem">
+        <button class="btn btn-primary" style="flex:2" onclick="saveProfile()">Save Changes</button>
+        <button class="btn btn-ghost" style="flex:1" onclick="toggleEdit()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECT PROGRESS DETAILED -->
+  <div class="subj-detail fade-in">
+    <div class="sd-title">Subject Progress</div>
+    <div class="sd-list" id="subjDetail"></div>
+  </div>
+
+  <!-- QUIZ HISTORY -->
+  <div class="history-card fade-in">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem">
+      <div style="font-size:15px;font-weight:600;color:var(--navy)">Quiz History</div>
+      <span class="chip chip-gray" id="histCount">0 quizzes</span>
+    </div>
+    <div class="hist-list" id="histList"></div>
+  </div>
+
+  <!-- TOPICS STUDIED -->
+  <div class="card fade-in" style="margin-bottom:1.25rem">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem">
+      <div style="font-size:15px;font-weight:600;color:var(--navy)">Topics Studied</div>
+      <button style="font-size:12px;font-weight:500;color:var(--red);font-family:var(--ff)" onclick="clearMemory()">Clear All</button>
+    </div>
+    <div id="memoryPills" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+  </div>
+
+  <!-- DANGER ZONE -->
+  <div class="danger-card fade-in">
+    <div class="danger-title">Reset Account Data</div>
+    <div class="danger-sub">This will clear all your quiz history, topics studied and progress. Your login details will remain. This cannot be undone.</div>
+    <button class="btn-danger" onclick="resetData()">Reset My Data</button>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottomnav">
+  <div class="bn-item" onclick="window.location.href='02-dashboard.html'"><div class="bn-icon">🏠</div><span>Home</span></div>
+  <div class="bn-item" onclick="window.location.href='03-scout.html'"><div class="bn-icon">📖</div><span>Study</span></div>
+  <div class="bn-item" onclick="window.location.href='06-quiz.html'"><div class="bn-icon">🧠</div><span>Quiz</span></div>
+  <div class="bn-item active"><div class="bn-icon">👤</div><span>Profile</span></div>
+</nav>
+
+<script src="app.js"></script>
+<script>
+const SUBJECTS=['Biology','Chemistry','Physics','Mathematics'];
+const ICONS={Biology:'🧬',Chemistry:'🧪',Physics:'⚛',Mathematics:'📐'};
+const BAR_COLORS={Biology:'var(--teal)',Chemistry:'var(--purple)',Physics:'var(--yellow)',Mathematics:'var(--green)'};
+const PILL_CLS=['chip-teal','chip-purple','chip-yellow','chip-green'];
+let student=null;
+
+document.addEventListener('DOMContentLoaded',()=>{
+  applyTheme();
+  document.getElementById('themeBtn').textContent=(localStorage.getItem('tk_theme')||'light')==='dark'?'☀':'◑';
+  updateToggles();
+  const sess=DB.session();
+  if(!sess){ window.location.href='01-login.html'; return; }
+  student=DB.students()[sess.admKey];
+  if(!student){ window.location.href='01-login.html'; return; }
+  renderAll();
+});
+
+function renderAll(){
+  renderHero();
+  renderStats();
+  renderSubjectDetail();
+  renderHistory();
+  renderMemory();
+}
+
+function renderHero(){
+  const initials=student.name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  document.getElementById('profileAv').textContent=initials;
+  document.getElementById('profileName').textContent=student.name;
+  document.getElementById('profileMeta').textContent=`${student.form} · ${student.school}${student.email?' · '+student.email:''}`;
+  // Pre-fill edit form
+  document.getElementById('eFirst').value=student.firstName||'';
+  document.getElementById('eLast').value=student.lastName||'';
+  document.getElementById('eSchool').value=student.school||'';
+  document.getElementById('eForm').value=student.form||'Form 3';
+  document.getElementById('eEmail').value=student.email||'';
+}
+
+function renderStats(){
+  document.getElementById('statStreak').textContent=(student.streak||0)+'🔥';
+  document.getElementById('statTopics').textContent=(student.memory||[]).length;
+  document.getElementById('statQuizzes').textContent=student.totalQuizzes||0;
+  document.getElementById('statBest').textContent=student.bestScore?student.bestScore+'%':'—';
+}
+
+function renderSubjectDetail(){
+  const mem=student.memory||[];
+  document.getElementById('subjDetail').innerHTML=SUBJECTS.map((s,i)=>{
+    const done=mem.filter(m=>m.subject===s).length;
+    const pct=Math.round((done/10)*100);
+    const topics=mem.filter(m=>m.subject===s).slice(-4);
+    return `<div class="sd-item">
+      <div class="sd-top">
+        <div class="sd-name">${ICONS[s]} ${s}</div>
+        <div class="sd-count">${done}/10 topics · ${pct}%</div>
+      </div>
+      <div class="progress-bar" style="margin-bottom:.45rem">
+        <div class="progress-fill" style="width:0%;background:${BAR_COLORS[s]}" data-w="${pct}%"></div>
+      </div>
+      <div class="sd-topics">${topics.map(t=>`<span class="chip ${PILL_CLS[i%PILL_CLS.length]}" style="font-size:11px">${t.topic.slice(0,22)}</span>`).join('')}${done>4?`<span class="chip chip-gray" style="font-size:11px">+${done-4} more</span>`:''}</div>
+    </div>`;
+  }).join('');
+  setTimeout(()=>document.querySelectorAll('.progress-fill').forEach(b=>{b.style.transition='width .8s cubic-bezier(.4,0,.2,1)';b.style.width=b.dataset.w;}),100);
+}
+
+function renderHistory(){
+  const hist=(student.quizHistory||[]).slice().reverse();
+  document.getElementById('histCount').textContent=hist.length+' quiz'+(hist.length!==1?'zes':'');
+  if(!hist.length){
+    document.getElementById('histList').innerHTML='<div style="text-align:center;padding:1.5rem;color:var(--muted);font-size:13.5px">No quizzes yet — take your first one!</div>';
+    return;
+  }
+  document.getElementById('histList').innerHTML=hist.slice(0,10).map(h=>{
+    const pct=Math.round((h.score/h.total)*100);
+    const cls=pct>=70?'chip-teal':pct>=50?'chip-yellow':'chip-purple';
+    return `<div class="hist-item">
+      <div class="hi-icon">${ICONS[h.subject]||'🧠'}</div>
+      <div class="hi-info"><div class="hi-title">${h.subject}: ${h.topic}</div><div class="hi-meta">${h.score}/${h.total} · ${timeAgo(h.date)}</div></div>
+      <span class="chip ${cls} hi-score">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+function renderMemory(){
+  const mem=student.memory||[];
+  if(!mem.length){
+    document.getElementById('memoryPills').innerHTML='<div style="color:var(--muted);font-size:13.5px;padding:.5rem 0">No topics studied yet.</div>';
+    return;
+  }
+  document.getElementById('memoryPills').innerHTML=mem.slice().reverse().map((m,i)=>
+    `<span class="chip ${PILL_CLS[i%PILL_CLS.length]}" style="font-size:12px">${ICONS[m.subject]} ${m.topic.slice(0,28)}</span>`
+  ).join('');
+}
+
+function toggleEdit(){
+  const card=document.getElementById('editCard');
+  card.classList.toggle('show');
+  if(card.classList.contains('show')) card.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function saveProfile(){
+  const first=document.getElementById('eFirst').value.trim();
+  const last=document.getElementById('eLast').value.trim();
+  const school=document.getElementById('eSchool').value.trim();
+  const form=document.getElementById('eForm').value;
+  const email=document.getElementById('eEmail').value.trim();
+  const pinOld=document.getElementById('ePinOld').value.trim();
+  const pinNew=document.getElementById('ePinNew').value.trim();
+  const pinConf=document.getElementById('ePinConf').value.trim();
+
+  if(!first||!last){ toast('First and last name are required','error'); return; }
+  if(!school){ toast('School name is required','error'); return; }
+
+  // PIN change
+  if(pinNew||pinOld){
+    if(pinOld!==student.pin){ toast('Current PIN is incorrect','error'); return; }
+    if(pinNew.length!==4){ toast('New PIN must be 4 digits','error'); return; }
+    if(pinNew!==pinConf){ toast('New PINs do not match','error'); return; }
+    student.pin=pinNew;
+  }
+
+  student.firstName=first; student.lastName=last;
+  student.name=first+' '+last;
+  student.school=school; student.form=form;
+  student.email=email;
+  saveStudent(student);
+  toast('Profile updated!','success');
+  toggleEdit();
+  renderHero();
+  // Clear PIN fields
+  ['ePinOld','ePinNew','ePinConf'].forEach(id=>document.getElementById(id).value='');
+}
+
+function clearMemory(){
+  if(!confirm('Clear all studied topics? This cannot be undone.')) return;
+  student.memory=[];
+  saveStudent(student);
+  renderMemory(); renderSubjectDetail(); renderStats();
+  toast('Topics cleared');
+}
+
+function resetData(){
+  if(!confirm('Reset all your progress data? Your login details will remain but quiz history and topics will be cleared. This cannot be undone.')) return;
+  student.memory=[]; student.quizHistory=[]; student.struggles=[];
+  student.totalQuizzes=0; student.totalLessons=0; student.bestScore=0;
+  student.streak=0; student.lastStudyDate=null; student.lastSubject=null;
+  saveStudent(student);
+  toast('Account data reset','success');
+  renderAll();
+}
+
+function confirmLogout(){
+  if(confirm('Sign out of Tusome KCSE?')){ sessionStorage.removeItem('tk_sess'); window.location.href='01-login.html'; }
+}
+
+function updateToggles(){
+  const isDark=(localStorage.getItem('tk_theme')||'light')==='dark';
+  const t=document.getElementById('darkToggle');
+  if(t) t.classList.toggle('on',isDark);
+}
+
+function toggleNotif(){
+  const t=document.getElementById('notifToggle');
+  t.classList.toggle('on');
+  toast(t.classList.contains('on')?'Reminders enabled':'Reminders disabled');
+}
+
+function timeAgo(d){
+  const diff=Date.now()-new Date(d).getTime();
+  const m=Math.floor(diff/60000);
+  if(m<1) return 'just now';
+  if(m<60) return m+'m ago';
+  const h=Math.floor(m/60);
+  if(h<24) return h+'h ago';
+  return Math.floor(h/24)+'d ago';
+}
+</script>
+</body>
+</html>
