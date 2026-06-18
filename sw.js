@@ -1,15 +1,19 @@
 // Tusome KCSE — Service Worker v2
 const CACHE = 'tusome-v2';
 const ASSETS = [
-  '/01-login.html',
-  '/02-dashboard.html',
-  '/03-scout.html',
-  '/04-guardian.html',
-  '/05-hunter.html',
-  '/06-quiz.html',
-  '/07-profile.html',
-  '/manifest.json',
-  'https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600&display=swap'
+  "/",
+  "/index.html",
+  "/02-dashboard.html",
+  "/03-scout.html",
+  "/04-guardian.html",
+  "/05-hunter.html",
+  "/06-quiz.html",
+  "/07-profile.html",
+  "/app.js",
+  "/style.css",
+  "/favicon.svg",
+  "/manifest.json",
+  "https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600&display=swap"
 ];
 
 // Install — cache all assets
